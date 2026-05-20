@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PowerGuide Settings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="output.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+    }
+  </style>
+</head>
+
+<body class="bg-[#03041A] text-white overflow-hidden loaded">
+
+  <div class="flex w-full h-screen">
+
+    <!-- SIDEBAR -->
+    <nav id="sidebar" class="flex flex-col fixed lg:sticky top-0 h-screen w-[280px] lg:w-[340px]
+        text-[#B5B5B5] text-center pt-8 px-5
+        border-r-2 border-white/10 bg-[#03041A] z-40
+        -translate-x-full lg:translate-x-0 transition-transform duration-300">
+
+        <!-- Logo -->
+        <div class="flex items-center gap-2 ml-4 mb-6">
+            <img class="w-10 md:w-12" src="../img/logo.png" alt="">
+
+            <div class="flex flex-col justify-center items-start">
+                <span class="text-white font-bold text-lg md:text-xl leading-tight">
+                    POWER<span class="text-[#FFBB02]">GUIDE</span>
+                </span>
+
+                <span class="text-white font-medium text-sm md:text-xs tracking-widest opacity-70 leading-none">
+                    SECURITY AND RELIABILITY
+                </span>
+            </div>
+        </div>
+
+        <!-- Nav Links -->
+        <div class="flex flex-col gap-2">
+
+            <span class="text-xs font-bold tracking-widest text-white text-left px-4 pt-4 mb-2">
+                MAIN MENU
+            </span>
+
+            <!-- Dashboard -->
+            <a href="dashboard.html" class="group flex flex-row items-center gap-3 px-4 h-11
+                rounded-lg hover:bg-[#FEBB02] hover:text-black duration-200
+                hover:scale-[1.03] active:scale-[0.98]
+                transition-all ease-in-out">
+
+                <img class="h-7 w-7 transition-all duration-200
+                    group-hover:opacity-0 absolute"
+                    src="/img/dashboard.png" alt="">
+
+                <img class="h-7 w-7 transition-all duration-200
+                    opacity-0 group-hover:opacity-100"
+                    src="/img/dashboard-black.png" alt="">
+
+                <span class="text-sm font-semibold">Dashboard</span>
+            </a>
+
+            <!-- Outage Map -->
+            <a href="outagemap.html" class="group flex flex-row items-center gap-3 px-4 h-11
+                rounded-lg hover:bg-[#FEBB02] hover:text-black duration-200
+                hover:scale-[1.03] active:scale-[0.98]
+                transition-all ease-in-out">
+
+                <img class="h-7 w-7 transition-all duration-200
+                    group-hover:opacity-0 absolute"
+                    src="/img/outagemap.svg" alt="">
+
+                <img class="h-7 w-7 transition-all duration-200
+                    opacity-0 group-hover:opacity-100"
+                    src="/img/outagemap-black.svg" alt="">
+
+                <span class="text-sm font-semibold">Outage Map</span>
+            </a>
+
+            <!-- Find Hubs -->
+            <a href="findhubs.html" class="group flex flex-row items-center gap-3 px-4 h-11
+                rounded-lg hover:bg-[#FEBB02] hover:text-black duration-200
+                hover:scale-[1.03] active:scale-[0.98]
+                transition-all ease-in-out">
+
+                <img class="h-7 w-7 transition-all duration-200
+                    group-hover:opacity-0 absolute"
+                    src="/img/findhubs.svg" alt="">
+
+                <img class="h-7 w-7 transition-all duration-200
+                    opacity-0 group-hover:opacity-100"
+                    src="/img/findhubs-black.svg" alt="">
+
+                <span class="text-sm font-semibold">Find Hubs</span>
+            </a>
+
+            <!-- Community -->
+            <span class="text-xs font-bold tracking-widest text-white text-left px-4 pt-4 mb-2 mt-2">
+                COMMUNITY
+            </span>
+
+            <!-- Reports -->
+            <a href="reports.html" class="group flex flex-row items-center gap-3 px-4 h-11
+                rounded-lg hover:bg-[#FEBB02] hover:text-black duration-200
+                hover:scale-[1.03] active:scale-[0.98]
+                transition-all ease-in-out">
+
+                <img class="h-7 w-7 transition-all duration-200
+                    group-hover:opacity-0 absolute"
+                    src="/img/reports.svg" alt="">
+
+                <img class="h-7 w-7 transition-all duration-200
+                    opacity-0 group-hover:opacity-100"
+                    src="/img/reports-black.svg" alt="">
+
+                <span class="text-sm font-semibold">Reports</span>
+            </a>
+
+            <!-- Active Settings -->
+            <a href="settings.html" class="group flex flex-row items-center gap-3 px-4 h-11
+                rounded-lg bg-[#FEBB02] text-black
+                hover:scale-[1.03] active:scale-[0.98]
+                transition-all duration-200 ease-in-out">
+
+                <div class="relative w-7 h-7">
+
+                    <!-- Hidden default -->
+                    <img class="absolute opacity-0"
+                        src="/img/settings.png" alt="">
+
+                    <!-- Active black icon -->
+                    <img class="absolute opacity-100"
+                        src="/img/settings-black.png" alt="">
+                </div>
+
+                <span class="text-sm font-semibold">Settings</span>
+            </a>
+
+        </div>
+
+        <!-- Pro Tip -->
+        <div class="flex flex-col text-left mt-auto mb-8 mx-2 p-6 rounded-lg bg-[#31324C]/50">
+
+            <span class="text-[#FEBB02] text-base font-bold mb-1">
+                PRO TIP
+            </span>
+
+            <span class="text-white/50 text-sm font-normal">
+                Lower screen brightness to 40% to save 15min of runtime.
+            </span>
+
+        </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="flex-1 w-full overflow-y-auto">
+
+      <div class="max-w-7xl mx-auto">
+
+        <!-- HEADER - Now sticks to sidebar -->
+        <header class="bg-[#1C1D30] flex flex-wrap items-center justify-between gap-4 
+                      px-6 lg:px-8 py-4 lg:h-28 mb-8 border-b border-white/10">
+
+            <!-- Title -->
+            <div class="flex flex-col justify-center ml-1">
+                <span class="font-bold text-base lg:text-2xl">
+                    Account and Preferences
+                </span>
+                <span class="text-xs lg:text-sm text-[#B5B5B5]">
+                    Manage your digital identity and alert matrix.
+                </span>
+            </div>
+
+            <!-- Right Side -->
+            <div class="flex items-center gap-4">
+                <button onclick="validateForm()"
+                    class="int-btn px-5 py-2.5 bg-[#FFBB02] text-black rounded-full hover:bg-[#D99A00] 
+                          active:bg-[#FFC833] transition-all duration-300 font-bold text-sm">
+                    Save All Changes
+                </button>
+            </div>
+
+        </header>
+
+        <div class="bg-[#111827] border border-yellow-400/30 rounded-3xl p-8 mb-6 ml-7 mr-6">
+            <div class="flex flex-col lg:flex-row lg:items-start gap-6">
+
+                <!-- Left Side: Avatar + Name -->
+                <div class="flex items-start gap-5 flex-shrink-0">
+                    <div class="relative w-20 h-20 flex-shrink-0">
+                        <img id="profileImage" 
+                            class="w-20 h-20 rounded-2xl object-cover hidden" alt="Profile">
+
+                        <div id="avatarBox"
+                            class="w-20 h-20 rounded-2xl bg-[#FFBB02] text-black flex items-center justify-center font-bold text-3xl shadow-inner">
+                            --
+                        </div>
+
+                        <input type="file" id="uploadPhoto" accept="image/*" class="hidden">
+                        <button onclick="document.getElementById('uploadPhoto').click()" 
+                                class="absolute inset-0 rounded-2xl hover:bg-black/30 transition-colors"></button>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center gap-3 mb-1">
+                            <h2 id="displayName" class="text-2xl font-bold text-white">John Doe</h2>
+                        </div>
+                        <p class="text-sm text-gray-400 italic">
+                            Verified Resident - (  )
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right Side: Badges -->
+                <div class="flex gap-2 lg:ml-auto">
+                    <span class="flex bg-[#22FF221A]/[10%] w-18 text-xs items-center rounded-md text-[#34FB34] p-2 font-bold justify-center">
+                          ACTIVE GRID LINK
+                    </span>
+                    <span class="flex bg-[#FFBB021A]/[10%] w-18 text-xs items-center rounded-md text-[#FFBB02] p-2 font-bold justify-center">
+                          PRO MEMBER
+                    </span>
+                </div>
+
+            </div>
+
+            <!-- Form Fields -->
+            <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-2 tracking-widest">DISPLAY NAME</label>
+                    <input id="fullName" oninput="generateAvatar()" 
+                          class="bg-[#1f2937] w-full px-5 py-4 rounded-2xl text-sm outline-none focus:ring-1 focus:ring-yellow-400/50"
+                          placeholder="Enter display name">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-2 tracking-widest">EMAIL CONNECTION</label>
+                    <input type="email" 
+                          class="bg-[#1f2937] w-full px-5 py-4 rounded-2xl text-sm outline-none focus:ring-1 focus:ring-yellow-400/50"
+                          placeholder="your@email.com">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-2 tracking-widest">MOBILE HOTLINE</label>
+                    <input id="contact" type="tel" inputmode="numeric" maxlength="11"
+                          oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11)"
+                          class="bg-[#1f2937] w-full px-5 py-4 rounded-2xl text-sm outline-none focus:ring-1 focus:ring-yellow-400/50"
+                          placeholder="09XXXXXXXXX">
+                </div>
+
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 ml-6 mr-6">
+
+          <div class="bg-[#111827] p-6 rounded-2xl">
+            <h3 class="font-semibold mb-4 text-lg flex items-center gap-2">
+              <img src="/img/bell.svg" class="w-5 h-5 mr-2" alt="">
+              Notification Matrix
+            </h3>
+
+            <div class="space-y-4">
+
+              <label class="flex justify-between items-center bg-[#1f2937] p-4 rounded-xl cursor-pointer">
+                
+                <div class="flex items-start gap-3">
+                  <img src="/img/fan.svg" class="w-5 h-5 mt-3 mr-2" alt="">
+
+                  <div>
+                    <p class="font-medium">Emergency Grid Failure</p>
+                    <p class="text-xs text-gray-400">Immediate push alerts for total area blackouts.</p>
+                  </div>
+                </div>
+
+                <div class="relative">
+                  <input type="checkbox" class="sr-only peer">
+                  <div class="w-12 h-6 bg-gray-600 rounded-full peer-checked:bg-yellow-400 transition"></div>
+                  <div
+                    class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-all duration-300 peer-checked:translate-x-6">
+                  </div>
+                </div>
+              </label>
+
+              <label class="flex justify-between items-center bg-[#1f2937] p-4 rounded-xl cursor-pointer">
+
+                <div class="flex items-start gap-3">
+                  <img src="/img/calendar.svg" class="w-5 h-5 mt-2 mr-2" alt="">
+
+                  <div>
+                    <p class="font-medium">Scheduled Maintenance</p>
+                    <p class="text-xs text-gray-400">48-hour advance notice of MERALCO activities.</p>
+                  </div>
+                </div>
+
+                <div class="relative">
+                  <input type="checkbox" class="sr-only peer" checked>
+                  <div class="w-12 h-6 bg-gray-600 rounded-full peer-checked:bg-yellow-400 transition"></div>
+                  <div
+                    class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-all duration-300 peer-checked:translate-x-6">
+                  </div>
+                </div>
+              </label>
+
+            </div>
+          </div>
+
+          <div class="bg-[#111827] p-6 rounded-2xl">
+
+            <h3 class="font-semibold mb-4 text-lg flex items-center gap-2">
+              <img src="/img/shield.svg" class="w-5 h-5 mr-2" alt="">
+              Security and Access
+            </h3>
+
+            <div class="bg-[#1f2937] p-4 rounded-xl flex items-start gap-3">
+
+              <img src="/img/key.svg" class="w-5 h-5 mt-1" alt="">
+
+              <div>
+                <p class="font-medium">Update Master Password</p>
+                <p class="text-xs text-gray-400">Last changed (  )</p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Low Battery Warning Toast -->
+      <div id="battery-warning"
+          class="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-4
+          opacity-0 invisible pointer-events-none transition-opacity duration-300">
+          <div id="batteryBox"
+              class="bg-[#1A1B33] border-2 border-red-600 rounded-3xl p-8 max-w-sm w-full flex flex-col items-center gap-4 text-center
+              scale-95 translate-y-4 opacity-0 transition-all duration-300 ease-out">
+              <span class="text-red-500 text-5xl">⚠️</span>
+              <h2 class="text-white text-xl font-bold">Battery Low!</h2>
+              <p class="text-[#B5B5B5] text-sm">Please charge your device as soon as possible to avoid losing power.</p>
+              <button onclick="closeBatteryWarning()"
+                  class="int-btn mt-2 px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full transition-all duration-200">
+                  Got it
+              </button>
+          </div>
+      </div>
+  </div>
+
+  <!-- Hidden battery elements required by script.js -->
+    <div class="hidden">
+        <span id="level"></span>
+        <span id="status"></span>
+        <svg>
+            <circle id="battery-ring"></circle>
+        </svg>
+    </div>
+  <script src="script.js"></script>
+  <script>
+    const upload = document.getElementById("uploadPhoto");
+    const img = document.getElementById("profileImage");
+    const box = document.getElementById("avatarBox");
+
+    upload.addEventListener("change", function () {
+      const file = this.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        img.src = e.target.result;
+        img.classList.remove("hidden");
+        box.classList.add("hidden");
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function generateAvatar() {
+      const name = document.getElementById("fullName").value.trim();
+
+      if (!img.classList.contains("hidden")) return;
+
+      if (!name) {
+        box.textContent = "--";
+        return;
+      }
+
+      const words = name.split(" ");
+      let initials = "";
+
+      words.forEach(word => {
+        if (word.length > 0) initials += word[0];
+      });
+
+      box.textContent = initials.toUpperCase().slice(0, 2);
+    }
+
+    function validateForm() {
+      const contact = document.getElementById("contact").value;
+
+      if (contact.length !== 11) {
+        alert("Contact number must be exactly 11 digits.");
+        return;
+      }
+
+      alert("Saved successfully!");
+    }
+  
+        window.addEventListener("load", () => {
+            document.body.classList.add("loaded");
+        });
+    </script>
+</body>
+
+</html>

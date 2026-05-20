@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll:smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerGuide Outage Map</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="/output.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background-color: #888; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background-color: #555; }
+        * { scrollbar-width: thin; scrollbar-color: #888 transparent; }
+    </style>
+</head>
+
+<body class="bg-[#03041A] text-white">
+
+    <!-- Mobile Menu Toggle -->
+    <button id="menuToggle" class="fixed top-4 left-4 z-50 lg:hidden bg-[#31324C] p-2 rounded-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- SIDEBAR NAV -->
+        <nav id="sidebar" class="flex flex-col fixed lg:sticky top-0 h-screen w-[280px] lg:w-[340px]
+            text-[#B5B5B5] text-center pt-8 px-5
+            border-r-2 border-white/10 bg-[#03041A] z-40
+            -translate-x-full lg:translate-x-0 transition-transform duration-300">
+
+            <!-- Logo -->
+            <div class="flex items-center gap-2 ml-4 mb-6">
+                <img class="w-10 md:w-12" src="/img/logo.png" alt="">
+                <div class="flex flex-col justify-center items-start">
+                    <span class="text-white font-bold text-lg md:text-xl leading-tight">
+                        POWER<span class="text-[#FFBB02]">GUIDE</span>
+                    </span>
+                    <span class="text-white font-medium text-sm md:text-xs tracking-widest opacity-70 leading-none">
+                        SECURITY AND RELIABILITY
+                    </span>
+                </div>
+            </div>
+
+            <!-- Nav Links -->
+            <div class="flex flex-col gap-2">
+
+                <!-- MAIN MENU -->
+                <span class="text-xs font-bold tracking-widest text-white text-left px-4 pt-4 mb-2">MAIN MENU</span>
+
+                <!-- Dashboard -->
+                <a href="dashboard.html" class="group flex flex-row items-center gap-3 px-4 h-11
+                    rounded-lg hover:bg-[#FEBB02] hover:text-black duration-200
+                    hover:scale-[1.03] active:scale-[0.98]
+                    transition-all ease-in-out">
+
+                    <div class="relative w-7 h-7">
+                        <img class="absolute transition-all duration-200 group-hover:opacity-0"
+                            src="/img/dashboard.png" alt="">
+                        <img class="absolute opacity-0 transition-all duration-200 group-hover:opacity-100"
+                            src="/img/dashboard-black.png" alt="">
+                    </div>
+
+                    <span class="text-sm font-semibold">Dashboard</span>
+                </a>
+
+                <!-- Outage Map (ACTIVE) -->
+                <a href="outagemap.html" class="group flex flex-row items-center gap-3 px-4 h-11
+                    rounded-lg bg-[#FEBB02] text-black
+                    hover:scale-[1.03] active:scale-[0.98]
+                    transition-all ease-in-out">
+
+                    <div class="relative w-7 h-7">
+                        <img class="absolute opacity-0"
+                            src="/img/outagemap.svg" alt="">
+                        <img class="absolute opacity-100"
+                            src="/img/outagemap-black.svg" alt="">
+                    </div>
+
+                    <span class="text-sm font-semibold">Outage Map</span>
+                </a>
+
+                <!-- Find Hubs -->
+                <a href="findhubs.html" class="group flex flex-row items-center gap-3 px-4 h-11
+                    rounded-lg hover:bg-[#FEBB02] hover:text-black duration-200
+                    hover:scale-[1.03] active:scale-[0.98]
+                    transition-all ease-in-out">
+
+                    <div class="relative w-7 h-7">
+                        <img class="absolute transition-all duration-200 group-hover:opacity-0"
+                            src="/img/findhubs.svg" alt="">
+                        <img class="absolute opacity-0 transition-all duration-200 group-hover:opacity-100"
+                            src="/img/findhubs-black.svg" alt="">
+                    </div>
+
+                    <span class="text-sm font-semibold">Find Hubs</span>
+                </a>
+
+                <!-- COMMUNITY -->
+                <span class="text-xs font-bold tracking-widest text-white text-left px-4 pt-4 mb-2 mt-2">COMMUNITY</span>
+
+                <!-- Reports -->
+                <a href="reports.html" class="group flex flex-row items-center gap-3 px-4 h-11
+                    rounded-lg hover:bg-[#FEBB02] hover:text-black duration-200
+                    hover:scale-[1.03] active:scale-[0.98]
+                    transition-all ease-in-out">
+
+                    <div class="relative w-7 h-7">
+                        <img class="absolute transition-all duration-200 group-hover:opacity-0"
+                            src="/img/reports.svg" alt="">
+                        <img class="absolute opacity-0 transition-all duration-200 group-hover:opacity-100"
+                            src="/img/reports-black.svg" alt="">
+                    </div>
+
+                    <span class="text-sm font-semibold">Reports</span>
+                </a>
+
+                <!-- Settings -->
+                <a href="settings.html" class="group flex flex-row items-center gap-3 px-4 h-11
+                    rounded-lg hover:bg-[#FEBB02] hover:text-black duration-200
+                    transition-all ease-in-out">
+
+                    <div class="relative w-7 h-7">
+                        <img class="absolute transition-all duration-200 group-hover:opacity-0"
+                            src="/img/settings.png" alt="">
+                        <img class="absolute opacity-0 transition-all duration-200 group-hover:opacity-100"
+                            src="/img/settings-black.png" alt="">
+                    </div>
+
+                    <span class="text-sm font-semibold">Settings</span>
+                </a>
+
+            </div>
+
+            <!-- Pro Tip -->
+            <div class="flex flex-col text-left mt-auto mb-8 mx-2 p-6 rounded-lg bg-[#31324C]/50">
+                <span class="text-[#FEBB02] text-base font-bold mb-1">PRO TIP</span>
+                <span class="text-white/50 text-sm font-normal">Lower screen brightness to 40% to save 15min of
+                    runtime.</span>
+            </div>
+        </nav>
+
+        <main class="flex-1 overflow-hidden flex flex-col">
+            <header class="bg-[#1C1D30] flex flex-wrap items-center justify-between gap-4 px-3 lg:px-5 py-4 lg:h-28">
+
+                <!-- Left: Title + Stats -->
+                <div class="flex flex-wrap items-center gap-4 w-full lg:w-auto pl-10 lg:pl-0">
+
+                    <!-- Title -->
+                <div class="flex flex-col justify-center pr-6 border-r-2 border-[#2A2A3E] ml-4">
+                    <span class="font-bold text-base lg:text-2xl">
+                        Interactive Outage Map
+                    </span>
+                    <span class="text-xs lg:text-sm text-[#B5B5B5]">
+                        REAL-TIME GRID INTELLIGENCE
+                    </span>
+                </div>
+
+                    <!-- Stats -->
+                    <div class="flex items-center gap-6 lg:gap-20 ml-4">
+                        <div class="flex items-center gap-2">
+                            <!-- Green Dot -->
+                            <span class="w-2 h-2 rounded-full bg-[#49B149]"></span>
+
+                            <!-- Text -->
+                            <span class="text-sm">(  ) Active Outages</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button onclick="openPopup()"
+                    class="int-btn cursor-pointer px-3 py-1.5 md:px-4 md:py-2 bg-[#FFBB02]
+                    text-black rounded-full hover:bg-[#D99A00] active:bg-[#FFC833]
+                    transition-all duration-300 ease-out transform
+                    hover:scale-105 active:scale-95 text-xs md:text-sm font-bold ml-24">
+
+                    + Report Outage
+                </button>
+                <!-- Right: Search + Button -->
+                <div class="flex items-center gap-4 mr-2">
+
+                    <div class="relative">
+
+                        <svg class="absolute left-3 top-1/2 -translate-y-1/2
+                        w-5 h-5 text-gray-400"
+                            fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24">
+
+                            <circle cx="10" cy="10" r="6"></circle>
+                            <line x1="19" y1="20" x2="16.5" y2="16.5"></line>
+                        </svg>
+
+                        <input type="search"
+                            placeholder="Search barangay..."
+                            class="w-[300px] h-11 pl-10 pr-4 rounded-xl
+                            bg-white/10 border border-white/10
+                            text-sm font-medium outline-none
+                            placeholder:text-white/40">
+                    </div>
+                </div>
+
+            </header>
+
+            <!-- Content -->
+            <section class="flex flex-col lg:flex-row justify-between flex-1 min-h-0 py-5 px-3 lg:py-8 lg:px-7 gap-4">
+
+                <!-- Map -->
+                <div class="w-full h-[300px] sm:h-[380px] md:h-[450px] lg:h-[550px]">
+                    <div class="relative w-full h-full">
+                        <img src="/img/map.png" alt="" class="w-full h-full object-cover rounded-2xl">
+                        <div
+                            class="absolute bottom-4 right-4 w-32 sm:w-36 md:w-44 border-2 bg-[#31324C] rounded-2xl z-20 p-2 md:p-3">
+                            <div class="flex flex-col gap-1 md:gap-2">
+                                <span class="font-bold text-xs md:text-sm">MAP LEGEND</span>
+                                <span class="font-medium text-xs flex flex-row items-center">
+                                    <span class="relative flex h-2 w-2 md:h-3 md:w-3 mr-2 shrink-0">
+                                        <span
+                                            class="relative inline-flex rounded-full h-2 w-2 md:h-3 md:w-3 bg-[#FE0000]"></span>
+                                    </span>
+                                    Confirmed Outage
+                                </span>
+                                <span class="font-medium text-xs flex flex-row items-center">
+                                    <span class="relative flex h-2 w-2 md:h-3 md:w-3 mr-2 shrink-0">
+                                        <span
+                                            class="relative inline-flex rounded-full h-2 w-2 md:h-3 md:w-3 bg-[#FFBB02]"></span>
+                                    </span>
+                                    Partial/Surge
+                                </span>
+                                <span class="font-medium text-xs flex flex-row items-center">
+                                    <span class="relative flex h-2 w-2 md:h-3 md:w-3 mr-2 shrink-0">
+                                        <span
+                                            class="relative inline-flex rounded-full h-2 w-2 md:h-3 md:w-3 bg-[#49B149]"></span>
+                                    </span>
+                                    Stable/Grid
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- City Stats -->
+                <div class="w-full lg:w-auto lg:flex-shrink-0">
+                    <div class="bg-[#31324C]/50 p-3 md:p-5 rounded-2xl w-full lg:w-[420px]
+                         h-[300px] sm:h-[380px] md:h-[450px] lg:h-[550px]
+                         flex flex-col relative ml-4">
+
+                        <!-- Header -->
+                        <div class="flex flex-row border-b-2 border-[#2A2A3E] p-2 justify-between items-center">
+                            <span class="font-bold text-lg md:text-xl mb-2">City Statistics</span>
+                            <span
+                                class="text-xs text-[#B5B5B5] font-semibold rounded-md bg-[#31324C] border-2 border-[#696969] p-1 mb-2">
+                                SORT BY: ALERT LEVEL
+                            </span>
+                        </div>
+
+                        <!-- Scrollable Cards -->
+                        <div class="flex-1 overflow-y-auto flex flex-col gap-3 pt-2">
+
+                            <!-- CRITICAL -->
+                            <div class="flex flex-col p-2">
+                                <div class="flex flex-col">
+                                    <span
+                                        class="font-bold flex justify-between text-white text-sm md:text-xl">(  )
+                                        <span
+                                            class="flex bg-[#FF3C2F1A]/[10%] w-18 text-xs items-center rounded-md text-[#FF2E1F] p-2 font-bold justify-center">
+                                            CRITICAL
+                                        </span>
+                                    </span>
+                                    <span class="font-medium text-xs text-[#B5B5B5]">(  )</span>
+                                </div>
+                                <div class="flex flex-row justify-between mt-3 gap-2">
+                                    <div
+                                        class="border-2 border-[#696969] rounded-md bg-[#31324C] flex flex-col flex-1 p-2">
+                                        <span class="text-xs text-[#B5B5B5] font-semibold">AFFECTED</span>
+                                        <span class="text-lg md:text-xl text-white font-bold">(  ) users</span>
+                                    </div>
+                                    <div
+                                        class="border-2 border-[#696969] rounded-md bg-[#31324C] flex flex-col flex-1 p-2">
+                                        <span class="text-xs text-[#B5B5B5] font-semibold">ETR</span>
+                                        <span class="text-lg md:text-xl text-[#FFBB02] font-bold">(  )</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- WARNING -->
+                            <div class="flex flex-col p-2">
+                                <div class="flex flex-col">
+                                    <span
+                                        class="font-bold flex justify-between text-white text-sm md:text-xl">(  )
+                                        <span
+                                            class="flex bg-[#FFBB021A]/[10%] w-18 text-xs items-center rounded-md text-[#FFBB02] p-2 font-bold justify-center">
+                                            WARNING
+                                        </span>
+                                    </span>
+                                    <span class="font-medium text-xs text-[#B5B5B5]">(  )</span>
+                                </div>
+                                <div class="flex flex-row justify-between mt-3 gap-2">
+                                    <div
+                                        class="border-2 border-[#696969] rounded-md bg-[#31324C] flex flex-col flex-1 p-2">
+                                        <span class="text-xs text-[#B5B5B5] font-semibold">AFFECTED</span>
+                                        <span class="text-lg md:text-xl text-white font-bold">(  ) users</span>
+                                    </div>
+                                    <div
+                                        class="border-2 border-[#696969] rounded-md bg-[#31324C] flex flex-col flex-1 p-2">
+                                        <span class="text-xs text-[#B5B5B5] font-semibold">STATUS</span>
+                                        <span class="text-lg md:text-xl text-[#B5B5B5] font-bold">(  )</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STABLE 1 -->
+                            <div class="flex flex-col p-2">
+                                <div class="flex flex-col">
+                                    <span
+                                        class="font-bold flex justify-between text-white text-sm md:text-xl">(  )
+                                        <span
+                                            class="flex bg-[#22FF221A]/[10%] w-18 text-xs items-center rounded-md text-[#34FB34] p-2 font-bold justify-center">
+                                            STABLE
+                                        </span>
+                                    </span>
+                                    <span class="font-medium text-xs text-[#B5B5B5]">(  )</span>
+                                </div>
+                                <div class="flex flex-row justify-between mt-3 gap-2">
+                                    <div
+                                        class="border-2 border-[#696969] rounded-md bg-[#31324C] flex flex-col flex-1 p-2">
+                                        <span class="text-xs text-[#B5B5B5] font-semibold">UPTIME</span>
+                                        <span class="text-lg md:text-xl text-white font-bold">(  ) %</span>
+                                    </div>
+                                    <div
+                                        class="border-2 border-[#696969] rounded-md bg-[#31324C] flex flex-col flex-1 p-2">
+                                        <span class="text-xs text-[#B5B5B5] font-semibold">GRID LOAD</span>
+                                        <span class="text-lg md:text-xl text-[#B5B5B5] font-bold">(  )</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STABLE 2 -->
+                            <div class="flex flex-col p-2">
+                                <div class="flex flex-col">
+                                    <span
+                                        class="font-bold flex justify-between text-white text-lg md:text-2xl">(  )
+                                        <span
+                                            class="flex bg-[#22FF221A]/[10%] w-16 text-xs items-center rounded-md text-[#34FB34] p-2 font-bold justify-center">
+                                            STABLE
+                                        </span>
+                                    </span>
+                                    <span class="font-medium text-xs text-[#B5B5B5]">(  )</span>
+                                </div>
+                                <div class="flex flex-row justify-between mt-3 gap-2">
+                                    <div
+                                        class="border-2 border-[#696969] rounded-md bg-[#31324C] flex flex-col flex-1 p-2">
+                                        <span class="text-xs text-[#B5B5B5] font-semibold">UPTIME</span>
+                                        <span class="text-lg md:text-2xl text-white font-bold">(  ) %</span>
+                                    </div>
+                                    <div
+                                        class="border-2 border-[#696969] rounded-md bg-[#31324C] flex flex-col flex-1 p-2">
+                                        <span class="text-xs text-[#B5B5B5] font-semibold">GRID LOAD</span>
+                                        <span class="text-lg md:text-2xl text-[#B5B5B5] font-bold">(  )</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 overflow-visible">
+                            <button class="int-btn cursor-pointer w-full px-4 py-3 rounded-lg bg-[#FFBB02] text-black text-sm md:text-base
+                                    font-bold flex items-center justify-center gap-2 hover:bg-[#D99A00] active:bg-[#FFC833]
+                                    transition-all duration-200 ease-out transform-gpu hover:scale-[1.03] hover:-translate-y-0.5
+                                    active:scale-[0.98] active:translate-y-0 shadow-lg hover:shadow-2xl hover:shadow-black/40">
+                                <img src="/img/download.svg" alt="">
+                                Download Local Status Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Popup Overlay -->
+            <div id="popup"
+                    class="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-4
+                    opacity-0 invisible pointer-events-none
+                    transition-all duration-300 ease-out"
+                    onclick="handleBackdropClick(event)">
+
+            <div id="popupBox"
+                    class="relative w-full max-w-[700px] shadow-[0_0_20px_#FFCA41] rounded-[20px]"
+                    onclick="event.stopPropagation()">
+
+                    <!-- Close Button -->
+                <button onclick="closePopup()"
+                    class="absolute top-4 right-4 text-white text-2xl font-bold hover:text-[#FFBB02] z-10">
+                    &times;
+                </button>
+
+                    <!-- Form -->
+                <form class="flex flex-col w-full max-h-[90vh] overflow-y-auto
+                        bg-[#1A1B33] text-white rounded-3xl
+                        px-6 pb-6 pt-6 md:px-10 md:pb-10 md:pt-7"
+                        action="">
+                    <span class="flex flex-col text-2xl md:text-3xl font-bold">
+                        Report an Outage
+                        <span class="text-sm font-semibold text-[#B5B5B5]">
+                            Your data helps neighbors stay prepared.
+                        </span>
+                    </span><br>
+
+                    <span class="text-[#B5B5B5] font-semibold text-sm mb-2">OUTAGE TYPE</span>
+                    <div class="flex flex-col sm:flex-row gap-4" id="outageOptions">
+                        <input type="radio" name="outage" id="blackout" class="hidden peer/blackout">
+                        <label for="blackout" class="flex flex-col text-center rounded-2xl items-center justify-center cursor-pointer text-white w-full sm:w-72 h-24 md:h-32 border-2 border-[#B5B5B5]
+                            peer-checked/blackout:bg-[#FFBB0240]/[25%] peer-checked/blackout:border-[#FAB005]">
+                            <img src="/img/volt.svg" alt="">
+                            Total Blackout
+                        </label>
+
+                        <input type="radio" name="outage" id="fluctuation" class="hidden peer/fluctuation">
+                        <label for="fluctuation"
+                            class="flex flex-col text-center rounded-2xl items-center justify-center cursor-pointer text-white w-full sm:w-72 h-24 md:h-32 border-2 border-[#B5B5B5]
+                            peer-checked/fluctuation:bg-[#FFBB0240]/[25%] peer-checked/fluctuation:border-[#FAB005]">
+                            <img src="/img/fluctuation.svg" alt="">
+                            Fluctuation
+                        </label>
+                    </div><br>
+
+                        <span class="text-[#B5B5B5] font-semibold text-sm mb-2">LOCATION DETAIL</span>
+                        <input class="w-full px-2 h-12 bg-[#1A1B33] border-2 rounded-2xl border-[#B5B5B5]/[50%]"
+                            type="text" placeholder="e.g, Street Name, Landmark"><br>
+
+                        <span class="text-[#B5B5B5] font-semibold text-sm mb-2">OBSERVATIONS</span>
+                        <textarea
+                            class="w-full h-28 md:h-20 border-2 p-2 border-[#B5B5B5]/[50%] rounded-2xl bg-[#1A1B33]"
+                            placeholder="Describe what happened..."></textarea><br>
+
+                        <button type="submit"
+                            class="int-btn flex bg-[#FFBB02] text-black font-bold w-full rounded-full h-10 items-center
+                            justify-center
+                            cursor-pointer
+                            transition-all duration-300 ease-out transform
+                            hover:bg-[#D99A00] active:bg-[#FFC833]
+                            hover:scale-105 active:scale-95 text-sm">
+                            Submit Community Report
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <div class="hidden">
+        <span id="level"></span>
+        <span id="status"></span>
+
+        <svg>
+            <circle id="battery-ring"></circle>
+        </svg>
+    </div>
+    <!-- Low Battery Warning Toast -->
+    <div id="battery-warning"
+        class="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-4
+        opacity-0 invisible pointer-events-none transition-opacity duration-300">
+        <div id="batteryBox"
+            class="bg-[#1A1B33] border-2 border-red-600 rounded-3xl p-8 max-w-sm w-full flex flex-col items-center gap-4 text-center
+            scale-95 translate-y-4 opacity-0 transition-all duration-300 ease-out">
+            <span class="text-red-500 text-5xl">⚠️</span>
+            <h2 class="text-white text-xl font-bold">Battery Low!</h2>
+            <p class="text-[#B5B5B5] text-sm">Please charge your device as soon as possible to avoid losing power.</p>
+            <button onclick="closeBatteryWarning()"
+                class="int-btn mt-2 px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full transition-all duration-200">
+                Got it
+            </button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>

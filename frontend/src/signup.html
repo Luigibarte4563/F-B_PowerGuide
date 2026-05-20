@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PowerGuide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="./output.css" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Montserrat', sans-serif; }
+  </style>
+</head>
+
+<body id="signup" class="min-h-screen flex justify-center items-center bg-[#03041A] p-6 text-white">
+
+<!-- Signup Box -->
+    <div class="shadow-[0_0_20px_#FFBB02]
+        rounded-[2rem] flex flex-col items-center justify-start
+        p-10 opacity-100 bg-[#03041A]"
+        style="width: 30rem; min-height: 30rem;">
+
+        <!-- Logo -->
+        <div class="flex justify-center items-center w-full mt-2">    
+            <img class="w-10 md:w-16" src="../img/logo.png" alt="">
+
+            <div class="flex flex-col justify-center items-start leading-none">
+                <span class="text-white text-lg md:text-xl font-semibold leading-none">
+                    POWER<span class="text-[#FFBB02]">GUIDE</span>
+                </span>
+
+                <span class="text-white font-normal text-sm md:text-xs tracking-widest opacity-70 leading-none -mt-1">
+                    SECURITY AND RELIABILITY
+                </span>
+            </div>
+        </div>
+
+    <!-- Form -->
+    <div class="flex flex-col">
+
+      <!-- Email -->
+      <div class="mb-3">
+        <span class="block text-sm text-white font-semibold mt-4 mb-1">Email</span>
+        <input type="email" placeholder="johndoe@gmail.com"
+                        class="w-80 h-10 pl-4 pr-4 rounded-xl
+                        border border-white/70
+                        text-sm font-medium text-white
+                        outline-none placeholder:text-white/40
+                        focus:border-[#FFBB02] mt-1">
+      </div>
+
+      <!-- Name -->
+      <div class="mb-3">
+        <span class="block text-sm text-white font-semibold mb-1">Full Name</span>
+        <input type="email" placeholder="John C. Doe"
+                        class="w-80 h-10 pl-4 pr-4 rounded-xl
+                        border border-white/70
+                        text-sm font-medium text-white
+                        outline-none placeholder:text-white/40
+                        focus:border-[#FFBB02] mt-1">
+      </div>
+
+      <!-- Contact -->
+      <div class="mb-3">
+        <span class="block text-sm text-white font-semibold mb-1">Contact Number</span>
+        <input type="tel" id="contact" placeholder="+63 912 345 6789"
+          maxlength="11"
+          inputmode="numeric"
+          oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+          class="w-80 h-10 pl-4 pr-4 rounded-xl
+                        border border-white/70
+                        text-sm font-medium text-white
+                        outline-none placeholder:text-white/40
+                        focus:border-[#FFBB02] mt-1">
+      </div>
+
+      <!-- Password -->
+      <div class="mb-4 relative">
+        <span class="block text-sm text-white font-semibold mb-1">Password</span>
+
+        <input type="password" id="password" placeholder="********"
+          class="w-80 h-10 pl-4 pr-4 rounded-xl
+                        border border-white/70
+                        text-sm font-medium text-white
+                        outline-none placeholder:text-white/40
+                        focus:border-[#FFBB02] mt-1">
+
+        <button type="button" onclick="togglePassword()" class="cursor-pointer" onmouseover="this.style.color='#FFBB02'"
+                                                                                            onmouseout="this.style.color='#9ca3af'"
+                        style="position: absolute; right: 0.75rem; top: 70%; transform: translateY(-50%); color: #9ca3af;">
+                        <i id="eyeIcon" class="fas fa-eye text-lg"></i>
+                    </button>
+      </div>
+
+      <!-- Button -->
+      <div class="flex justify-center">
+        <button onclick="validateForm()"
+          class="int-btn rounded-full bg-[#FFBB02] hover:bg-[#D99A00]
+              active:bg-[#FFC833] text-black text-sm font-bold
+              hover:scale-[1.02] active:scale-[0.98] transition"
+          style="width: 13rem; height:2rem;">
+          Create Account
+        </button>
+      </div>
+
+      <div class="flex flex-row items-center gap-3 my-4" style="margin-top:10px; margin-bottom:10px;">
+          <hr class="flex-1 w-40  border-[#AFAFAF]" />
+          <span class="text-base text-[#B5B5B5] font-bold">or</span>
+          <hr class="flex-1  border-[#AFAFAF]" />
+      </div>
+
+      <!-- Google -->
+      <div class="flex justify-center">
+        <button class="int-btn rounded-full font-semibold border border-[#FFBB02]
+            flex items-center justify-center gap-2 text-sm
+            hover:text-black hover:bg-[#FFBB02] transition"
+            style="width: 13rem; height:2rem;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" class="w-3 h-3">
+          Sign up with Google
+        </button>
+      </div>
+
+      <!-- Login -->
+      <div class="flex justify-center">
+          <span class="text-white text-sm pb-6 pt-2 mt-2">
+              Already have an account?
+              <a href="login.html" onclick="fadeOut(event)"
+                  style="color: #FFBB02; font-weight: bold; font-size: 0.9rem; text-decoration: none;"
+                  onmouseover="this.style.color='#D99A00'"
+                  onmouseout="this.style.color='#FFBB02'"
+                  onmousedown="this.style.color='#FFC833'"
+                  onmouseup="this.style.color='#D99A00'">
+                  Log in
+              </a>
+          </span>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script src="./script.js"></script>
+<script>
+    window.addEventListener("load", () => {
+        document.body.classList.add("loaded");
+    });
+
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            montserrat: ['Montserrat', 'sans-serif'],
+          }
+        }
+      }
+    }
+</script>
+
+</body>
+</html>                          

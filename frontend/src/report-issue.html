@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll:smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerGuide Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./output.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-[#03041A] text-white font-['Montserrat']">
+
+    <header id="mainHeader" class="flex flex-row sticky top-0 z-50
+                h-16 md:h-[100px] text-2xl items-center
+                justify-between px-4 md:px-0
+                bg-black/50 backdrop-blur-2xl
+                border-b border-white/10 -ml-8">
+        <div class="flex pl-8 items-center gap-2">
+            <a href="/src/landing.html" class="flex pl-10 items-center gap-2">
+                <img class="w-10 md:w-16" src="../img/logo.png" alt="">
+                <div class="flex flex-col justify-center items-start">
+                    <span class="text-white font-bold text-lg md:text-xl leading-tight">
+                        POWER<span class="text-[#FFBB02]">GUIDE</span>
+                    </span>
+                    <span class="text-white font-medium text-sm md:text-xs tracking-widest opacity-70 leading-none">
+                        SECURITY AND RELIABILITY
+                    </span>
+                </div>
+            </a>
+        </div>
+        <div class="flex items-center gap-6 md:gap-10 p-2 md:p-4 text-xs md:text-sm font-bold">
+            <a href="landing.html" onclick="fadeOut(event)">
+                <button class="int-btn cursor-pointer px-3 py-1.5 md:px-4 md:py-2
+                    bg-[#FFBB02] text-black rounded-full
+                    hover:bg-[#D99A00] active:bg-[#FFC833]
+                    transform transition-all duration-200 ease-in-out
+                    hover:scale-105 active:scale-95 mr-6">
+                    Back to Home
+                </button>
+            </a>
+            <!-- Hamburger button (mobile only) -->
+            <button id="menuBtn" class="md:hidden text-white p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center py-10 px-4">
+        <div class="w-full max-w-2xl bg-[#0C0D2A] p-8 md:p-12 rounded-4xl shadow-[0_0_30px_rgba(255,187,2,0.15)] border border-white/5">
+            
+            <div class="mb-10 text-center">
+                <h1 class="text-3xl md:text-4xl font-black mb-2">Report an <span class="text-[#FFBB02]">Issue</span></h1>
+                <p class="text-gray-400 text-sm md:text-base">Found a bug or having trouble? Let us know and we'll fix it.</p>
+            </div>
+
+            <form action="#" method="POST" class="flex flex-col gap-6">
+                <!-- Issue Category -->
+                <div class="flex flex-col gap-2">
+
+                    <label class="text-xs font-bold tracking-widest text-[#FFBB02] uppercase">
+                        Type of Issue
+                    </label>
+
+                    <div class="custom-select relative w-full" id="issueSelect">
+
+                        <!-- Dropdown Button -->
+                        <button type="button"
+                            onclick="toggleDropdown('issueSelect', event)"
+                            class="w-full px-3 h-12 bg-[#1A1B33] text-white text-left text-sm
+                            border-2 border-[#B5B5B5]/[50%] rounded-2xl cursor-pointer
+                            flex items-center justify-between focus:outline-none">
+
+                            <span class="select-label text-white/50">
+                                Select Issue Type
+                            </span>
+
+                            <svg class="select-arrow w-4 h-4 transition-transform duration-200"
+                                fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+
+                        <!-- Dropdown Options -->
+                        <div class="select-options absolute z-50 w-full mt-2 bg-[#364057]
+                            border-2 border-[#B5B5B5]/[50%] rounded-2xl overflow-hidden
+                            opacity-0 scale-95 pointer-events-none
+                            transition-all duration-200 ease-out origin-top">
+
+                            <div class="select-option px-4 py-3 text-sm text-white cursor-pointer
+                                hover:bg-[#FFBB02] hover:text-black transition-colors duration-150">
+                                Technical Bug
+                            </div>
+
+                            <div class="select-option px-4 py-3 text-sm text-white cursor-pointer
+                                hover:bg-[#FFBB02] hover:text-black transition-colors duration-150">
+                                Account Access
+                            </div>
+
+                            <div class="select-option px-4 py-3 text-sm text-white cursor-pointer
+                                hover:bg-[#FFBB02] hover:text-black transition-colors duration-150">
+                                Map/Location Error
+                            </div>
+
+                            <div class="select-option px-4 py-3 text-sm text-white cursor-pointer
+                                hover:bg-[#FFBB02] hover:text-black transition-colors duration-150">
+                                Battery Tracker Issue
+                            </div>
+
+                            <div class="select-option px-4 py-3 text-sm text-white cursor-pointer
+                                hover:bg-[#FFBB02] hover:text-black transition-colors duration-150">
+                                Other
+                            </div>
+
+                        </div>
+
+                        <input type="hidden" name="issue_type">
+
+                    </div>
+
+                </div>
+
+                <!-- Email -->
+                <div class="flex flex-col gap-2">
+                    <label class="text-xs font-bold tracking-widest text-[#FFBB02] uppercase">
+                        Your Email
+                    </label>
+
+                    <input type="email"
+                        placeholder="johndoe@gmail.com"
+                        class="w-full h-11 px-4 rounded-xl
+                        bg-white/10 border border-white/10
+                        text-sm font-medium text-white outline-none
+                        placeholder:text-white/40
+                        focus:border-[#FFBB02]/50 focus:ring-1 focus:ring-[#FFBB02]/30">
+                </div>
+
+                <!-- Description -->
+                <div class="flex flex-col gap-2">
+                    <label class="text-xs font-bold tracking-widest text-[#FFBB02] uppercase">
+                        Description
+                    </label>
+
+                    <textarea rows="5"
+                        placeholder="Please provide as much detail as possible..."
+                        class="w-full px-4 py-3 rounded-xl resize-none
+                        bg-white/10 border border-white/10
+                        text-sm font-medium text-white outline-none
+                        placeholder:text-white/40
+                        focus:border-[#FFBB02]/50 focus:ring-1 focus:ring-[#FFBB02]/30"></textarea>
+                </div>
+
+                <!-- Attachment (Optional) -->
+                <div class="flex flex-col gap-2">
+                    <label class="text-xs font-bold tracking-widest text-[#FFBB02] uppercase">Screenshot (Optional)</label>
+                    <input type="file" class="text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#FFBB02] file:text-black hover:file:bg-[#D99A00]">
+                </div>
+
+                <!-- Submit Button -->
+                <button type="button"
+                    onclick="window.location.href='landing.html'"
+                    class="mt-4 bg-[#FFBB02] text-black font-bold py-4 rounded-xl hover:bg-[#D99A00] active:scale-95 transition-all shadow-[0_5px_15px_rgba(255,187,2,0.2)]">
+                    Submit Report
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Simple Footer -->
+    <footer class="py-10 text-center border-t border-white/10 bg-[#0B0C22]">
+        <span class="text-white/50 text-xs tracking-widest uppercase">
+            V6 @ 2026 POWERGUIDE. BUILT FOR THE COMMUNITY.
+        </span>
+    </footer>
+
+    <script src="./script.js"></script>
+    <script>
+        window.addEventListener("load", () => {
+            document.body.classList.add("loaded");
+        });
+    </script>
+</body>
+</html>
