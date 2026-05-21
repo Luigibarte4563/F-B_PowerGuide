@@ -149,7 +149,7 @@ $googleClientId = $_ENV['GOOGLE_CLIENT_ID'] ?? '';
             formData.append("picture", data.picture);
             formData.append("sub", data.sub);
 
-            fetch("<?= BASE_URL ?>/src/api/auth/google_auth.php", {
+            fetch("<?= BACKEND_URL ?>/src/api/auth/google_auth.php", {
                 method: "POST",
                 body: formData
             })
@@ -162,10 +162,10 @@ $googleClientId = $_ENV['GOOGLE_CLIENT_ID'] ?? '';
                     }
 
                     if (res.role === "electric_company") {
-                        window.location.href = "<?= PUBLIC_URL ?>/dashboard/electric/dashboard.php";
+                        window.location.href = "<?= BACKEND_URL ?>/public/dashboard/electric/dashboard.php";
                     }
                     else {
-                        window.location.href = "<?= PUBLIC_URL ?>/dashboard/user/user.php";
+                        window.location.href = "<?= BACKEND_URL ?>/public/dashboard/user/user.php";
                     }
                 })
                 .catch(err => console.error(err));

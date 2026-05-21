@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 error_reporting(E_ALL);
@@ -16,15 +15,15 @@ $conn = getConnection();
 $secret_key = $_ENV['JWT_SECRET_KEY'];
 
 /* =========================
-   ONLY ALLOW POST
+   ONLY POST ALLOWED
 ========================= */
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    header("Location: " . PUBLIC_URL . "/auth/auth.php?page=register");
+    header("Location: " . BACKEND_URL . "/public/auth/auth.php?page=register");
     exit;
 }
 
 /* =========================
-   GET FORM DATA
+   GET DATA
 ========================= */
 $name = trim($_POST['name'] ?? '');
 $email = trim($_POST['email'] ?? '');
@@ -32,30 +31,31 @@ $passwordRaw = $_POST['password'] ?? '';
 $confirmPassword = $_POST['confirm_password'] ?? '';
 
 /* =========================
+   CLEAR OLD SESSION MESSAGES
+========================= */
+unset($_SESSION['register_error'], $_SESSION['success']);
+
+/* =========================
    VALIDATION
 ========================= */
 if (!$name || !$email || !$passwordRaw || !$confirmPassword) {
     $_SESSION['register_error'] = "All fields are required.";
-    header("Location: " . PUBLIC_URL . "/auth/auth.php?page=register");
-    exit;
+    redirect();
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $_SESSION['register_error'] = "Invalid email format.";
-    header("Location: " . PUBLIC_URL . "/auth/auth.php?page=register");
-    exit;
+    redirect();
 }
 
 if ($passwordRaw !== $confirmPassword) {
     $_SESSION['register_error'] = "Passwords do not match.";
-    header("Location: " . PUBLIC_URL . "/auth/auth.php?page=register");
-    exit;
+    redirect();
 }
 
 if (strlen($passwordRaw) < 6) {
     $_SESSION['register_error'] = "Password must be at least 6 characters.";
-    header("Location: " . PUBLIC_URL . "/auth/auth.php?page=register");
-    exit;
+    redirect();
 }
 
 /* =========================
@@ -66,48 +66,40 @@ $stmt->execute([$email]);
 
 if ($stmt->fetch()) {
     $_SESSION['register_error'] = "Email already exists.";
-    header("Location: " . PUBLIC_URL . "/auth/auth.php?page=register");
-    exit;
+    redirect();
 }
 
 /* =========================
-   HASH PASSWORD
+   CREATE USER
 ========================= */
 $password = password_hash($passwordRaw, PASSWORD_BCRYPT);
 
-/* =========================
-   INSERT USER (FIXED ROLE SAFE DEFAULT)
-========================= */
 $stmt = $conn->prepare("
     INSERT INTO users (name, email, password, auth_provider, role, created_at)
     VALUES (?, ?, ?, 'local', 'user', NOW())
 ");
 
-$success = $stmt->execute([$name, $email, $password]);
-
-if (!$success) {
+if (!$stmt->execute([$name, $email, $password])) {
     $_SESSION['register_error'] = "Registration failed.";
-    header("Location: " . PUBLIC_URL . "/auth/auth.php?page=register");
-    exit;
+    redirect();
 }
 
-/* =========================
-   GET USER
-========================= */
 $userId = $conn->lastInsertId();
 
-$stmt = $conn->prepare("SELECT * FROM users WHERE id = ? LIMIT 1");
+/* =========================
+   FETCH USER
+========================= */
+$stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$userId]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$user) {
     $_SESSION['register_error'] = "User retrieval failed.";
-    header("Location: " . PUBLIC_URL . "/auth/auth.php?page=register");
-    exit;
+    redirect();
 }
 
 /* =========================
-   JWT TOKEN
+   JWT
 ========================= */
 $payload = [
     "id" => $user['id'],
@@ -133,7 +125,7 @@ setcookie("jwt_token", $jwt, [
 ]);
 
 /* =========================
-   SESSION
+   SESSION USER
 ========================= */
 $_SESSION['user'] = [
     "id" => $user['id'],
@@ -149,12 +141,20 @@ $_SESSION['user'] = [
 $_SESSION['success'] = "Registration successful.";
 
 /* =========================
-   REDIRECT
+   REDIRECT FUNCTION
 ========================= */
-if ($user['role'] === "electric_company") {
-    header("Location: " . PUBLIC_URL . "/dashboard/electric/dashboard.php");
-} else {
-    header("Location: " . PUBLIC_URL . "/dashboard/user/user.php");
+function redirect()
+{
+    header("Location: " . BACKEND_URL . "/public/auth/auth.php?page=register");
+    exit;
 }
 
+/* =========================
+   FINAL REDIRECT (AUTO LOGIN FLOW)
+========================= */
+if ($user['role'] === "electric_company") {
+    header("Location: " . BACKEND_URL . "/public/dashboard/electric/dashboard.php");
+} else {
+    header("Location: " . BACKEND_URL . "/public/dashboard/user/user.php");
+}
 exit;
