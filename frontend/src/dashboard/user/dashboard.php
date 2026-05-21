@@ -217,7 +217,8 @@ $picture = $user['picture'] ?? $defaultPicture;
                 class="mx-4 lg:mx-8 mt-14 lg:mt-8 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h1 class="text-2xl lg:text-3xl font-black tracking-tight">Welcome Back,
-                        <?= htmlspecialchars(explode(' ', $user['name'])[0]) ?>!</h1>
+                        <?= htmlspecialchars(explode(' ', $user['name'])[0]) ?>!
+                    </h1>
                     <span class="text-xs lg:text-sm text-[#B5B5B5] flex items-center gap-2 mt-1">
                         Grid status:
                         <span class="flex items-center gap-1.5 text-[#00BA00] font-medium">
@@ -359,59 +360,125 @@ $picture = $user['picture'] ?? $defaultPicture;
             </section>
 
             <!-- CENTER SECTION -->
-            <section class="flex flex-col xl:flex-row gap-6 px-4 lg:px-8 mt-6 mb-8">
+            <section class="flex flex-col gap-6 px-4 lg:px-8 mt-6 mb-8">
 
-                <!-- LEFT: Map Container -->
-                <div class="flex flex-col flex-1 min-w-0">
-                    <div
-                        class="rounded-2xl border border-white/5 overflow-hidden shadow-xl bg-[#31324C]/20 flex flex-col">
+                <!-- TOP ROW: Map (Left) & Battery Status (Right) -->
+                <div class="flex flex-col xl:flex-row gap-6">
+
+                    <!-- LEFT: Map Container -->
+                    <div class="flex flex-col flex-1 min-w-0">
                         <div
-                            class="flex flex-row justify-between items-center p-5 border-b border-white/5 bg-[#16172E]/40">
-                            <div class="flex flex-row items-center gap-2.5">
-                                <div class="text-[#FFBB02]">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
+                            class="rounded-2xl border border-white/5 overflow-hidden shadow-xl bg-[#31324C]/20 flex flex-col h-full">
+                            <div
+                                class="flex flex-row justify-between items-center p-5 border-b border-white/5 bg-[#16172E]/40">
+                                <div class="flex flex-row items-center gap-2.5">
+                                    <div class="text-[#FFBB02]">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                    </div>
+                                    <span class="font-bold text-sm lg:text-base">Outage Reports Map</span>
                                 </div>
-                                <span class="font-bold text-sm lg:text-base">Outage Reports Map</span>
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="text-[#00BA00] px-2.5 py-1 bg-[#00BA00]/10 text-xs rounded-lg font-bold border border-[#00BA00]/20 flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 bg-[#00BA00] rounded-full animate-pulse"></span> LIVE
+                                        REED
+                                    </span>
+                                </div>
                             </div>
-                            <div class="flex items-center gap-2">
-                                <span
-                                    class="text-[#00BA00] px-2.5 py-1 bg-[#00BA00]/10 text-xs rounded-lg font-bold border border-[#00BA00]/20 flex items-center gap-1">
-                                    <span class="w-1.5 h-1.5 bg-[#00BA00] rounded-full animate-pulse"></span> LIVE REED
+
+                            <!-- Restored Map Element ID Block -->
+                            <div id="map" class="w-full h-80 lg:h-[430px] z-10 bg-[#0E0F26]"></div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: Battery Detection Card with Circular Progress -->
+                    <div class="flex flex-col xl:w-[380px] flex-shrink-0">
+                        <div class="card-hover bg-[#31324C]/20 border border-white/5 rounded-2xl p-6 flex flex-col justify-between shadow-xl min-h-[440px] xl:h-full relative transition-all duration-300 overflow-hidden"
+                            id="batteryCard">
+
+                            <!-- Card Header -->
+                            <div class="flex justify-between items-center">
+                                <span class="text-white text-xs font-bold uppercase tracking-widest opacity-60">System
+                                    Power</span>
+                                <span id="batteryBadge"
+                                    class="text-[11px] font-extrabold tracking-widest text-[#FFBB02] bg-white/5 px-3 py-1.5 rounded-lg border border-white/5 transition-colors duration-300">
+                                    DETECTING STATUS
                                 </span>
                             </div>
-                        </div>
 
-                        <!-- Restored Map Element ID Block -->
-                        <div id="map" class="w-full h-80 lg:h-[430px] z-10 bg-[#0E0F26]"></div>
+                            <!-- CENTER: Circular Progress Ring Visualizer -->
+                            <div class="flex justify-center items-center my-auto py-4">
+                                <div class="relative w-44 h-44">
+                                    <!-- SVG Ring Layer -->
+                                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+                                        <!-- Background Track Circle -->
+                                        <circle cx="60" cy="60" r="50" class="stroke-white/5" stroke-width="8"
+                                            fill="transparent" />
+                                        <!-- Active Dynamic Fill Circle -->
+                                        <circle id="batteryProgressCircle" cx="60" cy="60" r="50" stroke="#FFBB02"
+                                            stroke-width="8" fill="transparent" stroke-dasharray="314.16"
+                                            stroke-dashoffset="314.16" stroke-linecap="round"
+                                            class="transition-all duration-500 ease-out" />
+                                    </svg>
+
+                                    <!-- Center Label Text Container -->
+                                    <div class="absolute inset-0 flex flex-col justify-center items-center">
+                                        <span id="batteryPercentage"
+                                            class="text-white text-4xl font-black tracking-tighter">--%</span>
+                                        <span id="chargingStateText"
+                                            class="text-[10px] font-bold uppercase text-[#00BA00] tracking-wider mt-0.5 min-h-[15px]"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card Footer Info Texts -->
+                            <div class="flex items-start gap-3 border-t border-white/5 pt-4">
+                                <div id="batteryIconWrapper"
+                                    class="bg-[#FFBB02]/10 text-[#FFBB02] p-2 rounded-lg transition-colors duration-300 flex-shrink-0">
+                                    <svg id="batteryIcon" class="w-5 h-5" fill="none" stroke="currentColor"
+                                        stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h16v4H3z" />
+                                    </svg>
+                                </div>
+                                <div class="flex flex-col gap-0.5">
+                                    <span id="batteryStatusDesc"
+                                        class="text-[#B5B5B5] text-xs font-medium leading-relaxed transition-colors duration-300">
+                                        Initializing system telemetry links...
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 
-                <!-- RIGHT: Outage Lists Feed -->
-                <div class="flex flex-col xl:w-[380px] flex-shrink-0">
+                <!-- BOTTOM ROW: Wide Outage Lists Feed Container -->
+                <div class="w-full">
                     <div
-                        class="rounded-2xl border border-white/5 bg-[#31324C]/20 flex flex-col p-5 shadow-xl min-h-[460px]">
+                        class="rounded-2xl border border-white/5 bg-[#31324C]/20 flex flex-col p-6 shadow-xl min-h-[300px]">
                         <span class="text-white text-xs font-bold uppercase tracking-widest opacity-60 mb-4">Report Logs
                             Feed</span>
 
-                        <!-- Dynamic Outage List Render Element Container -->
+                        <!-- Dynamic Outage List Render Element Container (Wide) -->
                         <div id="list"
-                            class="flex flex-col gap-3 flex-1 overflow-y-auto custom-scrollbar pr-1 max-h-[380px]">
+                            class="flex flex-col gap-3 flex-1 overflow-y-auto custom-scrollbar pr-1 max-h-[400px]">
                             <!-- List items inject dynamically here -->
                         </div>
 
                         <!-- Restored Pagination Navigation Element -->
                         <div id="pagination"
-                            class="flex flex-row gap-1 justify-center items-center mt-4 pt-3 border-t border-white/5">
+                            class="flex flex-row gap-1 justify-center items-center mt-5 pt-4 border-t border-white/5">
                             <!-- Dynamic pagination nodes inject here -->
                         </div>
                     </div>
                 </div>
+
             </section>
         </main>
     </div>
@@ -581,6 +648,101 @@ $picture = $user['picture'] ?? $defaultPicture;
             });
         }
 
+        // Battery Detect
+        document.addEventListener("DOMContentLoaded", () => {
+            initDashboardBatteryRing();
+        });
+
+        function initDashboardBatteryRing() {
+            const pctLabel = document.getElementById("batteryPercentage");
+            const badgeLabel = document.getElementById("batteryBadge");
+            const descLabel = document.getElementById("batteryStatusDesc");
+            const chargingLabel = document.getElementById("chargingStateText");
+            const iconWrapper = document.getElementById("batteryIconWrapper");
+            const cardElement = document.getElementById("batteryCard");
+            const iconSvg = document.getElementById("batteryIcon");
+            const progressCircle = document.getElementById("batteryProgressCircle");
+
+            // Circumference value of the r=50 circle path (2 * PI * 50)
+            const ringCircumference = 314.15926;
+
+            if (!navigator.getBattery) {
+                pctLabel.innerText = "N/A";
+                badgeLabel.innerText = "UNSUPPORTED";
+                descLabel.innerText = "Hardware API interface missing from this browser.";
+                return;
+            }
+
+            navigator.getBattery().then((battery) => {
+                function runSystemUpdate() {
+                    const currentLevel = Math.round(battery.level * 100);
+                    pctLabel.innerText = `${currentLevel}%`;
+
+                    // Adjust the SVG Fill Stroke offset position smoothly
+                    const offsetValue = ringCircumference - (battery.level * ringCircumference);
+                    progressCircle.style.strokeDashoffset = offsetValue;
+
+                    // Toggle flashing charging status string
+                    chargingLabel.innerText = battery.charging ? "Charging" : "";
+
+                    // Reset dynamic glow and border attributes
+                    cardElement.style.boxShadow = "";
+                    cardElement.style.borderColor = "rgba(255,255,255,0.05)";
+
+                    if (battery.charging && currentLevel >= 95) {
+                        // GREEN CAPACITANCE STATE
+                        badgeLabel.innerText = "FULLY CHARGED";
+                        badgeLabel.style.color = "#5FCB5F";
+                        descLabel.innerText = "AC wall power online. Station infrastructure holding max cell reserves.";
+
+                        progressCircle.style.stroke = "#5FCB5F";
+                        progressCircle.style.filter = "drop-shadow(0 0 4px rgba(95, 203, 95, 0.4))";
+                        iconWrapper.className = "p-2 rounded-lg bg-[#5FCB5F]/10 text-[#5FCB5F] transition-colors duration-300";
+                        cardElement.style.boxShadow = "0 20px 25px -5px rgba(95, 203, 95, 0.03)";
+
+                        iconSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h14a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2zm16 4h2v2h-2v-2zM6 10h2v4H6v-4zm4 0h2v4h-2v-4zm4 0h2v4h-2v-4z" />`;
+                    }
+                    else if (currentLevel <= 20) {
+                        // RED EMERGENCY CRITICAL STATE
+                        badgeLabel.innerText = "CRITICAL LOW";
+                        badgeLabel.style.color = "#CB3435";
+                        descLabel.innerText = battery.charging
+                            ? "Low capacity state. Secondary energy link active, restoring levels."
+                            : "Severe local power drainage. Plug in immediate system backups.";
+
+                        progressCircle.style.stroke = "#CB3435";
+                        progressCircle.style.filter = "drop-shadow(0 0 6px rgba(203, 52, 53, 0.6))";
+                        iconWrapper.className = "p-2 rounded-lg bg-[#CB3435]/10 text-[#CB3435] transition-colors duration-300";
+                        cardElement.style.borderColor = "rgba(203, 52, 53, 0.2)";
+                        cardElement.style.boxShadow = "0 20px 25px -5px rgba(203, 52, 53, 0.08)";
+
+                        iconSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h14a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2zm16 4h2v2h-2v-2zM6 10h1v4H6v-4z" />`;
+                    }
+                    else {
+                        // STANDARD GOLD AMBER STATE
+                        badgeLabel.innerText = battery.charging ? "RECHARGING" : "BATTERY NOMINAL";
+                        badgeLabel.style.color = "#FFBB02";
+                        descLabel.innerText = battery.charging
+                            ? "DC voltage streaming steady. Rebuilding capacity distributions."
+                            : "System runtime operating on stable standalone lithium architecture.";
+
+                        progressCircle.style.stroke = "#FFBB02";
+                        progressCircle.style.filter = "drop-shadow(0 0 4px rgba(255, 187, 2, 0.4))";
+                        iconWrapper.className = "p-2 rounded-lg bg-[#FFBB02]/10 text-[#FFBB02] transition-colors duration-300";
+                        cardElement.style.boxShadow = "0 20px 25px -5px rgba(255, 187, 2, 0.03)";
+
+                        iconSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h14a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2zm16 4h2v2h-2v-2zM6 10h5v4H6v-4z" />`;
+                    }
+                }
+
+                // Initialize state indicators
+                runSystemUpdate();
+
+                // System interrupts to process physical cable tracking changes dynamically
+                battery.addEventListener("levelchange", runSystemUpdate);
+                battery.addEventListener("chargingchange", runSystemUpdate);
+            });
+        }
         /* CLIENT-SIDE PAGINATION INTERACTIVE ELEMENTS GENERATOR */
         function renderPagination() {
             const p = document.getElementById("pagination");
@@ -593,8 +755,8 @@ $picture = $user['picture'] ?? $defaultPicture;
                 const btn = document.createElement("button");
                 btn.innerText = i;
                 btn.className = `h-7 w-7 flex items-center justify-center rounded-lg font-bold text-[11px] transition-all duration-150 ${i === currentPage
-                        ? "bg-[#FFBB02] text-black shadow-md shadow-[#FFBB02]/10"
-                        : "bg-[#31324C]/40 text-[#B5B5B5] hover:bg-[#31324C]/80 hover:text-white"
+                    ? "bg-[#FFBB02] text-black shadow-md shadow-[#FFBB02]/10"
+                    : "bg-[#31324C]/40 text-[#B5B5B5] hover:bg-[#31324C]/80 hover:text-white"
                     }`;
 
                 btn.onclick = () => {
