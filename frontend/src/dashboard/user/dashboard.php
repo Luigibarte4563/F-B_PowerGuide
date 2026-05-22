@@ -236,14 +236,9 @@ $picture = $user['picture'] ?? $defaultPicture;
                         <?= htmlspecialchars(explode(' ', $user['name'])[0]) ?>!
                     </h1>
                     <span class="text-xs lg:text-sm text-[#B5B5B5] flex items-center gap-2 mt-1">
-                        Grid status:
-                        <span class="flex items-center gap-1.5 text-[#00BA00] font-medium">
-                            <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            Stable in Dagupan City
+                        Status Context:
+                        <span class="flex items-center gap-1.5 text-[#FFBB02] font-medium" id="status">
+                            Initializing infrastructure links...
                         </span>
                     </span>
                 </div>
@@ -275,17 +270,14 @@ $picture = $user['picture'] ?? $defaultPicture;
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                                         </svg>
-                                        <h1 class="text-xs font-bold text-white uppercase tracking-wider">Live System
-                                            Feed</h1>
+                                        <h1 class="text-xs font-bold text-white uppercase tracking-wider">Live System Feed</h1>
                                     </div>
                                     <button onclick="markAllAsRead()"
-                                        class="text-[10px] text-[#FFBB02] hover:underline font-bold tracking-wide uppercase bg-[#31324C]/30 px-2 py-1 rounded">Mark
-                                        All</button>
+                                        class="text-[10px] text-[#FFBB02] hover:underline font-bold tracking-wide uppercase bg-[#31324C]/30 px-2 py-1 rounded">Mark All</button>
                                 </div>
 
                                 <div id="notifFeed"
                                     class="flex flex-col gap-2.5 max-h-80 overflow-y-auto custom-scrollbar">
-                                    <!-- Dynamic elements map here -->
                                 </div>
                             </div>
                         </div>
@@ -399,18 +391,17 @@ $picture = $user['picture'] ?? $defaultPicture;
                                                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                         </svg>
                                     </div>
-                                    <span class="font-bold text-sm lg:text-base">Outage Reports Map</span>
+                                    <span class="font-bold text-sm lg:text-base">Nearby Charging Hubs Map</span>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <span
                                         class="text-[#00BA00] px-2.5 py-1 bg-[#00BA00]/10 text-xs rounded-lg font-bold border border-[#00BA00]/20 flex items-center gap-1">
-                                        <span class="w-1.5 h-1.5 bg-[#00BA00] rounded-full animate-pulse"></span> LIVE
-                                        REED
+                                        <span class="w-1.5 h-1.5 bg-[#00BA00] rounded-full animate-pulse"></span> LIVE LOOP
                                     </span>
                                 </div>
                             </div>
 
-                            <!-- Restored Map Element ID Block -->
+                            <!-- Map Element Block -->
                             <div id="map" class="w-full h-80 lg:h-[430px] z-10 bg-[#0E0F26]"></div>
                         </div>
                     </div>
@@ -422,8 +413,7 @@ $picture = $user['picture'] ?? $defaultPicture;
 
                             <!-- Card Header -->
                             <div class="flex justify-between items-center">
-                                <span class="text-white text-xs font-bold uppercase tracking-widest opacity-60">System
-                                    Power</span>
+                                <span class="text-white text-xs font-bold uppercase tracking-widest opacity-60">System Power</span>
                                 <span id="batteryBadge"
                                     class="text-[11px] font-extrabold tracking-widest text-[#FFBB02] bg-white/5 px-3 py-1.5 rounded-lg border border-white/5 transition-colors duration-300">
                                     DETECTING STATUS
@@ -476,23 +466,21 @@ $picture = $user['picture'] ?? $defaultPicture;
                     </div>
                 </div>
 
-                <!-- BOTTOM ROW: Wide Outage Lists Feed Container -->
+                <!-- BOTTOM ROW: Wide Charging Hub Lists Feed Container -->
                 <div class="w-full">
                     <div
                         class="rounded-2xl border border-white/5 bg-[#31324C]/20 flex flex-col p-6 shadow-xl min-h-[300px]">
-                        <span class="text-white text-xs font-bold uppercase tracking-widest opacity-60 mb-4">Report Logs
-                            Feed</span>
+                        <span class="text-white text-xs font-bold uppercase tracking-widest opacity-60 mb-4">Nearby Power Stations</span>
 
-                        <!-- Dynamic Outage List Render Element Container (Wide) -->
+                        <!-- Dynamic Station Feed Render Element Container (Wide) -->
                         <div id="list"
-                            class="flex flex-col gap-3 flex-1 overflow-y-auto custom-scrollbar pr-1 max-h-[400px]">
-                            <!-- List items inject dynamically here -->
+                            class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 flex-1 overflow-y-auto custom-scrollbar pr-1 max-h-[400px]">
+                            <!-- Station feed cards inject dynamically here -->
                         </div>
 
-                        <!-- Restored Pagination Navigation Element -->
+                        <!-- Pagination Navigation Element -->
                         <div id="pagination"
                             class="flex flex-row gap-1 justify-center items-center mt-5 pt-4 border-t border-white/5">
-                            <!-- Dynamic pagination nodes inject here -->
                         </div>
                     </div>
                 </div>
@@ -516,161 +504,274 @@ $picture = $user['picture'] ?? $defaultPicture;
         menuToggle.addEventListener('click', toggleMobileSidebar);
         overlay.addEventListener('click', toggleMobileSidebar);
 
-        /* CORE BUSINESS DATA LOGIC PORTING INTERACTION LAYERS */
+        /* =========================
+           GLOBAL STATES & ARRAYS
+        ========================= */
         let map;
-        let markers = [];
-        let allData = [];
+        let stationLayer;
+        let userMarker = null;
+        let stationsData = [];
         let currentPage = 1;
-        const perPage = 3; // Switched to 3 items inside compressed side block component layout to prevent overflows
+        const perPage = 3; 
         let notifications = [];
 
-        /* INIT MAP */
+        /* =========================
+           MAP INITIALIZATION
+        ========================= */
         function initMap() {
-            map = L.map('map').setView([16.043, 120.333], 12);
+            map = L.map('map').setView([16.0431, 120.3330], 13);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19
+                maxZoom: 19,
+                attribution: "© OpenStreetMap"
             }).addTo(map);
+
+            stationLayer = L.layerGroup().addTo(map);
         }
 
-        /* DASHBOARD METRICS INITIALIZATION */
+        /* =========================
+           CUSTOM LEAFLET MAP ICONS
+        ========================= */
+        const stationIcon = L.icon({
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/252/252025.png',
+            iconSize: [35, 35],
+            iconAnchor: [17, 35]
+        });
+
+        const userIcon = L.icon({
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/64/64113.png',
+            iconSize: [35, 35],
+            iconAnchor: [17, 35]
+        });
+
+        /* =========================
+           GEOLOCATION PIPELINE
+        ========================= */
+        async function loadUserLocation() {
+            if (!navigator.geolocation) {
+                document.getElementById("status").innerText = "Geolocation not supported";
+                loadStations(16.0431, 120.3330);
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                async (pos) => {
+                    const userLat = pos.coords.latitude;
+                    const userLng = pos.coords.longitude;
+
+                    if (userMarker) {
+                        map.removeLayer(userMarker);
+                    }
+
+                    userMarker = L.marker([userLat, userLng], { icon: userIcon })
+                        .addTo(map)
+                        .bindPopup("📍 Your Current Location");
+
+                    loadStations(userLat, userLng);
+                },
+                (err) => {
+                    console.error(err);
+                    document.getElementById("status").innerText = "Failed to get your location";
+                    loadStations(16.0431, 120.3330);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        }
+
+        /* =========================
+           DISTANCE CALCULATOR (HAVERSINE FORMULA)
+        ========================= */
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * Math.PI / 180) *
+                Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return (R * c).toFixed(2);
+        }
+
+        /* =========================
+           DASHBOARD METRICS INITIALIZATION
+        ========================= */
         async function loadDashboard() {
             try {
-
-                /* ================= STATIONS ================= */
-                const myReports = await fetch(
-                    "http://localhost/crowdsourcedAPI/api/power_station/get_available.php",
-                    {
-                        method: "GET",
-                        credentials: "include",
-                        headers: { "Accept": "application/json" }
-                    }
-                );
-
-                const myData = await myReports.json();
-
-                const stationsEl = document.getElementById("totalStations");
-                if (stationsEl) {
-                    stationsEl.innerText = myData.total_available ?? 0;
-                }
-
-
                 /* ================= ACTIVE OUTAGES ================= */
-                const active = await fetch(
-                    "http://localhost/crowdsourcedapi/api/outage_report/get_active.php",
-                    { credentials: "include" }
-                );
-
+                const active = await fetch("http://localhost/crowdsourcedapi/api/outage_report/get_active.php", { credentials: "include" });
                 const activeData = await active.json();
-
-                console.log("ACTIVE API RESPONSE:", activeData);
-
                 const activeEl = document.getElementById("activeOutages");
                 if (activeEl) {
-                    activeEl.innerText =
-                        activeData.count ??
-                        activeData.total ??
-                        activeData.total_active_reports ??
-                        (Array.isArray(activeData.data) ? activeData.data.length : 0);
+                    activeEl.innerText = activeData.count ?? activeData.total ?? activeData.total_active_reports ?? (Array.isArray(activeData.data) ? activeData.data.length : 0);
                 }
-
 
                 /* ================= MAINTENANCE ================= */
-                const maintenance = await fetch(
-                    "http://localhost/crowdsourcedapi/api/maintenance/get_upcoming.php",
-                    { credentials: "include" }
-                );
-
+                const maintenance = await fetch("http://localhost/crowdsourcedapi/api/maintenance/get_upcoming.php", { credentials: "include" });
                 const mData = await maintenance.json();
-
                 const maintenanceEl = document.getElementById("maintenanceCount");
                 if (maintenanceEl) {
-                    maintenanceEl.innerText =
-                        mData.count ??
-                        mData.upcoming_count ??
-                        (Array.isArray(mData.data) ? mData.data.length : 0);
+                    maintenanceEl.innerText = mData.count ?? mData.upcoming_count ?? (Array.isArray(mData.data) ? mData.data.length : 0);
+                }
+            } catch (e) {
+                console.error("Dashboard Metrics Parse Error:", e);
+            }
+        }
+
+        /* =========================
+           STATIONS LOADING & GEOGRAPHIC MANAGEMENT
+        ========================= */
+        async function loadStations(userLat, userLng) {
+            try {
+                const res = await fetch("http://localhost/crowdsourcedapi/api/power_station/get.php", { credentials: "include" });
+                const result = await res.json();
+
+                if (!result.success) {
+                    document.getElementById("status").innerText = "Failed to load stations";
+                    return;
                 }
 
-            } catch (e) {
-                console.error("Dashboard Stats Error:", e);
-            }
-        }
+                let stations = result.data || [];
 
-        /* OUTAGES DATA PARSING */
-        async function loadOutages() {
-            try {
-                const res = await fetch("http://localhost/crowdsourcedapi/api/outage_report/get.php", {
-                    credentials: "include"
+                // Calculate distances vectors dynamically
+                stations = stations.map(station => {
+                    const lat = parseFloat(station.latitude);
+                    const lng = parseFloat(station.longitude);
+                    let distance = null;
+                    if (!isNaN(lat) && !isNaN(lng)) {
+                        distance = calculateDistance(userLat, userLng, lat, lng);
+                    }
+                    return { ...station, distance };
                 });
 
-                const data = await res.json();
-                allData = data.data || [];
+                // Sort configurations nearest first
+                stations.sort((a, b) => (a.distance || 9999) - (b.distance || 9999));
+                stationsData = stations;
 
-                renderPage();
-                renderPagination();
-                renderMarkers();
-            } catch (e) {
-                console.error("Outages log feed could not parse remote API arrays:", e);
+                // Sync counter layout badges
+                document.getElementById("totalStations").innerText = stationsData.length;
+                document.getElementById("status").innerText = `Nearby Stations: ${stationsData.length}`;
+
+                renderStationsPage();
+                renderStationsPagination();
+                renderStationMapMarkers(userLat, userLng);
+
+            } catch (err) {
+                console.error("Load error:", err);
+                document.getElementById("status").innerText = "Server error";
             }
         }
 
-        /* MAP MARKERS RENDER ENGINE */
-        function renderMarkers() {
-            markers.forEach(m => map.removeLayer(m));
-            markers = [];
+        /* =========================
+           MAP MARKERS UPDATE LAYER LOOP
+        ========================= */
+        function renderStationMapMarkers(userLat, userLng) {
+            stationLayer.clearLayers();
+            let bounds = [];
 
-            allData.forEach(item => {
-                if (!item.latitude || !item.longitude) return;
+            stationsData.forEach(s => {
+                const lat = parseFloat(s.latitude);
+                const lng = parseFloat(s.longitude);
 
-                const marker = L.marker([item.latitude, item.longitude])
-                    .addTo(map)
-                    .bindPopup(`<b style="color:#000;">${item.location_name}</b><br><span style="color:#666;">${item.status}</span>`);
-
-                markers.push(marker);
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    const marker = L.marker([lat, lng], { icon: stationIcon });
+                    marker.bindPopup(`
+                        <div class="text-black text-xs p-1">
+                            <b class="text-sm border-b pb-1 mb-1 block">${s.station_name}</b>
+                            <b>Type:</b> ${s.station_type}<br>
+                            <b>Status:</b> ${s.availability_status}<br>
+                            <b>Access:</b> ${s.access_type}<br>
+                            <b>Location:</b> ${s.location_name}
+                        </div>
+                    `);
+                    stationLayer.addLayer(marker);
+                    bounds.push([lat, lng]);
+                }
             });
+
+            if (userMarker) bounds.push([userLat, userLng]);
+
+            if (bounds.length > 0) {
+                map.fitBounds(bounds, { padding: [50, 50] });
+            }
         }
 
-        /* PAGINATED LOG LIST DISPLAY MODULATION */
-        function renderPage() {
+        /* =========================
+           STATION LIST FEED RENDERING CARD TILES
+        ========================= */
+        function renderStationsPage() {
             const list = document.getElementById("list");
             list.innerHTML = "";
 
             const start = (currentPage - 1) * perPage;
-            const page = allData.slice(start, start + perPage);
+            const pageData = stationsData.slice(start, start + perPage);
 
-            if (page.length === 0) {
-                list.innerHTML = `<div class="text-xs text-white/40 font-medium text-center py-8">No current logs found</div>`;
+            if (pageData.length === 0) {
+                list.innerHTML = `<div class="text-xs text-white/40 font-medium text-center py-8 col-span-full">No active station logs synced.</div>`;
                 return;
             }
 
-            page.forEach(i => {
-                const div = document.createElement("div");
-                div.className = "bg-[#0D0E2A]/70 border border-white/5 rounded-xl p-3.5 flex flex-col gap-1 text-left";
+            pageData.forEach(s => {
+                const card = document.createElement("div");
+                card.className = "bg-[#0D0E2A]/70 border border-white/5 rounded-xl p-4 flex flex-col gap-2 text-left transition-all hover:border-white/10";
 
-                // Color formatting logic based on context
                 let statusBadgeColor = "text-[#FAB005] bg-[#FAB005]/10 border-[#FAB005]/20";
-                if (i.status && i.status.toLowerCase().includes('resolved')) {
+                if (s.availability_status && s.availability_status.toLowerCase().includes('available')) {
                     statusBadgeColor = "text-[#00BA00] bg-[#00BA00]/10 border-[#00BA00]/20";
-                } else if (i.status && i.status.toLowerCase().includes('active')) {
+                } else if (s.availability_status && s.availability_status.toLowerCase().includes('offline')) {
                     statusBadgeColor = "text-[#CB3435] bg-[#CB3435]/10 border-[#CB3435]/20";
                 }
 
-                div.innerHTML = `
+                card.innerHTML = `
                     <div class="flex justify-between items-start gap-2">
-                        <span class="text-white font-bold text-xs truncate max-w-[180px]">${i.location_name}</span>
-                        <span class="px-2 py-0.5 border text-[9px] font-bold rounded-md ${statusBadgeColor} uppercase tracking-wide whitespace-nowrap">${i.status}</span>
+                        <span class="text-white font-bold text-sm truncate max-w-[190px]">${s.station_name}</span>
+                        <span class="px-2 py-0.5 border text-[9px] font-bold rounded-md ${statusBadgeColor} uppercase tracking-wide">${s.availability_status}</span>
                     </div>
-                    <p class="text-[#B5B5B5] text-[11px] font-normal leading-normal line-clamp-2 mt-0.5">${i.description || "No descriptions appended to system layer log."}</p>
+                    <div class="text-[#B5B5B5] text-xs flex flex-col gap-0.5">
+                        <span class="text-white/80 font-medium truncate">${s.location_name}</span>
+                        <div class="flex justify-between mt-1 text-[11px] opacity-60 font-semibold uppercase">
+                            <span>Type: ${s.station_type}</span>
+                        </div>
+                    </div>
+                    ${s.description ? `<p class="text-[#B5B5B5]/70 text-[11px] line-clamp-2 border-t border-white/5 pt-1.5 mt-1">${s.description}</p>` : ''}
                 `;
-                list.appendChild(div);
+                list.appendChild(card);
             });
         }
 
-        // Battery Detect
-        document.addEventListener("DOMContentLoaded", () => {
-            initDashboardBatteryRing();
-        });
+        /* STATION PAGINATION CONTROLS MODULATION */
+        function renderStationsPagination() {
+            const p = document.getElementById("pagination");
+            p.innerHTML = "";
 
+            const pages = Math.ceil(stationsData.length / perPage);
+            if (pages <= 1) return;
+
+            for (let i = 1; i <= pages; i++) {
+                const btn = document.createElement("button");
+                btn.innerText = i;
+                btn.className = `h-7 w-7 flex items-center justify-center rounded-lg font-bold text-[11px] transition-all duration-150 ${i === currentPage
+                    ? "bg-[#FFBB02] text-black shadow-md shadow-[#FFBB02]/10"
+                    : "bg-[#31324C]/40 text-[#B5B5B5] hover:bg-[#31324C]/80 hover:text-white"
+                }`;
+
+                btn.onclick = () => {
+                    currentPage = i;
+                    renderStationsPage();
+                    renderStationsPagination();
+                };
+                p.appendChild(btn);
+            }
+        }
+
+        /* =========================
+           BATTERY DETECTION INFRASTRUCTURE
+        ========================= */
         function initDashboardBatteryRing() {
             const pctLabel = document.getElementById("batteryPercentage");
             const badgeLabel = document.getElementById("batteryBadge");
@@ -681,7 +782,6 @@ $picture = $user['picture'] ?? $defaultPicture;
             const iconSvg = document.getElementById("batteryIcon");
             const progressCircle = document.getElementById("batteryProgressCircle");
 
-            // Circumference value of the r=50 circle path (2 * PI * 50)
             const ringCircumference = 314.15926;
 
             if (!navigator.getBattery) {
@@ -696,120 +796,75 @@ $picture = $user['picture'] ?? $defaultPicture;
                     const currentLevel = Math.round(battery.level * 100);
                     pctLabel.innerText = `${currentLevel}%`;
 
-                    // Adjust the SVG Fill Stroke offset position smoothly
                     const offsetValue = ringCircumference - (battery.level * ringCircumference);
                     progressCircle.style.strokeDashoffset = offsetValue;
-
-                    // Toggle flashing charging status string
                     chargingLabel.innerText = battery.charging ? "Charging" : "";
 
-                    // Reset dynamic glow and border attributes
                     cardElement.style.boxShadow = "";
                     cardElement.style.borderColor = "rgba(255,255,255,0.05)";
 
                     if (battery.charging && currentLevel >= 95) {
-                        // GREEN CAPACITANCE STATE
                         badgeLabel.innerText = "FULLY CHARGED";
                         badgeLabel.style.color = "#5FCB5F";
                         descLabel.innerText = "AC wall power online. Station infrastructure holding max cell reserves.";
-
                         progressCircle.style.stroke = "#5FCB5F";
                         progressCircle.style.filter = "drop-shadow(0 0 4px rgba(95, 203, 95, 0.4))";
-                        iconWrapper.className = "p-2 rounded-lg bg-[#5FCB5F]/10 text-[#5FCB5F] transition-colors duration-300";
+                        iconWrapper.className = "p-2 rounded-lg bg-[#5FCB5F]/10 text-[#5FCB5F]";
                         cardElement.style.boxShadow = "0 20px 25px -5px rgba(95, 203, 95, 0.03)";
-
                         iconSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h14a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2zm16 4h2v2h-2v-2zM6 10h2v4H6v-4zm4 0h2v4h-2v-4zm4 0h2v4h-2v-4z" />`;
                     }
                     else if (currentLevel <= 20) {
-                        // RED EMERGENCY CRITICAL STATE
                         badgeLabel.innerText = "CRITICAL LOW";
                         badgeLabel.style.color = "#CB3435";
                         descLabel.innerText = battery.charging
                             ? "Low capacity state. Secondary energy link active, restoring levels."
                             : "Severe local power drainage. Plug in immediate system backups.";
-
                         progressCircle.style.stroke = "#CB3435";
                         progressCircle.style.filter = "drop-shadow(0 0 6px rgba(203, 52, 53, 0.6))";
-                        iconWrapper.className = "p-2 rounded-lg bg-[#CB3435]/10 text-[#CB3435] transition-colors duration-300";
+                        iconWrapper.className = "p-2 rounded-lg bg-[#CB3435]/10 text-[#CB3435]";
                         cardElement.style.borderColor = "rgba(203, 52, 53, 0.2)";
                         cardElement.style.boxShadow = "0 20px 25px -5px rgba(203, 52, 53, 0.08)";
-
                         iconSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h14a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2zm16 4h2v2h-2v-2zM6 10h1v4H6v-4z" />`;
                     }
                     else {
-                        // STANDARD GOLD AMBER STATE
                         badgeLabel.innerText = battery.charging ? "RECHARGING" : "BATTERY NOMINAL";
                         badgeLabel.style.color = "#FFBB02";
                         descLabel.innerText = battery.charging
                             ? "DC voltage streaming steady. Rebuilding capacity distributions."
                             : "System runtime operating on stable standalone lithium architecture.";
-
                         progressCircle.style.stroke = "#FFBB02";
                         progressCircle.style.filter = "drop-shadow(0 0 4px rgba(255, 187, 2, 0.4))";
-                        iconWrapper.className = "p-2 rounded-lg bg-[#FFBB02]/10 text-[#FFBB02] transition-colors duration-300";
+                        iconWrapper.className = "p-2 rounded-lg bg-[#FFBB02]/10 text-[#FFBB02]";
                         cardElement.style.boxShadow = "0 20px 25px -5px rgba(255, 187, 2, 0.03)";
-
                         iconSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h14a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2zm16 4h2v2h-2v-2zM6 10h5v4H6v-4z" />`;
                     }
                 }
-
-                // Initialize state indicators
                 runSystemUpdate();
-
-                // System interrupts to process physical cable tracking changes dynamically
                 battery.addEventListener("levelchange", runSystemUpdate);
                 battery.addEventListener("chargingchange", runSystemUpdate);
             });
         }
-        /* CLIENT-SIDE PAGINATION INTERACTIVE ELEMENTS GENERATOR */
-        function renderPagination() {
-            const p = document.getElementById("pagination");
-            p.innerHTML = "";
 
-            const pages = Math.ceil(allData.length / perPage);
-            if (pages <= 1) return; // Prevent render rendering if single node container satisfies scope size
-
-            for (let i = 1; i <= pages; i++) {
-                const btn = document.createElement("button");
-                btn.innerText = i;
-                btn.className = `h-7 w-7 flex items-center justify-center rounded-lg font-bold text-[11px] transition-all duration-150 ${i === currentPage
-                    ? "bg-[#FFBB02] text-black shadow-md shadow-[#FFBB02]/10"
-                    : "bg-[#31324C]/40 text-[#B5B5B5] hover:bg-[#31324C]/80 hover:text-white"
-                    }`;
-
-                btn.onclick = () => {
-                    currentPage = i;
-                    renderPage();
-                    renderPagination();
-                };
-
-                p.appendChild(btn);
-            }
-        }
-
-        /* LIVE SYSTEM FEED NOTIFICATIONS HANDLERS */
+        /* =========================
+           LIVE FEED NOTIFICATIONS
+        ========================= */
         async function loadNotif() {
             try {
-                const res = await fetch("http://localhost/crowdsourcedapi/api/notification/get.php", {
-                    credentials: "include"
-                });
-
+                const res = await fetch("http://localhost/crowdsourcedapi/api/notification/get.php", { credentials: "include" });
                 const data = await res.json();
                 notifications = data.data || [];
-
                 renderNotif();
             } catch (e) {
-                console.error("Notification aggregation background connection broke:", e);
+                console.error("Notification connection link lost:", e);
             }
         }
 
         function renderNotif() {
             const feed = document.getElementById("notifFeed");
             const badge = document.getElementById("notifCount");
-
             const unread = notifications.filter(n => n.is_read == 0);
 
-            if (unread.length ? true : false) {
+            if (unread.length) {
                 badge.classList.remove("hidden");
                 badge.innerText = unread.length;
             } else {
@@ -839,8 +894,7 @@ $picture = $user['picture'] ?? $defaultPicture;
         }
 
         function toggleNotifications() {
-            const p = document.getElementById("notifPanel");
-            p.classList.toggle("hidden");
+            document.getElementById("notifPanel").classList.toggle("hidden");
         }
 
         async function markAllAsRead() {
@@ -849,24 +903,28 @@ $picture = $user['picture'] ?? $defaultPicture;
                     method: "POST",
                     credentials: "include"
                 });
-
                 notifications = notifications.map(n => ({ ...n, is_read: 1 }));
                 renderNotif();
             } catch (e) {
-                console.error("Unable to execute transaction call to clear state indices:", e);
+                console.error("Unable to update notification states indices:", e);
             }
         }
 
-        /* CONTEXT-BOUND INITIALIZATIONS RUNTIME PIPELINE */
-        initMap();
-        loadDashboard();
-        loadOutages();
-        loadNotif();
+        /* =========================
+           RUN-TIME INITIALIZATION PIPELINE
+        ========================= */
+        document.addEventListener("DOMContentLoaded", () => {
+            initMap();
+            loadUserLocation();
+            loadDashboard();
+            loadNotif();
+            initDashboardBatteryRing();
 
-        /* Long-poll asynchronous refresh interval engine */
-        setInterval(loadNotif, 15000);
+            // Long poll system intervals for real-time tracking loops
+            setInterval(loadUserLocation, 10000);
+            setInterval(loadNotif, 15000);
+        });
     </script>
-
 </body>
 
 </html>

@@ -144,7 +144,6 @@ $current_user_id = $user['id'] ?? null;
                 <span class="text-[11px] font-bold tracking-widest text-white px-4 pt-2 mb-2 opacity-50">MAIN
                     MENU</span>
 
-                <!-- CHANGED: Dashboard is now the unhighlighted link -->
                 <a href="dashboard.php"
                     class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
                     <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-black transition-colors" fill="none"
@@ -155,7 +154,6 @@ $current_user_id = $user['id'] ?? null;
                     <span>Dashboard</span>
                 </a>
 
-                <!-- CHANGED: Outage Map is now statically highlighted -->
                 <a href="outagemap.php"
                     class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl bg-[#FEBB02] text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
                     <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="2"
@@ -302,15 +300,15 @@ $current_user_id = $user['id'] ?? null;
                                     LEGEND</span>
                                 <span class="font-semibold text-xs flex items-center text-white/90">
                                     <span class="w-2.5 h-2.5 rounded-md bg-[#FF2E1F] mr-2 block shadow-sm"></span>
-                                    Confirmed Outage
+                                    Critical Severity
                                 </span>
                                 <span class="font-semibold text-xs flex items-center text-white/90">
                                     <span class="w-2.5 h-2.5 rounded-md bg-[#FFBB02] mr-2 block shadow-sm"></span>
-                                    Partial/Surge
+                                    Moderate Severity
                                 </span>
                                 <span class="font-semibold text-xs flex items-center text-white/90">
                                     <span class="w-2.5 h-2.5 rounded-md bg-[#34FB34] mr-2 block shadow-sm"></span>
-                                    Stable/Grid
+                                    Minor Severity
                                 </span>
                             </div>
                         </div>
@@ -328,7 +326,7 @@ $current_user_id = $user['id'] ?? null;
                             <div class="flex gap-2">
                                 <button onclick="toggleFilterMode('all')" id="filterBtnAll"
                                     class="text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all">
-                                    All Grid
+                                    All Reports
                                 </button>
                                 <button onclick="toggleFilterMode('mine')" id="filterBtnMine"
                                     class="text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all">
@@ -367,52 +365,61 @@ $current_user_id = $user['id'] ?? null;
 
     <!-- WIDE OVERLAY MODAL FEATURING INTUITION LOCATION-PICKING MAP CANVAS -->
     <div id="popup"
-        class="fixed inset-0 bg-black/80 flex justify-center items-center z-50 p-4 opacity-0 invisible transition-all duration-300 ease-out"
+        class="fixed inset-0 bg-[#03041A]/80 backdrop-blur-sm flex justify-center items-center z-[2000] p-4 opacity-0 invisible transition-all duration-300 ease-out"
         onclick="closePopup()">
         <div id="popupBox"
-            class="relative w-full max-w-[1000px] bg-[#1A1B33] border border-white/10 rounded-[24px] overflow-hidden shadow-2xl transition-all"
+            class="relative w-full max-w-[1000px] bg-gradient-to-b from-[#1E203C] to-[#141527] border border-white/10 rounded-[24px] overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] transition-all transform scale-95"
             onclick="event.stopPropagation()">
 
+            <!-- Close Button -->
             <button type="button" onclick="closePopup()"
-                class="absolute top-5 h-8 w-8 rounded-full bg-[#03041A] border border-white/10 flex items-center justify-center right-5 text-white/60 text-xl font-light hover:text-[#FFBB02] transition-colors z-50">&times;</button>
+                class="absolute top-5 right-5 h-9 w-9 rounded-xl bg-[#03041A]/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/70 text-lg hover:text-[#FFBB02] hover:border-[#FFBB02]/30 hover:bg-[#03041A] transition-all duration-200 z-50 shadow-lg">
+                &times;
+            </button>
 
-            <!-- Dual-Panel Flex Layout Grid System -->
-            <div class="flex flex-col md:flex-row h-[90vh] md:h-[620px]">
+            <!-- Dual-Panel Layout -->
+            <div class="flex flex-col md:flex-row h-[90vh] md:h-[640px]">
 
-                <!-- LEFT SIDEBAR MAP: Click target to define precise marker coordinate vectors -->
+                <!-- LEFT SIDEBAR MAP -->
                 <div
-                    class="w-full md:w-[45%] h-[240px] md:h-full relative bg-[#03041A] border-b md:border-b-0 md:border-r border-white/10">
-                    <div id="modalMap" class="w-full h-full"></div>
+                    class="w-full md:w-[45%] h-[280px] md:h-full relative bg-[#03041A] border-b md:border-b-0 md:border-r border-white/10">
+                    <div id="modalMap" class="w-full h-full bg-[#050724]"></div>
+
+                    <!-- Floating Info Badge -->
                     <div
-                        class="absolute top-4 left-4 z-[1000] pointer-events-none bg-[#03041A]/95 backdrop-blur-md px-3 py-2 rounded-xl border border-white/10">
-                        <span class="text-[10px] font-black tracking-wider text-[#FFBB02] uppercase block">Geographic
-                            Pinpoint</span>
-                        <p class="text-[11px] text-white/70 font-medium mt-0.5">Click or drag the map node position
-                            inside this viewport panel.</p>
+                        class="absolute bottom-4 left-4 right-4 z-[1000] pointer-events-none bg-[#03041A]/90 backdrop-blur-md px-4 py-3 rounded-xl border border-white/10 shadow-xl">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#FFBB02] animate-pulse"></span>
+                            <span class="text-[10px] font-bold tracking-wider text-[#FFBB02] uppercase">Geographic
+                                Pinpoint</span>
+                        </div>
+                        <p class="text-[11px] text-white/60 font-normal mt-0.5 leading-relaxed">Click or drag the map
+                            node inside this viewport to match the fault line area.</p>
                     </div>
                 </div>
 
-                <!-- RIGHT PANEL: Input form structures -->
-                <form id="outageForm" class="flex-1 flex flex-col justify-between overflow-y-auto p-6 md:p-8"
+                <!-- RIGHT PANEL: Input Form -->
+                <form id="outageForm"
+                    class="flex-1 flex flex-col justify-between overflow-y-auto p-6 md:p-8 bg-transparent"
                     onsubmit="handleFormSubmit(event)">
                     <input type="hidden" id="report_id" value="">
-                    <!-- Coordinates Hidden Trackers -->
                     <input type="hidden" id="formLatitude" value="">
                     <input type="hidden" id="formLongitude" value="">
 
-                    <div>
-                        <div class="mb-4">
-                            <h3 id="formTitle" class="text-2xl font-black text-white tracking-tight">Report an Outage
+                    <div class="space-y-5">
+                        <!-- Header -->
+                        <div>
+                            <h3 id="formTitle" class="text-2xl font-bold text-white tracking-tight">Report an Incident
                             </h3>
-                            <p class="text-xs text-[#B5B5B5] mt-0.5">Define your location via the picker view layout on
-                                the left, then fill in details below.</p>
+                            <p class="text-xs text-white/50 mt-1">Specify system metrics and location markers for field
+                                dispatch analysis.</p>
                         </div>
 
-                        <!-- USE MY CURRENT LOCATION GPS TRIGGER BUTTON -->
-                        <div class="mb-4">
+                        <!-- GPS Trigger Button -->
+                        <div>
                             <button type="button" onclick="useCurrentLocation()"
-                                class="w-full h-11 px-4 bg-[#31324C]/60 hover:bg-[#31324C] border border-white/10 rounded-xl text-xs font-bold text-white flex items-center justify-center gap-2 transition-all active:scale-95">
-                                <svg class="w-4 h-4 text-[#FFBB02]" fill="none" stroke="currentColor" stroke-width="2"
+                                class="w-full h-11 px-4 bg-white/[0.03] hover:bg-white/[0.07] border border-white/10 rounded-xl text-xs font-semibold text-white/90 flex items-center justify-center gap-2.5 transition-all active:scale-[0.98] hover:border-white/20 shadow-sm">
+                                <svg class="w-4 h-4 text-[#FFBB02]" fill="none" stroke="currentColor" stroke-width="2.5"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -423,50 +430,113 @@ $current_user_id = $user['id'] ?? null;
                             </button>
                         </div>
 
-                        <!-- OUTAGE TYPE / SEVERITY (Acts as status in create/update payloads) -->
-                        <span
-                            class="text-[#B5B5B5] font-bold text-[11px] tracking-widest mb-1.5 block uppercase opacity-60">OUTAGE
-                            TYPE / SEVERITY</span>
-                        <div class="relative w-full mb-3">
-                            <select id="formSeverity"
-                                class="w-full h-11 px-3 bg-[#03041A] border border-white/10 rounded-xl text-sm outline-none focus:border-[#FFBB02] transition-colors text-white cursor-pointer">
-                                <option value="Critical">Critical (Total Blackout)</option>
-                                <option value="Warning">Warning (Partial Outage)</option>
-                                <option value="Stable">Stable / Checking</option>
-                            </select>
+                        <!-- Row 1: Severity & Houses -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label
+                                    class="text-white/40 font-semibold text-[10px] tracking-wider mb-1.5 block uppercase">Severity
+                                    Level</label>
+                                <div class="relative">
+                                    <select id="formSeverity"
+                                        class="w-full h-11 pl-3 pr-8 bg-white/[0.03] border border-white/10 rounded-xl text-sm text-white/90 outline-none focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all cursor-pointer appearance-none focus:bg-[#141527]">
+                                        <option value="minor">Minor Issue</option>
+                                        <option value="moderate">Moderate Outage</option>
+                                        <option value="critical">Critical Emergency</option>
+                                    </select>
+                                    <div
+                                        class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-white/30">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                            viewBox="0 0 24 24">
+                                            <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label
+                                    class="text-white/40 font-semibold text-[10px] tracking-wider mb-1.5 block uppercase">Houses
+                                    Affected</label>
+                                <input id="formAffectedHouses" required min="1" value="1"
+                                    class="w-full px-3 h-11 bg-white/[0.03] border border-white/10 rounded-xl text-sm text-white/90 outline-none focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all focus:bg-[#141527]"
+                                    type="number">
+                            </div>
                         </div>
 
-                        <!-- CATEGORY CLASSIFICATION -->
-                        <span
-                            class="text-[#B5B5B5] font-bold text-[11px] tracking-widest mb-1.5 block uppercase opacity-60">CATEGORY
-                            CLASSIFICATION</span>
-                        <div class="relative w-full mb-3">
-                            <select id="formCategory"
-                                class="w-full h-11 px-3 bg-[#03041A] border border-white/10 rounded-xl text-sm outline-none focus:border-[#FFBB02] transition-colors text-white cursor-pointer">
-                                <option value="Grid Power outage">Grid Power Outage</option>
-                                <option value="Line Fluctuation">Line Fluctuation</option>
-                                <option value="Transformer Failure">Transformer Failure</option>
-                            </select>
+                        <!-- Row 2: Category & Hazard -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label
+                                    class="text-white/40 font-semibold text-[10px] tracking-wider mb-1.5 block uppercase">Category</label>
+                                <div class="relative">
+                                    <select id="formCategory"
+                                        class="w-full h-11 pl-3 pr-8 bg-white/[0.03] border border-white/10 rounded-xl text-sm text-white/90 outline-none focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all cursor-pointer appearance-none focus:bg-[#141527]">
+                                        <option value="power_outage">Power Outage</option>
+                                        <option value="low_voltage">Low Voltage</option>
+                                        <option value="power_fluctuation">Power Fluctuation</option>
+                                        <option value="transformer_explosion">Transformer Explosion</option>
+                                        <option value="fallen_power_line">Fallen Power Line</option>
+                                        <option value="electrical_fire">Electrical Fire</option>
+                                        <option value="scheduled_maintenance">Scheduled Maintenance</option>
+                                        <option value="unknown_issue">Unknown Issue</option>
+                                    </select>
+                                    <div
+                                        class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-white/30">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                            viewBox="0 0 24 24">
+                                            <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label
+                                    class="text-white/40 font-semibold text-[10px] tracking-wider mb-1.5 block uppercase">Hazard
+                                    Log</label>
+                                <div class="relative">
+                                    <select id="formHazardType"
+                                        class="w-full h-11 pl-3 pr-8 bg-white/[0.03] border border-white/10 rounded-xl text-sm text-white/90 outline-none focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all cursor-pointer appearance-none focus:bg-[#141527]">
+                                        <option value="none">None</option>
+                                        <option value="smoke">Smoke</option>
+                                        <option value="sparks">Sparks</option>
+                                        <option value="fire">Fire</option>
+                                        <option value="fallen_wire">Fallen Wire</option>
+                                        <option value="explosion_sound">Explosion Sound</option>
+                                    </select>
+                                    <div
+                                        class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-white/30">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                            viewBox="0 0 24 24">
+                                            <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- LOCATION NAME -->
-                        <span
-                            class="text-[#B5B5B5] font-bold text-[11px] tracking-widest mb-1.5 block uppercase opacity-60">LOCATION
-                            NAME</span>
-                        <input id="formLocation" required
-                            class="w-full px-4 h-11 bg-[#03041A] border border-white/10 rounded-xl text-sm outline-none focus:border-[#FFBB02] transition-colors mb-3"
-                            type="text" placeholder="e.g., Barangay Name, Street, Local Landmark">
+                        <!-- Location Input -->
+                        <div>
+                            <label
+                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1.5 block uppercase">Location
+                                Name</label>
+                            <input id="formLocation" required
+                                class="w-full px-4 h-11 bg-white/[0.03] border border-white/10 rounded-xl text-sm text-white outline-none placeholder-white/20 focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all focus:bg-[#141527]"
+                                type="text" placeholder="e.g., Barangay, Street, Landmark">
+                        </div>
 
-                        <!-- OBSERVATIONS -->
-                        <span
-                            class="text-[#B5B5B5] font-bold text-[11px] tracking-widest mb-1.5 block uppercase opacity-60">OBSERVATIONS</span>
-                        <textarea id="formDescription"
-                            class="w-full h-20 border border-white/10 p-3 rounded-xl bg-[#03041A] focus:border-[#FFBB02] outline-none text-sm resize-none"
-                            placeholder="Describe environmental context parameters..."></textarea>
+                        <!-- Description Input -->
+                        <div>
+                            <label
+                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1.5 block uppercase">Description
+                                / Notes</label>
+                            <textarea id="formDescription"
+                                class="w-full h-20 border border-white/10 p-3 rounded-xl bg-white/[0.03] text-white placeholder-white/20 focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 outline-none text-sm resize-none transition-all focus:bg-[#141527]"
+                                placeholder="Describe visible damage, sounds, or weather context..."></textarea>
+                        </div>
                     </div>
 
+                    <!-- Submit Button -->
                     <button type="submit"
-                        class="w-full h-12 mt-6 rounded-xl bg-[#FFBB02] hover:bg-[#D99A00] text-black font-extrabold text-sm transition-colors shadow-md shrink-0">
+                        class="w-full h-12 mt-6 rounded-xl bg-gradient-to-r from-[#FFBB02] to-[#E5A800] hover:from-[#FFC422] hover:to-[#F5B400] text-[#03041A] font-bold text-sm tracking-wide transition-all shadow-[0_4px_20px_rgba(255,187,2,0.15)] hover:shadow-[0_4px_25px_rgba(255,187,2,0.3)] transform hover:-translate-y-0.5 active:translate-y-0 shrink-0">
                         Submit Community Report
                     </button>
                 </form>
@@ -508,7 +578,7 @@ $current_user_id = $user['id'] ?? null;
         let filteredReports = [];
         let currentFilterMode = 'all';
         let currentPage = 1;
-        const perPage = 3; // Number of items loaded concurrently inside the scroll feed viewport block
+        const perPage = 3;
 
         /* ================= SAFE TEXT HELPER (XSS PROTECTION) ================= */
         function escapeHTML(str) {
@@ -540,8 +610,8 @@ $current_user_id = $user['id'] ?? null;
         }
 
         function setModalCoordinates(lat, lng) {
-            document.getElementById("formLatitude").value = Number(lat).toFixed(4);
-            document.getElementById("formLongitude").value = Number(lng).toFixed(4);
+            document.getElementById("formLatitude").value = Number(lat).toFixed(6);
+            document.getElementById("formLongitude").value = Number(lng).toFixed(6);
 
             if (modalSelectionMarker) {
                 modalSelectionMarker.setLatLng([lat, lng]);
@@ -550,8 +620,8 @@ $current_user_id = $user['id'] ?? null;
                 modalSelectionMarker.on('dragend', function (event) {
                     const marker = event.target;
                     const position = marker.getLatLng();
-                    document.getElementById("formLatitude").value = position.lat.toFixed(4);
-                    document.getElementById("formLongitude").value = position.lng.toFixed(4);
+                    document.getElementById("formLatitude").value = position.lat.toFixed(6);
+                    document.getElementById("formLongitude").value = position.lng.toFixed(6);
                 });
             }
             modalMap.panTo([lat, lng]);
@@ -560,7 +630,7 @@ $current_user_id = $user['id'] ?? null;
         /* ================= GEOLOCATION UTILITIES ================= */
         function useCurrentLocation() {
             if (!navigator.geolocation) {
-                alert("Geolocation tracking is not supported by your current browser environment.");
+                alert("Geolocation is not supported by your browser.");
                 return;
             }
 
@@ -568,13 +638,47 @@ $current_user_id = $user['id'] ?? null;
                 (position) => {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
+
+                    console.log("GPS:", lat, lng);
+
+                    // set hidden fields
                     setModalCoordinates(lat, lng);
+
+                    // IMPORTANT: ensure modal map exists
+                    if (!modalMap) {
+                        initModalMap();
+                    }
+
+                    // force map refresh before panning
+                    setTimeout(() => {
+                        modalMap.invalidateSize();
+                        modalMap.setView([lat, lng], 16);
+                    }, 100);
                 },
                 (error) => {
                     console.error("Geolocation error:", error);
-                    alert("Unable to fetch location data tracks. Verify device diagnostic permissions.");
+
+                    let msg = "Unable to fetch location.";
+
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            msg = "Permission denied. Please allow location access.";
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            msg = "Location unavailable.";
+                            break;
+                        case error.TIMEOUT:
+                            msg = "Location request timed out.";
+                            break;
+                    }
+
+                    alert(msg);
                 },
-                { enableHighAccuracy: true }
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
             );
         }
 
@@ -624,7 +728,8 @@ $current_user_id = $user['id'] ?? null;
                 location_name: document.getElementById("formLocation").value,
                 category: document.getElementById("formCategory").value,
                 severity: document.getElementById("formSeverity").value,
-                status: document.getElementById("formSeverity").value, // Sync severity with status
+                hazard_type: document.getElementById("formHazardType").value,
+                affected_houses: parseInt(document.getElementById("formAffectedHouses").value) || 1,
                 description: document.getElementById("formDescription").value,
                 latitude: document.getElementById("formLatitude").value,
                 longitude: document.getElementById("formLongitude").value
@@ -684,8 +789,9 @@ $current_user_id = $user['id'] ?? null;
                 location_name: document.getElementById("formLocation").value,
                 category: document.getElementById("formCategory").value,
                 severity: document.getElementById("formSeverity").value,
+                hazard_type: document.getElementById("formHazardType").value,
+                affected_houses: parseInt(document.getElementById("formAffectedHouses").value) || 1,
                 description: document.getElementById("formDescription").value,
-                status: document.getElementById("formSeverity").value,
                 latitude: document.getElementById("formLatitude").value,
                 longitude: document.getElementById("formLongitude").value
             };
@@ -715,7 +821,6 @@ $current_user_id = $user['id'] ?? null;
                 btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
             }
             currentPage = 1;
-            // Reset keyword filter search input box UI field during view state swaps
             document.getElementById("mapSearch").value = "";
             initGridSynchronization();
         }
@@ -728,14 +833,12 @@ $current_user_id = $user['id'] ?? null;
                 const publicReports = mapResult.data || [];
                 renderMapMarkers(publicReports);
 
-                // Side statistics list respects the toggle filter path structures
                 const targetUrl = (currentFilterMode === 'mine') ? `${API_BASE}/get_my_report.php` : `${API_BASE}/get.php`;
                 const feedRes = await fetch(targetUrl, { credentials: "include" });
                 const feedResult = await feedRes.json();
 
                 allCachedReports = feedResult.data || [];
 
-                // Re-apply keyword search context filters if any exist inside input field layout boxes
                 const currentKeyword = document.getElementById("mapSearch").value;
                 if (currentKeyword) {
                     filterBarangay(currentKeyword);
@@ -757,9 +860,17 @@ $current_user_id = $user['id'] ?? null;
                 if (!r.latitude || !r.longitude) return;
                 activeAlertsCount++;
 
-                let markerColor = "#34FB34";
-                if (r.severity?.toLowerCase() === 'critical' || r.status?.toLowerCase() === 'critical') markerColor = "#FF2E1F";
-                if (r.severity?.toLowerCase() === 'warning' || r.status?.toLowerCase() === 'warning') markerColor = "#FFBB02";
+                const severity = (r.severity || "moderate").toLowerCase();
+
+                if (severity.includes("critical") || severity.includes("high")) {
+                    markerColor = "#FF2E1F"; // Critical Severity
+                } else if (severity.includes("moderate") || severity.includes("medium")) {
+                    markerColor = "#FFBB02"; // Moderate Severity
+                } else {
+                    markerColor = "#34FB34"; // Minor Severity
+                }
+
+                const formattedCategory = (r.category ?? 'power_outage').replace(/_/g, ' ');
 
                 L.circleMarker([r.latitude, r.longitude], {
                     radius: 9, fillColor: markerColor, color: "#fff", weight: 2, opacity: 1, fillOpacity: 0.9
@@ -767,8 +878,12 @@ $current_user_id = $user['id'] ?? null;
                     .bindPopup(`
                     <div class="text-white text-xs">
                         <strong class="text-sm block border-b border-white/10 pb-1 mb-1">${escapeHTML(r.location_name)}</strong>
-                        <p class="mb-1 text-white/80">${escapeHTML(r.description || 'No notes noted.')}</p>
-                        <span class="inline-block px-2 py-0.5 rounded font-bold text-[10px]" style="background:${markerColor}; color:#000;">${escapeHTML(r.severity || r.status || 'REPORTED')}</span>
+                        <p class="mb-1 text-white/50 uppercase tracking-widest text-[9px] font-bold">${escapeHTML(formattedCategory)}</p>
+                        <p class="mb-1 text-white/80">${escapeHTML(r.description || 'No system notes noted.')}</p>
+                        <div class="flex items-center justify-between mt-2 pt-1 border-t border-white/5">
+                            <span class="inline-block px-1.5 py-0.5 rounded font-black text-[9px] uppercase" style="background:${markerColor}; color:#000;">${escapeHTML(r.severity)}</span>
+                            <span class="text-[10px] text-white/60 font-semibold">Status: ${escapeHTML(r.status || 'active')}</span>
+                        </div>
                     </div>
                 `)
                     .addTo(layerGroup);
@@ -785,7 +900,8 @@ $current_user_id = $user['id'] ?? null;
         function filterBarangay(keyword) {
             filteredReports = allCachedReports.filter(r =>
                 r.location_name.toLowerCase().includes(keyword.toLowerCase()) ||
-                (r.description && r.description.toLowerCase().includes(keyword.toLowerCase()))
+                (r.description && r.description.toLowerCase().includes(keyword.toLowerCase())) ||
+                (r.category && r.category.toLowerCase().includes(keyword.toLowerCase()))
             );
             currentPage = 1;
             renderStatisticsFeed();
@@ -808,29 +924,21 @@ $current_user_id = $user['id'] ?? null;
             const fragment = document.createDocumentFragment();
 
             pageData.forEach((r) => {
-                const status = (r.severity || r.status || "stable").toUpperCase();
-                let badgeStyle = "bg-[#22FF221A]/[10%] text-[#34FB34]";
-                let textLabel = "STABLE";
-                let dynamicMetricField = "UPTIME";
-                let dynamicMetricValue = "100 %";
-                let secondaryMetricField = "GRID LOAD";
-                let secondaryMetricValue = "Optimal";
+                const severity = (r.severity || "moderate").toLowerCase();
+                let badgeStyle = "bg-[#FFBB021A]/[10%] text-[#FFBB02]";
+                let textLabel = "MODERATE";
 
-                if (status.includes("CRITICAL") || status.includes("OUTAGE")) {
+                if (severity === "critical") {
                     badgeStyle = "bg-[#FF3C2F1A]/[10%] text-[#FF2E1F]";
                     textLabel = "CRITICAL";
-                    dynamicMetricField = "AFFECTED";
-                    dynamicMetricValue = "Total Blackout";
-                    secondaryMetricField = "ETR";
-                    secondaryMetricValue = "Pending";
-                } else if (status.includes("WARN") || status.includes("FLUCTUATION")) {
-                    badgeStyle = "bg-[#FFBB021A]/[10%] text-[#FFBB02]";
-                    textLabel = "WARNING";
-                    dynamicMetricField = "AFFECTED";
-                    dynamicMetricValue = "Partial Phase";
-                    secondaryMetricField = "STATUS";
-                    secondaryMetricValue = "Fluctuation";
+                } else if (severity === "minor") {
+                    badgeStyle = "bg-[#22FF221A]/[10%] text-[#34FB34]";
+                    textLabel = "MINOR";
                 }
+
+                const displayCategory = (r.category || 'power_outage').replace(/_/g, ' ');
+                const displayHazard = (r.hazard_type || 'none').replace(/_/g, ' ');
+                const displayStatus = (r.status || 'active').replace(/_/g, ' ');
 
                 const isAuthor = (CURRENT_USER_ID && r.user_id && String(r.user_id) === String(CURRENT_USER_ID)) || (currentFilterMode === 'mine');
 
@@ -841,25 +949,29 @@ $current_user_id = $user['id'] ?? null;
                     <div class="flex flex-col">
                         <span class="font-bold flex justify-between items-center text-white text-base md:text-lg">
                             <span class="truncate max-w-[240px]">${escapeHTML(r.location_name)}</span>
-                            <span class="flex ${badgeStyle} px-2 py-1 text-[10px] items-center rounded-lg font-black tracking-wider shadow-sm shrink-0">
+                            <span class="flex ${badgeStyle} px-2 py-1 text-[10px] items-center rounded-lg font-black tracking-wider shadow-sm shrink-0 uppercase">
                                 ${escapeHTML(textLabel)}
                             </span>
                         </span>
-                        <span class="font-medium text-xs text-[#B5B5B5] mt-1 flex items-center gap-1.5">
+                        <span class="font-medium text-xs text-[#B5B5B5] mt-1 flex items-center gap-1.5 capitalize">
                             <svg class="w-3.5 h-3.5 text-[#FFBB02]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                             </svg>
-                            ${escapeHTML(r.category || 'Power Grid Terminal Node')}
+                            ${escapeHTML(displayCategory)}
                         </span>
                     </div>
-                    <div class="flex flex-row justify-between mt-3.5 gap-3">
-                        <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col flex-1 p-2.5">
-                            <span class="text-[10px] text-[#B5B5B5] font-bold tracking-wide uppercase opacity-50">${escapeHTML(dynamicMetricField)}</span>
-                            <span class="text-sm text-white font-extrabold mt-0.5">${escapeHTML(dynamicMetricValue)}</span>
+                    <div class="grid grid-cols-3 gap-2 mt-3.5">
+                        <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-2 text-center">
+                            <span class="text-[9px] text-[#B5B5B5] font-bold tracking-wide uppercase opacity-50">AFFECTED</span>
+                            <span class="text-xs text-white font-extrabold mt-0.5">${parseInt(r.affected_houses) || 1} Hse</span>
                         </div>
-                        <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col flex-1 p-2.5">
-                            <span class="text-[10px] text-[#B5B5B5] font-bold tracking-wide uppercase opacity-50">${escapeHTML(secondaryMetricField)}</span>
-                            <span class="text-sm text-[#FFBB02] font-extrabold mt-0.5">${escapeHTML(secondaryMetricValue)}</span>
+                        <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-2 text-center">
+                            <span class="text-[9px] text-[#B5B5B5] font-bold tracking-wide uppercase opacity-50">HAZARD</span>
+                            <span class="text-xs text-[#FFBB02] font-extrabold mt-0.5 truncate capitalize">${escapeHTML(displayHazard)}</span>
+                        </div>
+                        <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-2 text-center">
+                            <span class="text-[9px] text-[#B5B5B5] font-bold tracking-wide uppercase opacity-50">STATUS</span>
+                            <span class="text-xs text-white font-extrabold mt-0.5 truncate capitalize">${escapeHTML(displayStatus)}</span>
                         </div>
                     </div>
                 `;
@@ -949,10 +1061,12 @@ $current_user_id = $user['id'] ?? null;
             document.getElementById("report_id").value = r.id;
             document.getElementById("formLocation").value = r.location_name;
             document.getElementById("formCategory").value = r.category;
-            document.getElementById("formSeverity").value = r.severity || r.status;
+            document.getElementById("formSeverity").value = r.severity;
+            document.getElementById("formHazardType").value = r.hazard_type || "none";
+            document.getElementById("formAffectedHouses").value = r.affected_houses || 1;
             document.getElementById("formDescription").value = r.description || "";
 
-            document.getElementById("formTitle").innerText = "Update Grid Report Config";
+            document.getElementById("formTitle").innerText = "Update Incident Report Layout";
             openPopup(true);
 
             setTimeout(() => {
