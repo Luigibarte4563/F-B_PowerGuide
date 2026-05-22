@@ -113,7 +113,6 @@ $current_user_id = $user['id'] ?? null;
     <div class="flex h-screen overflow-hidden">
 
         <!-- ================= SIDEBAR NAV ================= -->
-        <!-- SIDEBAR NAV -->
         <nav id="sidebar" class="flex flex-col fixed lg:sticky top-0 h-screen w-[280px] lg:w-[340px]
                 text-[#B5B5B5] text-center pt-8 px-5
                 border-r-2 border-white/10 bg-[#03041A] z-40
@@ -201,11 +200,10 @@ $current_user_id = $user['id'] ?? null;
             <div
                 class="flex flex-col text-left mt-auto mb-3 mx-2 p-5 rounded-2xl bg-[#31324C]/30 border border-white/5">
                 <span class="text-[#FEBB02] text-xs font-bold tracking-wider mb-1">PRO TIP</span>
-                <span class="text-white/50 text-xs font-normal leading-relaxed">Lower screen brightness to 40% to save
-                    roughly 15 minutes of device runtime.</span>
+                <span class="text-white/50 text-xs font-normal leading-relaxed">Limit high wattage consumption during peak hours to preserve active local transformer runtimes.</span>
             </div>
 
-            <!-- Profile Info Panel (Repositioned to bottom of sidebar) -->
+            <!-- Profile Info Panel -->
             <div
                 class="flex flex-row items-center justify-between gap-3 px-4 py-3 mb-8 rounded-2xl bg-[#31324C]/20 border border-white/5 text-left">
                 <div class="flex items-center gap-3 min-w-0">
@@ -216,14 +214,14 @@ $current_user_id = $user['id'] ?? null;
                     </div>
                     <div class="min-w-0 flex flex-col">
                         <span
-                            class="text-xs font-bold text-white truncate"><?= htmlspecialchars($user['name']) ?></span>
+                            class="text-xs font-bold text-white truncate"><?= htmlspecialchars($user['name'] ?? 'Authorized Staff') ?></span>
                         <span
-                            class="text-[10px] font-medium text-[#B5B5B5] truncate"><?= htmlspecialchars($user['email']) ?></span>
+                            class="text-[10px] font-medium text-[#B5B5B5] truncate"><?= htmlspecialchars($user['email'] ?? 'staff@powerguide.gov') ?></span>
                     </div>
                 </div>
 
                 <!-- Logout Button -->
-                <a href="<?= BACKEND_URL ?>/public/logout.php"
+                <a href="<?= defined('BACKEND_URL') ? BACKEND_URL : '/logout.php' ?>/public/logout.php"
                     class="p-2 text-[#B5B5B5] hover:text-[#CB3435] hover:bg-[#CB3435]/10 rounded-xl transition-all flex-shrink-0 group"
                     title="Logout">
                     <svg class="w-5 h-5 transform group-hover:translate-x-0.5 transition-transform" fill="none"
@@ -264,7 +262,7 @@ $current_user_id = $user['id'] ?? null;
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5"
                                 viewBox="0 0 24 24">
                                 <circle cx="11" cy="11" r="8"></circle>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                <line x1="21" x1="21" x2="16.65" y2="16.65"></line>
                             </svg>
                         </span>
                         <input type="search" id="mapSearch" oninput="filterStations(this.value)"
@@ -501,41 +499,6 @@ $current_user_id = $user['id'] ?? null;
         </div>
     </div>
 
-    <!-- Battery Warning Overlay Toast window -->
-    <div id="battery-warning"
-        class="fixed inset-0 bg-black/70 flex justify-center items-center z-50 p-4 opacity-0 invisible pointer-events-none transition-all duration-300">
-        <div id="batteryBox"
-            class="bg-[#1A1B33] border-2 border-red-600 rounded-3xl p-8 max-w-sm w-full flex flex-col items-center gap-4 text-center scale-95 translate-y-4 opacity-0 transition-all duration-300 ease-out">
-            <span class="text-red-500 text-5xl">⚠️</span>
-            <h2 class="text-white text-xl font-bold">Battery Low!</h2>
-            <p class="text-[#B5B5B5] text-sm leading-relaxed">Please connect your device to a power source to avoid disruptions in active telemetry logs tracking.</p>
-            <button onclick="closeBatteryWarning()"
-                class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl text-sm shadow-md">
-                Got it
-            </button>
-        </div>
-    </div>
-
-    <!-- Custom Dialogs System Overlay (Replacement for alert / confirm) -->
-    <div id="toastNotification" class="fixed top-4 right-4 z-[9999] transition-all duration-300 transform translate-x-full opacity-0 pointer-events-none">
-        <div class="bg-[#1A1B33] border border-[#FFBB02]/30 text-white rounded-xl px-5 py-3 shadow-2xl flex items-center gap-3">
-            <span id="toastIcon" class="text-[#FFBB02] text-lg">⚡</span>
-            <span id="toastMessage" class="text-xs font-semibold leading-normal"></span>
-        </div>
-    </div>
-
-    <div id="confirmDialog" class="fixed inset-0 bg-[#03041A]/80 backdrop-blur-sm flex justify-center items-center z-[9999] transition-all duration-300 opacity-0 invisible">
-        <div class="bg-[#1A1B33] border border-white/10 rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl text-center transform scale-95 transition-transform duration-300">
-            <div class="w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500 text-xl">⚠️</div>
-            <h4 id="confirmTitle" class="text-white text-lg font-bold mb-2">Confirm Action</h4>
-            <p id="confirmMessage" class="text-[#B5B5B5] text-xs leading-relaxed mb-6">Are you sure you want to permanently execute this action?</p>
-            <div class="flex gap-3">
-                <button id="confirmCancelBtn" class="flex-1 py-2.5 bg-[#31324C]/60 hover:bg-[#31324C] text-[#B5B5B5] hover:text-white rounded-xl text-xs font-bold transition-all">Cancel</button>
-                <button id="confirmConfirmBtn" class="flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-all">Execute</button>
-            </div>
-        </div>
-    </div>
-
     <!-- ================= JAVASCRIPT SYSTEM ENGINE ================= -->
     <script>
         /* ================= STREAMING_CHUNK:Configuring Leaflet Map layers and parameters... ================= */
@@ -555,6 +518,7 @@ $current_user_id = $user['id'] ?? null;
         let currentFilterMode = 'all';
         let currentPage = 1;
         const perPage = 3;
+        let hasAlertedBattery = false;
 
         /* ================= SAFE TEXT HELPER (XSS PROTECTION) ================= */
         function escapeHTML(str) {
@@ -566,57 +530,9 @@ $current_user_id = $user['id'] ?? null;
                 .replace(/'/g, "&#039;");
         }
 
-        /* ================= CUSTOM CONFIRMS & TOAST REPLACEMENTS ================= */
-        function showToast(message, type = "info") {
-            const toast = document.getElementById("toastNotification");
-            const msgSpan = document.getElementById("toastMessage");
-            const iconSpan = document.getElementById("toastIcon");
-
-            if (type === "error") {
-                iconSpan.innerText = "❌";
-                toast.firstElementChild.className = "bg-[#1A1B33] border border-red-500/30 text-white rounded-xl px-5 py-3 shadow-2xl flex items-center gap-3";
-            } else if (type === "success") {
-                iconSpan.innerText = "✅";
-                toast.firstElementChild.className = "bg-[#1A1B33] border border-green-500/30 text-white rounded-xl px-5 py-3 shadow-2xl flex items-center gap-3";
-            } else {
-                iconSpan.innerText = "⚡";
-                toast.firstElementChild.className = "bg-[#1A1B33] border border-[#FFBB02]/30 text-white rounded-xl px-5 py-3 shadow-2xl flex items-center gap-3";
-            }
-
-            msgSpan.innerText = message;
-            toast.classList.remove("translate-x-full", "opacity-0", "pointer-events-none");
-
-            setTimeout(() => {
-                toast.classList.add("translate-x-full", "opacity-0", "pointer-events-none");
-            }, 4000);
-        }
-
-        function showConfirm(title, message, onConfirm) {
-            const dialog = document.getElementById("confirmDialog");
-            const titleEl = document.getElementById("confirmTitle");
-            const msgEl = document.getElementById("confirmMessage");
-            const cancelBtn = document.getElementById("confirmCancelBtn");
-            const confirmBtn = document.getElementById("confirmConfirmBtn");
-
-            titleEl.innerText = title;
-            msgEl.innerText = message;
-
-            dialog.classList.remove("invisible", "opacity-0");
-            dialog.firstElementChild.classList.remove("scale-95");
-
-            const cleanUp = () => {
-                dialog.classList.add("invisible", "opacity-0");
-                dialog.firstElementChild.classList.add("scale-95");
-            };
-
-            cancelBtn.onclick = () => {
-                cleanUp();
-            };
-
-            confirmBtn.onclick = () => {
-                cleanUp();
-                if (onConfirm) onConfirm();
-            };
+        /* ================= REPLACED POPUPS WITH STANDARD BROWSER ALERTS ================= */
+        function showAlert(title, message, type = "info") {
+            alert(`${title ? title.toUpperCase() + ': ' : ''}${message}`);
         }
 
         /* ================= STREAMING_CHUNK:Initializing picker map viewport components... ================= */
@@ -675,7 +591,7 @@ $current_user_id = $user['id'] ?? null;
         /* ================= STREAMING_CHUNK:Structuring geolocation search patterns... ================= */
         function useLocation() {
             if (!navigator.geolocation) {
-                showToast("Geolocation is not supported by your browser.", "error");
+                showAlert("System Error", "Geolocation is not supported by your browser.", "error");
                 return;
             }
 
@@ -720,7 +636,7 @@ $current_user_id = $user['id'] ?? null;
                             break;
                     }
 
-                    showToast(msg, "error");
+                    showAlert("GPS Error", msg, "error");
                 },
                 {
                     enableHighAccuracy: true,
@@ -812,7 +728,7 @@ $current_user_id = $user['id'] ?? null;
                 const result = await api(`${API_BASE}/get.php`);
 
                 if (!result.success) {
-                    showToast(result.message || "Failed to synchronise active station grids.", "error");
+                    showAlert("Sync Issue", result.message || "Failed to synchronise active station grids.", "error");
                     return;
                 }
 
@@ -840,7 +756,7 @@ $current_user_id = $user['id'] ?? null;
                 }
             } catch (e) {
                 console.error("Failed to query stations feed:", e);
-                showToast("Server network timeout.", "error");
+                showAlert("Network Error", "Server connection timeout.", "error");
             }
         }
 
@@ -953,6 +869,7 @@ $current_user_id = $user['id'] ?? null;
                 const card = document.createElement("div");
                 card.className = "card-hover flex flex-col p-4 border border-white/5 rounded-2xl bg-[#1C1D30]/30 transition-all hover:border-white/10";
 
+                // REPLACED Coordinates Block in card metrics with Location Name display block
                 card.innerHTML = `
                     <div class="flex flex-col">
                         <div class="flex justify-between items-start gap-2">
@@ -975,16 +892,16 @@ $current_user_id = $user['id'] ?? null;
                             <span class="text-[11px] text-white font-extrabold mt-0.5 truncate">${escapeHTML(s.station_type)}</span>
                         </div>
                         <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-1.5 text-center">
-                            <span class="text-[8px] text-[#B5B5B5] font-bold tracking-wider uppercase opacity-40">Coordinates</span>
-                            <span class="text-[11px] text-[#FFBB02] font-extrabold mt-0.5 truncate">${Number(s.latitude).toFixed(4)}, ${Number(s.longitude).toFixed(4)}</span>
+                            <span class="text-[8px] text-[#B5B5B5] font-bold tracking-wider uppercase opacity-40">Location</span>
+                            <span class="text-[11px] text-[#FFBB02] font-extrabold mt-0.5 truncate">${escapeHTML(s.location_name)}</span>
                         </div>
                     </div>
 
                     <p class="text-white/60 text-[11px] font-medium leading-relaxed mt-2.5 line-clamp-2">${escapeHTML(s.description || 'No system parameter logs found.')}</p>
                 `;
 
-                // Add modification buttons if authorized
-                const isAuthor = !window.CURRENT_USER_ID || String(s.user_id) === String(CURRENT_USER_ID);
+                // RESTRICTED EDIT/DELETE ACTIONS - Only authorized for personal posts
+                const isAuthor = CURRENT_USER_ID && s.user_id && String(s.user_id) === String(CURRENT_USER_ID); 
                 if (isAuthor) {
                     const controls = document.createElement("div");
                     controls.className = "flex gap-4 justify-end pt-2 mt-3 border-t border-white/5 text-xs";
@@ -1031,72 +948,99 @@ $current_user_id = $user['id'] ?? null;
             }, 100);
         }
 
-        /* ================= DELETE STATION PROCESS ================= */
+        /* ================= DELETE STATION PROCESS VIA NATIVE BROWSER CONFIRMATION ================= */
         async function deleteStation(id) {
-            showConfirm(
-                "Delete Station Node",
-                "Are you sure you want to permanently delete this power station from the grid database? This cannot be undone.",
-                async () => {
-                    try {
-                        const result = await api(`${API_BASE}/delete.php`, {
-                            method: "POST",
-                            body: JSON.stringify({ station_id: id })
-                        });
+            const confirmed = confirm("Are you sure you want to permanently delete this power station from the grid database? This cannot be undone.");
+            if (!confirmed) return;
 
-                        showToast(result.message || "Operation executed successfully.", result.success ? "success" : "error");
+            try {
+                const result = await api(`${API_BASE}/delete.php`, {
+                    method: "POST",
+                    body: JSON.stringify({ station_id: id })
+                });
 
-                        if (result.success) {
-                            loadStations();
-                        }
-                    } catch (err) {
-                        console.error("Deletion exception:", err);
-                        showToast("Failed to connect to the backend database.", "error");
-                    }
+                showAlert(
+                    result.success ? "Success" : "Error",
+                    result.message || "Operation executed."
+                );
+
+                if (result.success) {
+                    loadStations();
                 }
-            );
+            } catch (err) {
+                console.error("Deletion exception:", err);
+                showAlert("System Error", "Failed to connect to the backend database.");
+            }
         }
 
         /* ================= STATION CREATE/UPDATE SUBMISSION ================= */
         document.getElementById("stationForm")?.addEventListener("submit", async (e) => {
-            e.preventDefault();
+    e.preventDefault();
 
-            const id = document.getElementById("station_id").value;
-            const isEdit = !!id;
+    const id = document.getElementById("station_id")?.value;
+    const isEdit = id && id.trim() !== "";
 
-            const payload = {
-                station_name: document.getElementById("station_name").value,
-                location_name: document.getElementById("location_name").value,
-                station_type: document.getElementById("station_type").value,
-                availability_status: document.getElementById("availability_status").value,
-                description: document.getElementById("description").value,
-                latitude: document.getElementById("latitude").value,
-                longitude: document.getElementById("longitude").value
-            };
+    const payload = {
+        station_name: document.getElementById("station_name").value,
+        location_name: document.getElementById("location_name").value,
+        station_type: document.getElementById("station_type").value,
+        availability_status: document.getElementById("availability_status").value,
+        description: document.getElementById("description").value,
+        latitude: document.getElementById("latitude").value,
+        longitude: document.getElementById("longitude").value
+    };
 
-            if (isEdit) {
-                payload.id = id;
-                payload.station_id = id; // Mapping both attributes for absolute compatibility
-            }
+    // ✅ Validate coordinates
+    if (!payload.latitude || !payload.longitude) {
+        showAlert(
+            "Missing Coordinates",
+            "Please select a location on the map before submitting.",
+            "error"
+        );
+        return;
+    }
 
-            const endpoint = isEdit ? `${API_BASE}/update.php` : `${API_BASE}/create.php`;
+    // ✅ Add ID only when editing
+    if (isEdit) {
+        payload.id = id;
+        payload.station_id = id;
+    }
 
-            try {
-                const result = await api(endpoint, {
-                    method: "POST",
-                    body: JSON.stringify(payload)
-                });
+    const endpoint = isEdit
+        ? `${API_BASE}/update.php`
+        : `${API_BASE}/create.php`;
 
-                showToast(result.message || "Grid synchronization complete.", result.success ? "success" : "error");
+    try {
+        const result = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
 
-                if (result.success) {
-                    closePopup();
-                    loadStations();
-                }
-            } catch (err) {
-                console.error("Submission exception:", err);
-                showToast("Data transmission failed.", "error");
-            }
+            // 🔥 IMPORTANT FIX FOR 403 (AUTH / SESSION)
+            credentials: "include",
+
+            body: JSON.stringify(payload)
         });
+
+        const data = await result.json();
+
+        showAlert(
+            data.success ? "Success" : "Error",
+            data.message || "Operation completed."
+        );
+
+        if (data.success) {
+            closePopup();
+            loadStations();
+        }
+
+    } catch (err) {
+        console.error("Submission exception:", err);
+        showAlert("System Error", "Failed to send request to server.");
+    }
+});
 
         /* ================= PAGINATION CONTROL INTERFACE ENGINE ================= */
         function renderPaginationControls() {
@@ -1170,7 +1114,7 @@ $current_user_id = $user['id'] ?? null;
             loadStations();
         }
 
-        /* ================= STREAMING_CHUNK:Implementing local hardware battery warnings... ================= */
+        /* ================= STREAMING_CHUNK:Implementing local hardware battery alerts... ================= */
         function batteryDetection() {
             if (!navigator.getBattery) return;
             navigator.getBattery().then(battery => {
@@ -1183,21 +1127,22 @@ $current_user_id = $user['id'] ?? null;
                     if (chargingSpan) chargingSpan.innerText = battery.charging ? "Yes" : "No";
 
                     if (battery.level <= 0.20 && !battery.charging) {
-                        const toast = document.getElementById("battery-warning");
-                        if (toast) {
-                            toast.classList.remove("invisible", "opacity-0");
-                            document.getElementById("batteryBox").classList.remove("scale-95", "opacity-0");
+                        if (!hasAlertedBattery) {
+                            alert("Battery Low! Please connect your device to a power source to avoid disruptions in active telemetry logs tracking.");
+                            hasAlertedBattery = true;
                         }
                         if (statusBox) {
                             statusBox.innerText = "Low Battery";
                             statusBox.style.background = "#e74c3c";
                         }
                     } else if (battery.charging) {
+                        hasAlertedBattery = false;
                         if (statusBox) {
                             statusBox.innerText = "Charging";
                             statusBox.style.background = "#2ecc71";
                         }
                     } else {
+                        hasAlertedBattery = false;
                         if (statusBox) {
                             statusBox.innerText = "Normal";
                             statusBox.style.background = "#f39c12";
@@ -1208,10 +1153,6 @@ $current_user_id = $user['id'] ?? null;
                 battery.addEventListener("levelchange", update);
                 battery.addEventListener("chargingchange", update);
             });
-        }
-
-        function closeBatteryWarning() {
-            document.getElementById("battery-warning").classList.add("invisible", "opacity-0");
         }
 
         /* ================= INITIALIZATION RENDERING RUNTIME CONTROLS ================= */
