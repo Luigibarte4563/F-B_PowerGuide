@@ -279,7 +279,7 @@ $googleClientId = $_ENV['GOOGLE_CLIENT_ID'] ?? '';
                     window.location.href = "<?= BACKEND_URL ?>/public/dashboard/electric/dashboard.php";
                 }
                 else {
-                    window.location.href = "<?= BACKEND_URL ?>/public/dashboard/user/user.php";
+                    window.location.href = "<?= FRONTEND_URL ?>/src/dashboard/user/dashboard.php";
                 }
             })
             .catch(err => console.error(err));

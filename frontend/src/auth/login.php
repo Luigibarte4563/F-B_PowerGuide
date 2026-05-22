@@ -248,8 +248,8 @@ $googleClientId = $_ENV['GOOGLE_CLIENT_ID'] ?? '';
                 if (res.role === "electric_company") {
                     window.location.href = "<?= BACKEND_URL ?>/public/dashboard/electric/dashboard.php";
                 }
-                else {
-                    window.location.href = "<?= BACKEND_URL ?>/public/dashboard/user/user.php";
+                else { 
+                    window.location.href = "<?= FRONTEND_URL ?>/src/dashboard/user/dashboard.php";
                 }
             })
             .catch(err => console.error(err));
