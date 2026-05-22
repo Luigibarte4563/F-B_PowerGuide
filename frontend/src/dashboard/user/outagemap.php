@@ -164,7 +164,7 @@ $current_user_id = $user['id'] ?? null;
                     <span>Outage Map</span>
                 </a>
 
-                <a href="findhubs.html"
+                <a href="findhubs.php"
                     class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
                     <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-black transition-colors" fill="none"
                         stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -562,7 +562,7 @@ $current_user_id = $user['id'] ?? null;
 
     <!-- ================= JAVASCRIPT SYSTEM ENGINE ================= -->
     <script>
-        /* ================= MAP COMPONENT LAYERS INITIALIZATION ================= */
+        /* ================= STREAMING_CHUNK:Configuring the Leaflet mapping layers... ================= */
         const map = L.map('map', { zoomControl: false }).setView([16.04, 120.33], 12);
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
@@ -590,7 +590,7 @@ $current_user_id = $user['id'] ?? null;
                 .replace(/'/g, "&#039;");
         }
 
-        /* ================= MODAL MAP (PICKER ENVIRONMENT) INITIALIZATION ================= */
+        /* ================= STREAMING_CHUNK:Initializing the picker environment modal map... ================= */
         let modalMap;
         let modalSelectionMarker;
 
@@ -605,11 +605,12 @@ $current_user_id = $user['id'] ?? null;
             }).addTo(modalMap);
 
             modalMap.on('click', function (e) {
-                setModalCoordinates(e.latlng.lat, e.latlng.lng);
+                setModalCoordinates(e.latlng.lat, e.latlng.lng, false);
             });
         }
 
-        function setModalCoordinates(lat, lng) {
+        /* ================= STREAMING_CHUNK:Implementing geocoding & coordination synchronization... ================= */
+        function setModalCoordinates(lat, lng, skipGeocode = false) {
             document.getElementById("formLatitude").value = Number(lat).toFixed(6);
             document.getElementById("formLongitude").value = Number(lng).toFixed(6);
 
@@ -620,36 +621,56 @@ $current_user_id = $user['id'] ?? null;
                 modalSelectionMarker.on('dragend', function (event) {
                     const marker = event.target;
                     const position = marker.getLatLng();
-                    document.getElementById("formLatitude").value = position.lat.toFixed(6);
-                    document.getElementById("formLongitude").value = position.lng.toFixed(6);
+                    setModalCoordinates(position.lat, position.lng, false);
                 });
             }
             modalMap.panTo([lat, lng]);
+
+            // Auto-fill the location name field with a clean reverse-geocoding lookup sequence
+            if (!skipGeocode) {
+                const locationInput = document.getElementById("formLocation");
+                if (locationInput) {
+                    locationInput.value = "Fetching address from GPS telemetry...";
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            locationInput.value = data.display_name || `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
+                        })
+                        .catch(() => {
+                            locationInput.value = `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
+                        });
+                }
+            }
         }
 
-        /* ================= GEOLOCATION UTILITIES ================= */
+        /* ================= STREAMING_CHUNK:Implementing high-accuracy geolocation utilities... ================= */
         function useCurrentLocation() {
             if (!navigator.geolocation) {
                 alert("Geolocation is not supported by your browser.");
                 return;
             }
 
+            const locationInput = document.getElementById("formLocation");
+            if (locationInput) {
+                locationInput.value = "Interrogating GPS Satellite telemetry...";
+            }
+
             navigator.geolocation.getCurrentPosition(
-                (position) => {
+                async (position) => {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
 
                     console.log("GPS:", lat, lng);
 
-                    // set hidden fields
-                    setModalCoordinates(lat, lng);
+                    // Set hidden coordinate bounds and run geocoding lookup sequence
+                    setModalCoordinates(lat, lng, false);
 
-                    // IMPORTANT: ensure modal map exists
+                    // Ensure modal Leaflet map canvas target exists
                     if (!modalMap) {
                         initModalMap();
                     }
 
-                    // force map refresh before panning
+                    // Force map viewport layout refresh before panning
                     setTimeout(() => {
                         modalMap.invalidateSize();
                         modalMap.setView([lat, lng], 16);
@@ -657,6 +678,9 @@ $current_user_id = $user['id'] ?? null;
                 },
                 (error) => {
                     console.error("Geolocation error:", error);
+                    if (locationInput && locationInput.value.includes("GPS")) {
+                        locationInput.value = "";
+                    }
 
                     let msg = "Unable to fetch location.";
 
@@ -682,7 +706,7 @@ $current_user_id = $user['id'] ?? null;
             );
         }
 
-        /* ================= MODAL WORKFLOW SYSTEM MODALS ================= */
+        /* ================= STREAMING_CHUNK:Managing popup workflows and modal actions... ================= */
         function openPopup(editMode = false) {
             const popup = document.getElementById("popup");
             popup.classList.remove("invisible", "opacity-0");
@@ -695,7 +719,7 @@ $current_user_id = $user['id'] ?? null;
                     document.getElementById("outageForm").reset();
                     document.getElementById("report_id").value = "";
                     document.getElementById("formTitle").innerText = "Report an Outage";
-                    setModalCoordinates(16.043, 120.333);
+                    setModalCoordinates(16.043, 120.333, true); // Don't lookup generic default location coordinate
                 }
             }, 50);
         }
@@ -709,8 +733,8 @@ $current_user_id = $user['id'] ?? null;
             closePopup();
         }
 
-        /* ================= BUSINESS LOGIC CRUD API FETCH ACTIONS ================= */
-        const API_BASE = "http://localhost/crowdsourcedapi/api/outage_report";
+        /* ================= STREAMING_CHUNK:Declaring API business logic and CRUD routines... ================= */
+        const API_BASE = "http://localhost/crowdsourcedAPI/api/outage_report";
 
         async function createReport(payload) {
             const res = await fetch(`${API_BASE}/create.php`, {
@@ -758,7 +782,7 @@ $current_user_id = $user['id'] ?? null;
         async function deleteReport(id) {
             if (!confirm("Delete this report?")) return;
             try {
-                const res = await fetch(`${API_BASE}/delete.php`, {
+                const res = await fetch(`http://localhost/crowdsourcedAPI/api/outage_report/delete.php`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     credentials: "include",
@@ -825,7 +849,7 @@ $current_user_id = $user['id'] ?? null;
             initGridSynchronization();
         }
 
-        /* ================= DATA RECONCILIATION & FEED RENDER PIPELINES ================= */
+        /* ================= STREAMING_CHUNK:Synchronizing the data points with the Leaflet map... ================= */
         async function initGridSynchronization() {
             try {
                 const mapRes = await fetch(`${API_BASE}/get.php`, { credentials: "include" });
@@ -1055,6 +1079,7 @@ $current_user_id = $user['id'] ?? null;
             paginationContainer.appendChild(fragment);
         }
 
+        /* ================= STREAMING_CHUNK:Configuring system edit modes... ================= */
         function editReportByObject(r) {
             if (!r) return;
 
@@ -1071,12 +1096,13 @@ $current_user_id = $user['id'] ?? null;
 
             setTimeout(() => {
                 if (r.latitude && r.longitude) {
-                    setModalCoordinates(parseFloat(r.latitude), parseFloat(r.longitude));
+                    // Load coords in edit state while preserving saved customized location names
+                    setModalCoordinates(parseFloat(r.latitude), parseFloat(r.longitude), true);
                 }
             }, 100);
         }
 
-        /* ================= HARDWARE LEVEL TELEMETRY MONITORING ================= */
+        /* ================= STREAMING_CHUNK:Implementing local hardware battery warnings... ================= */
         function batteryDetection() {
             if (!navigator.getBattery) return;
             navigator.getBattery().then(battery => {
