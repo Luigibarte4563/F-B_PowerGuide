@@ -28,9 +28,12 @@ $current_user_id = $user['id'] ?? null;
 
     <!-- CDN Deliveries (Tailwind, Montserrat, Leaflet Map) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <style>
         body {
@@ -144,7 +147,8 @@ $current_user_id = $user['id'] ?? null;
 
                 <a href="dashboard.php"
                     class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
-                    <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-black transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-black transition-colors" fill="none"
+                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
                     </svg>
@@ -163,7 +167,8 @@ $current_user_id = $user['id'] ?? null;
 
                 <a href="findhubs.php"
                     class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl bg-[#FEBB02] text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
-                    <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -200,7 +205,8 @@ $current_user_id = $user['id'] ?? null;
             <div
                 class="flex flex-col text-left mt-auto mb-3 mx-2 p-5 rounded-2xl bg-[#31324C]/30 border border-white/5">
                 <span class="text-[#FEBB02] text-xs font-bold tracking-wider mb-1">PRO TIP</span>
-                <span class="text-white/50 text-xs font-normal leading-relaxed">Limit high wattage consumption during peak hours to preserve active local transformer runtimes.</span>
+                <span class="text-white/50 text-xs font-normal leading-relaxed">Limit high wattage consumption during
+                    peak hours to preserve active local transformer runtimes.</span>
             </div>
 
             <!-- Profile Info Panel -->
@@ -291,7 +297,9 @@ $current_user_id = $user['id'] ?? null;
                         <div
                             class="absolute bottom-4 left-4 border border-white/10 bg-[#1A1B33]/95 rounded-2xl z-[1000] p-3 shadow-xl backdrop-blur-md">
                             <div class="flex flex-col gap-1.5 min-w-[140px]">
-                                <span class="font-bold text-[10px] tracking-widest text-white/40 block mb-0.5">AVAILABILITY LEGEND</span>
+                                <span
+                                    class="font-bold text-[10px] tracking-widest text-white/40 block mb-0.5">AVAILABILITY
+                                    LEGEND</span>
                                 <span class="font-semibold text-xs flex items-center text-white/90">
                                     <span class="w-2.5 h-2.5 rounded-full bg-[#34FB34] mr-2 block shadow-sm"></span>
                                     Operational
@@ -340,7 +348,8 @@ $current_user_id = $user['id'] ?? null;
                         <!-- Dynamic Scrollable Station Feed Deck Container -->
                         <div id="recentReports"
                             class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-3.5 pt-3.5 pr-1">
-                            <p class="text-xs text-white/40 text-center py-8">Initializing live updates synchronization vectors...</p>
+                            <p class="text-xs text-white/40 text-center py-8">Initializing live updates synchronization
+                                vectors...</p>
                         </div>
 
                         <!-- PAGINATION CONTAINER INTERFACE COMPONENT -->
@@ -378,7 +387,8 @@ $current_user_id = $user['id'] ?? null;
             <div class="flex flex-col md:flex-row h-[90vh] md:h-[640px]">
 
                 <!-- LEFT SIDEBAR MAP -->
-                <div class="w-full md:w-[45%] h-[280px] md:h-full relative bg-[#03041A] border-b md:border-b-0 md:border-r border-white/10">
+                <div
+                    class="w-full md:w-[45%] h-[280px] md:h-full relative bg-[#03041A] border-b md:border-b-0 md:border-r border-white/10">
                     <div id="modalMap" class="w-full h-full bg-[#050724]"></div>
 
                     <!-- Floating Info Badge -->
@@ -386,9 +396,11 @@ $current_user_id = $user['id'] ?? null;
                         class="absolute bottom-4 left-4 right-4 z-[1000] pointer-events-none bg-[#03041A]/90 backdrop-blur-md px-4 py-3 rounded-xl border border-white/10 shadow-xl">
                         <div class="flex items-center gap-2">
                             <span class="w-1.5 h-1.5 rounded-full bg-[#FFBB02] animate-pulse"></span>
-                            <span class="text-[10px] font-bold tracking-wider text-[#FFBB02] uppercase">Geographic Pinpoint</span>
+                            <span class="text-[10px] font-bold tracking-wider text-[#FFBB02] uppercase">Geographic
+                                Pinpoint</span>
                         </div>
-                        <p class="text-[11px] text-white/60 font-normal mt-0.5 leading-relaxed">Click anywhere on the map or drag the node to set station coordinates.</p>
+                        <p class="text-[11px] text-white/60 font-normal mt-0.5 leading-relaxed">Click anywhere on the
+                            map or drag the node to set station coordinates.</p>
                     </div>
                 </div>
 
@@ -402,8 +414,10 @@ $current_user_id = $user['id'] ?? null;
                     <div class="space-y-4">
                         <!-- Header -->
                         <div>
-                            <h3 id="formTitle" class="text-2xl font-bold text-white tracking-tight">Register Power Station</h3>
-                            <p class="text-xs text-white/50 mt-1">Specify grid parameters and coordinates for crowdsourced infrastructure logs.</p>
+                            <h3 id="formTitle" class="text-2xl font-bold text-white tracking-tight">Register Power
+                                Station</h3>
+                            <p class="text-xs text-white/50 mt-1">Specify grid parameters and coordinates for
+                                crowdsourced infrastructure logs.</p>
                         </div>
 
                         <!-- GPS Trigger Button -->
@@ -423,7 +437,9 @@ $current_user_id = $user['id'] ?? null;
 
                         <!-- Station Name Field -->
                         <div>
-                            <label class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Station Name</label>
+                            <label
+                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Station
+                                Name</label>
                             <input id="station_name" required
                                 class="w-full px-4 h-11 bg-white/[0.03] border border-white/10 rounded-xl text-sm text-white outline-none placeholder-white/20 focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all focus:bg-[#141527]"
                                 type="text" placeholder="e.g., Calasiao Transmission Substation">
@@ -432,7 +448,9 @@ $current_user_id = $user['id'] ?? null;
                         <!-- Station Type & Status -->
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Station Type</label>
+                                <label
+                                    class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Station
+                                    Type</label>
                                 <div class="relative">
                                     <select id="station_type" required
                                         class="w-full h-11 pl-3 pr-8 bg-[#1E203C] border border-white/10 rounded-xl text-sm text-white/90 outline-none focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all cursor-pointer appearance-none">
@@ -445,15 +463,19 @@ $current_user_id = $user['id'] ?? null;
                                         <option value="Battery Storage">Battery Storage Station</option>
                                         <option value="Charging Station">EV Charging Hub</option>
                                     </select>
-                                    <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-white/30">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <div
+                                        class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-white/30">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                            viewBox="0 0 24 24">
                                             <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                <label class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Availability Status</label>
+                                <label
+                                    class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Availability
+                                    Status</label>
                                 <div class="relative">
                                     <select id="availability_status" required
                                         class="w-full h-11 pl-3 pr-8 bg-[#1E203C] border border-white/10 rounded-xl text-sm text-white/90 outline-none focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all cursor-pointer appearance-none">
@@ -463,8 +485,10 @@ $current_user_id = $user['id'] ?? null;
                                         <option value="Planned">Planned / Proposed</option>
                                         <option value="Decommissioned">Decommissioned</option>
                                     </select>
-                                    <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-white/30">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <div
+                                        class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-white/30">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                            viewBox="0 0 24 24">
                                             <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
                                     </div>
@@ -474,7 +498,9 @@ $current_user_id = $user['id'] ?? null;
 
                         <!-- Geographic Location Name -->
                         <div>
-                            <label class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Geographic Location Name</label>
+                            <label
+                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Geographic
+                                Location Name</label>
                             <input id="location_name" required
                                 class="w-full px-4 h-11 bg-white/[0.03] border border-white/10 rounded-xl text-sm text-white outline-none placeholder-white/20 focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all focus:bg-[#141527]"
                                 type="text" placeholder="Street, Barangay, City or Coordinates">
@@ -482,7 +508,9 @@ $current_user_id = $user['id'] ?? null;
 
                         <!-- Description notes -->
                         <div>
-                            <label class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Operating Notes / Description</label>
+                            <label
+                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Operating
+                                Notes / Description</label>
                             <textarea id="description"
                                 class="w-full h-16 border border-white/10 p-3 rounded-xl bg-white/[0.03] text-white placeholder-white/20 focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 outline-none text-sm resize-none transition-all focus:bg-[#141527]"
                                 placeholder="Describe operating configurations, transformers, or current structural logs..."></textarea>
@@ -501,178 +529,178 @@ $current_user_id = $user['id'] ?? null;
 
     <!-- ================= JAVASCRIPT SYSTEM ENGINE ================= -->
     <script>
-        /* ================= STREAMING_CHUNK:Configuring Leaflet Map layers and parameters... ================= */
-        const map = L.map('map', { zoomControl: false }).setView([16.04, 120.33], 12);
-        L.control.zoom({ position: 'bottomright' }).addTo(map);
+    /* ================= STREAMING_CHUNK:Configuring Leaflet Map layers and parameters... ================= */
+    const map = L.map('map', { zoomControl: false }).setView([16.04, 120.33], 12);
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    let layerGroup = L.layerGroup().addTo(map);
+
+    // Pagination & Global Cache Layer Data States
+    let allCachedReports = [];
+    let filteredReports = [];
+    let currentFilterMode = 'all';
+    let currentPage = 1;
+    const perPage = 3;
+    let hasAlertedBattery = false;
+
+    /* ================= SAFE TEXT HELPER (XSS PROTECTION) ================= */
+    function escapeHTML(str) {
+        return String(str ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    /* ================= REPLACED POPUPS WITH STANDARD BROWSER ALERTS ================= */
+    function showAlert(title, message, type = "info") {
+        alert(`${title ? title.toUpperCase() + ': ' : ''}${message}`);
+    }
+
+    /* ================= STREAMING_CHUNK:Initializing picker map viewport components... ================= */
+    let modalMap;
+    let modalSelectionMarker;
+
+    function initModalMap() {
+        if (modalMap) return;
+
+        modalMap = L.map('modalMap', { zoomControl: false }).setView([16.04, 120.33], 13);
+        L.control.zoom({ position: 'bottomright' }).addTo(modalMap);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+            maxZoom: 19
+        }).addTo(modalMap);
 
-        let layerGroup = L.layerGroup().addTo(map);
+        modalMap.on('click', function (e) {
+            setModalCoordinates(e.latlng.lat, e.latlng.lng, false);
+        });
+    }
 
-        // Pagination & Global Cache Layer Data States
-        let allCachedReports = [];
-        let filteredReports = [];
-        let currentFilterMode = 'all';
-        let currentPage = 1;
-        const perPage = 3;
-        let hasAlertedBattery = false;
+    /* ================= STREAMING_CHUNK:Implementing geocoding & coordinate triggers... ================= */
+    function setModalCoordinates(lat, lng, skipGeocode = false) {
+        document.getElementById("latitude").value = Number(lat).toFixed(6);
+        document.getElementById("longitude").value = Number(lng).toFixed(6);
 
-        /* ================= SAFE TEXT HELPER (XSS PROTECTION) ================= */
-        function escapeHTML(str) {
-            return String(str ?? "")
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-
-        /* ================= REPLACED POPUPS WITH STANDARD BROWSER ALERTS ================= */
-        function showAlert(title, message, type = "info") {
-            alert(`${title ? title.toUpperCase() + ': ' : ''}${message}`);
-        }
-
-        /* ================= STREAMING_CHUNK:Initializing picker map viewport components... ================= */
-        let modalMap;
-        let modalSelectionMarker;
-
-        function initModalMap() {
-            if (modalMap) return;
-
-            modalMap = L.map('modalMap', { zoomControl: false }).setView([16.04, 120.33], 13);
-            L.control.zoom({ position: 'bottomright' }).addTo(modalMap);
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19
-            }).addTo(modalMap);
-
-            modalMap.on('click', function (e) {
-                setModalCoordinates(e.latlng.lat, e.latlng.lng, false);
+        if (modalSelectionMarker) {
+            modalSelectionMarker.setLatLng([lat, lng]);
+        } else {
+            modalSelectionMarker = L.marker([lat, lng], { draggable: true }).addTo(modalMap);
+            modalSelectionMarker.on('dragend', function (event) {
+                const marker = event.target;
+                const position = marker.getLatLng();
+                setModalCoordinates(position.lat, position.lng, false);
             });
         }
+        modalMap.panTo([lat, lng]);
 
-        /* ================= STREAMING_CHUNK:Implementing geocoding & coordinate triggers... ================= */
-        function setModalCoordinates(lat, lng, skipGeocode = false) {
-            document.getElementById("latitude").value = Number(lat).toFixed(6);
-            document.getElementById("longitude").value = Number(lng).toFixed(6);
-
-            if (modalSelectionMarker) {
-                modalSelectionMarker.setLatLng([lat, lng]);
-            } else {
-                modalSelectionMarker = L.marker([lat, lng], { draggable: true }).addTo(modalMap);
-                modalSelectionMarker.on('dragend', function (event) {
-                    const marker = event.target;
-                    const position = marker.getLatLng();
-                    setModalCoordinates(position.lat, position.lng, false);
-                });
-            }
-            modalMap.panTo([lat, lng]);
-
-            // Auto-fill coordinates name field through Nominatim reverse geocoder
-            if (!skipGeocode) {
-                const locationInput = document.getElementById("location_name");
-                if (locationInput) {
-                    locationInput.value = "Fetching address from GPS telemetry...";
-                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-                        .then(res => res.json())
-                        .then(data => {
-                            locationInput.value = data.display_name || `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
-                        })
-                        .catch(() => {
-                            locationInput.value = `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
-                        });
-                }
-            }
-        }
-
-        /* ================= STREAMING_CHUNK:Structuring geolocation search patterns... ================= */
-        function useLocation() {
-            if (!navigator.geolocation) {
-                showAlert("System Error", "Geolocation is not supported by your browser.", "error");
-                return;
-            }
-
+        if (!skipGeocode) {
             const locationInput = document.getElementById("location_name");
             if (locationInput) {
-                locationInput.value = "Interrogating GPS Satellite telemetry...";
+                locationInput.value = "Fetching address from GPS telemetry...";
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        locationInput.value = data.display_name || `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
+                    })
+                    .catch(() => {
+                        locationInput.value = `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
+                    });
             }
+        }
+    }
 
-            navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
+    /* ================= STREAMING_CHUNK:Structuring geolocation search patterns... ================= */
+    function useLocation() {
+        if (!navigator.geolocation) {
+            showAlert("System Error", "Geolocation is not supported by your browser.", "error");
+            return;
+        }
 
-                    setModalCoordinates(lat, lng, false);
+        const locationInput = document.getElementById("location_name");
+        if (locationInput) {
+            locationInput.value = "Interrogating GPS Satellite telemetry...";
+        }
 
-                    if (!modalMap) {
-                        initModalMap();
-                    }
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
 
-                    setTimeout(() => {
-                        modalMap.invalidateSize();
-                        modalMap.setView([lat, lng], 16);
-                    }, 100);
-                },
-                (error) => {
-                    console.error("Geolocation error:", error);
-                    if (locationInput && locationInput.value.includes("GPS")) {
-                        locationInput.value = "";
-                    }
+                setModalCoordinates(lat, lng, false);
 
-                    let msg = "Unable to fetch location telemetry.";
-
-                    switch (error.code) {
-                        case error.PERMISSION_DENIED:
-                            msg = "Permission denied. Please allow location access.";
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            msg = "Location unavailable.";
-                            break;
-                        case error.TIMEOUT:
-                            msg = "Location query timed out.";
-                            break;
-                    }
-
-                    showAlert("GPS Error", msg, "error");
-                },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0
+                if (!modalMap) {
+                    initModalMap();
                 }
-            );
-        }
 
-        /* ================= STREAMING_CHUNK:Managing form popup display transitions... ================= */
-        function openPopup(editMode = false) {
-            const popup = document.getElementById("popup");
-            popup.classList.remove("invisible", "opacity-0");
-
-            setTimeout(() => {
-                initModalMap();
-                modalMap.invalidateSize();
-
-                if (!editMode) {
-                    document.getElementById("stationForm").reset();
-                    document.getElementById("station_id").value = "";
-                    document.getElementById("formTitle").innerText = "Register Power Station";
-                    setModalCoordinates(16.043, 120.333, true); // Pinpoint near Calasiao view center initially
+                setTimeout(() => {
+                    modalMap.invalidateSize();
+                    modalMap.setView([lat, lng], 16);
+                }, 100);
+            },
+            (error) => {
+                console.error("Geolocation error:", error);
+                if (locationInput && locationInput.value.includes("GPS")) {
+                    locationInput.value = "";
                 }
-            }, 50);
-        }
 
-        function closePopup() {
-            const popup = document.getElementById("popup");
-            popup.classList.add("invisible", "opacity-0");
-        }
+                let msg = "Unable to fetch location telemetry.";
 
-        /* ================= STREAMING_CHUNK:Establishing AJAX integration workflows with Power station API... ================= */
-        const API_BASE = "http://localhost/crowdsourcedapi/api/power_station";
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        msg = "Permission denied. Please allow location access.";
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        msg = "Location unavailable.";
+                        break;
+                    case error.TIMEOUT:
+                        msg = "Location query timed out.";
+                        break;
+                }
 
-        async function api(url, options = {}) {
+                showAlert("GPS Error", msg, "error");
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
+    }
+
+    /* ================= STREAMING_CHUNK:Managing form popup display transitions... ================= */
+    function openPopup(editMode = false) {
+        const popup = document.getElementById("popup");
+        popup.classList.remove("invisible", "opacity-0");
+
+        setTimeout(() => {
+            initModalMap();
+            modalMap.invalidateSize();
+
+            if (!editMode) {
+                document.getElementById("stationForm").reset();
+                document.getElementById("station_id").value = "";
+                document.getElementById("formTitle").innerText = "Register Power Station";
+                setModalCoordinates(16.043, 120.333, true);
+            }
+        }, 50);
+    }
+
+    function closePopup() {
+        const popup = document.getElementById("popup");
+        popup.classList.add("invisible", "opacity-0");
+    }
+
+    /* ================= STREAMING_CHUNK:Establishing AJAX integration workflows with Power station API... ================= */
+    const API_BASE = "http://localhost/crowdsourcedapi/api/power_station";
+
+    async function api(url, options = {}) {
+        try {
             const res = await fetch(url, {
                 method: options.method || "GET",
                 headers: { "Content-Type": "application/json" },
@@ -680,505 +708,480 @@ $current_user_id = $user['id'] ?? null;
                 body: options.body || null
             });
             return await res.json();
+        } catch (err) {
+            console.error("API Error:", err);
+            return { success: false, message: "Network error occurred" };
         }
+    }
 
-        /* ================= GET USER INITIAL TELEMETRY LOCATION ================= */
-        async function loadUserLocation() {
-            try {
-                const result = await api(`${API_BASE}/get_near_location.php`);
+    /* ================= GET USER INITIAL TELEMETRY LOCATION ================= */
+    async function loadUserLocation() {
+        try {
+            const result = await api(`${API_BASE}/get_near_location.php`);
 
-                if (!result.success) {
-                    console.log("Relative Location telemetry unavailable:", result.message);
-                    return;
-                }
-
-                const lat = parseFloat(result.data.latitude);
-                const lng = parseFloat(result.data.longitude);
-
-                if (!isNaN(lat) && !isNaN(lng)) {
-                    map.setView([lat, lng], 14);
-
-                    const userLocIcon = L.divIcon({
-                        className: 'custom-user-location-marker',
-                        html: `
-                            <div class="relative flex items-center justify-center w-8 h-8 rounded-full border-2 border-white shadow-xl bg-[#007AFF]">
-                                <svg class="w-4 h-4 text-white animate-pulse" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
-                                <span class="absolute inset-0 rounded-full bg-[#007AFF] opacity-30 animate-ping"></span>
-                            </div>
-                        `,
-                        iconSize: [32, 32],
-                        iconAnchor: [16, 16]
-                    });
-
-                    L.marker([lat, lng], { icon: userLocIcon })
-                        .addTo(map)
-                        .bindPopup("<strong class='text-xs text-white block text-center'>Registered Home Location</strong>");
-                }
-            } catch (err) {
-                console.error("Home query interface exception:", err);
-            }
-        }
-
-        /* ================= LOAD STATIONS telemetry ================= */
-        async function loadStations() {
-            try {
-                const result = await api(`${API_BASE}/get.php`);
-
-                if (!result.success) {
-                    showAlert("Sync Issue", result.message || "Failed to synchronise active station grids.", "error");
-                    return;
-                }
-
-                const stations = result.data || [];
-                renderMapMarkers(stations);
-
-                // Apply local authorization filter
-                if (currentFilterMode === 'mine') {
-                    if (window.CURRENT_USER_ID) {
-                        allCachedReports = stations.filter(s => String(s.user_id) === String(CURRENT_USER_ID));
-                    } else {
-                        allCachedReports = [];
-                    }
-                } else {
-                    allCachedReports = stations;
-                }
-
-                const keyword = document.getElementById("mapSearch").value;
-                if (keyword) {
-                    filterStations(keyword);
-                } else {
-                    filteredReports = [...allCachedReports];
-                    renderStatisticsFeed();
-                    renderPaginationControls();
-                }
-            } catch (e) {
-                console.error("Failed to query stations feed:", e);
-                showAlert("Network Error", "Server connection timeout.", "error");
-            }
-        }
-
-        /* ================= STREAMING_CHUNK:Rendering live SVG coordinates onto Leaflet Canvas... ================= */
-        function renderMapMarkers(stations) {
-            layerGroup.clearLayers();
-            let liveCount = 0;
-
-            stations.forEach(s => {
-                const lat = parseFloat(s.latitude);
-                const lng = parseFloat(s.longitude);
-
-                if (isNaN(lat) || isNaN(lng)) return;
-                liveCount++;
-
-                const statusStr = String(s.availability_status || "Operational").toLowerCase();
-                let markerColor = "#34FB34"; // Operational
-                if (statusStr.includes("offline") || statusStr.includes("decommissioned")) {
-                    markerColor = "#FF2E1F";
-                } else if (statusStr.includes("maintenance")) {
-                    markerColor = "#FFBB02";
-                } else if (statusStr.includes("planned")) {
-                    markerColor = "#00E5FF";
-                }
-
-                const pulseIcon = L.divIcon({
-                    className: 'custom-station-pulse-marker',
-                    html: `
-                        <div class="relative flex items-center justify-center w-6 h-6 rounded-full border-2 border-white shadow-md" style="background-color: ${markerColor}">
-                            <svg class="w-3.5 h-3.5 text-[#03041A]" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                            </svg>
-                            <span class="absolute -top-1 -right-1 flex h-2 w-2">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background-color: ${markerColor}"></span>
-                                <span class="relative inline-flex rounded-full h-2 w-2" style="background-color: ${markerColor}"></span>
-                            </span>
-                        </div>
-                    `,
-                    iconSize: [24, 24],
-                    iconAnchor: [12, 12],
-                    popupAnchor: [0, -12]
-                });
-
-                const popupContent = `
-                    <div class="text-white text-xs p-1">
-                        <strong class="text-sm block border-b border-white/10 pb-1 mb-1 text-[#FFBB02]">${escapeHTML(s.station_name)}</strong>
-                        <p class="mb-1 text-white/50 uppercase tracking-widest text-[9px] font-bold">${escapeHTML(s.station_type)}</p>
-                        <p class="mb-2 text-white/80 text-[11px] leading-relaxed">${escapeHTML(s.description || 'No system parameter logs found.')}</p>
-                        <div class="flex items-center justify-between mt-2 pt-2 border-t border-white/5">
-                            <span class="inline-block px-2 py-0.5 rounded text-[9px] font-bold" style="background:${markerColor}20; color:${markerColor}; border:1px solid ${markerColor}40;">
-                                ${escapeHTML(s.availability_status)}
-                            </span>
-                            <span class="text-[10px] text-white/40 truncate max-w-[120px]">${escapeHTML(s.location_name)}</span>
-                        </div>
-                    </div>
-                `;
-
-                L.marker([lat, lng], { icon: pulseIcon })
-                    .bindPopup(popupContent)
-                    .addTo(layerGroup);
-            });
-
-            document.getElementById("activeOutageCounter").innerHTML = `
-                <svg class="w-4 h-4 inline-block mr-1 fill-current text-[#00BA00]" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                </svg>
-                Active Nodes: ${liveCount} Operational Stations Tracked
-            `;
-        }
-
-        /* ================= SEARCH FILTERING ================= */
-        function filterStations(keyword) {
-            filteredReports = allCachedReports.filter(r =>
-                String(r.station_name || "").toLowerCase().includes(keyword.toLowerCase()) ||
-                String(r.location_name || "").toLowerCase().includes(keyword.toLowerCase()) ||
-                String(r.station_type || "").toLowerCase().includes(keyword.toLowerCase()) ||
-                String(r.availability_status || "").toLowerCase().includes(keyword.toLowerCase())
-            );
-            currentPage = 1;
-            renderStatisticsFeed();
-            renderPaginationControls();
-        }
-
-        /* ================= STREAMING_CHUNK:Rendering dynamic HTML blocks for Station feed cards... ================= */
-        function renderStatisticsFeed() {
-            const feedContainer = document.getElementById("recentReports");
-            feedContainer.innerHTML = "";
-
-            if (!filteredReports.length) {
-                feedContainer.innerHTML = `<p class="text-xs text-white/40 text-center py-12">No registered stations found matching the current search boundaries.</p>`;
+            if (!result.success) {
+                console.log("Relative Location telemetry unavailable:", result.message);
                 return;
             }
 
-            const start = (currentPage - 1) * perPage;
-            const pageData = filteredReports.slice(start, start + perPage);
+            const lat = parseFloat(result.data.latitude);
+            const lng = parseFloat(result.data.longitude);
 
-            const fragment = document.createDocumentFragment();
+            if (!isNaN(lat) && !isNaN(lng)) {
+                map.setView([lat, lng], 14);
 
-            pageData.forEach((s) => {
-                const statusStr = String(s.availability_status || "operational").toLowerCase();
-                let badgeStyle = "bg-green-500/10 text-[#34FB34] border border-green-500/20";
-                if (statusStr.includes("offline") || statusStr.includes("decommissioned")) {
-                    badgeStyle = "bg-red-500/10 text-[#FF2E1F] border border-red-500/20";
-                } else if (statusStr.includes("maintenance")) {
-                    badgeStyle = "bg-yellow-500/10 text-[#FFBB02] border border-yellow-500/20";
-                } else if (statusStr.includes("planned")) {
-                    badgeStyle = "bg-blue-500/10 text-[#00E5FF] border border-blue-500/20";
-                }
-
-                const card = document.createElement("div");
-                card.className = "card-hover flex flex-col p-4 border border-white/5 rounded-2xl bg-[#1C1D30]/30 transition-all hover:border-white/10";
-
-                // REPLACED Coordinates Block in card metrics with Location Name display block
-                card.innerHTML = `
-                    <div class="flex flex-col">
-                        <div class="flex justify-between items-start gap-2">
-                            <span class="font-bold text-white text-sm md:text-base tracking-tight leading-tight truncate max-w-[210px]">${escapeHTML(s.station_name)}</span>
-                            <span class="text-[9px] font-black tracking-wider uppercase px-2 py-0.5 rounded-md ${badgeStyle}">
-                                ${escapeHTML(s.availability_status)}
-                            </span>
-                        </div>
-                        <span class="font-medium text-[11px] text-[#B5B5B5] mt-1.5 flex items-center gap-1">
-                            <svg class="w-3 h-3 text-[#FFBB02]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                const userLocIcon = L.divIcon({
+                    className: 'custom-user-location-marker',
+                    html: `
+                        <div class="relative flex items-center justify-center w-8 h-8 rounded-full border-2 border-white shadow-xl bg-[#007AFF]">
+                            <svg class="w-4 h-4 text-white animate-pulse" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"/>
+                                <circle cx="12" cy="12" r="3"/>
                             </svg>
-                            ${escapeHTML(s.location_name)}
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2 mt-3">
-                        <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-1.5 text-center">
-                            <span class="text-[8px] text-[#B5B5B5] font-bold tracking-wider uppercase opacity-40">System Type</span>
-                            <span class="text-[11px] text-white font-extrabold mt-0.5 truncate">${escapeHTML(s.station_type)}</span>
+                            <span class="absolute inset-0 rounded-full bg-[#007AFF] opacity-30 animate-ping"></span>
                         </div>
-                        <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-1.5 text-center">
-                            <span class="text-[8px] text-[#B5B5B5] font-bold tracking-wider uppercase opacity-40">Location</span>
-                            <span class="text-[11px] text-[#FFBB02] font-extrabold mt-0.5 truncate">${escapeHTML(s.location_name)}</span>
-                        </div>
-                    </div>
-
-                    <p class="text-white/60 text-[11px] font-medium leading-relaxed mt-2.5 line-clamp-2">${escapeHTML(s.description || 'No system parameter logs found.')}</p>
-                `;
-
-                // RESTRICTED EDIT/DELETE ACTIONS - Only authorized for personal posts
-                const isAuthor = CURRENT_USER_ID && s.user_id && String(s.user_id) === String(CURRENT_USER_ID); 
-                if (isAuthor) {
-                    const controls = document.createElement("div");
-                    controls.className = "flex gap-4 justify-end pt-2 mt-3 border-t border-white/5 text-xs";
-
-                    const editBtn = document.createElement("button");
-                    editBtn.className = "text-[#FFBB02] hover:underline font-semibold flex items-center gap-1";
-                    editBtn.innerHTML = `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg> Edit`;
-                    editBtn.onclick = () => editStationByObject(s);
-
-                    const deleteBtn = document.createElement("button");
-                    deleteBtn.className = "text-red-400 hover:underline font-semibold flex items-center gap-1";
-                    deleteBtn.innerHTML = `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg> Delete`;
-                    deleteBtn.onclick = () => deleteStation(s.id);
-
-                    controls.appendChild(editBtn);
-                    controls.appendChild(deleteBtn);
-                    card.appendChild(controls);
-                }
-
-                fragment.appendChild(card);
-            });
-
-            feedContainer.appendChild(fragment);
-        }
-
-        /* ================= STREAMING_CHUNK:Configuring system edit modes... ================= */
-        function editStationByObject(s) {
-            if (!s) return;
-
-            document.getElementById("station_id").value = s.id;
-            document.getElementById("station_name").value = s.station_name;
-            document.getElementById("location_name").value = s.location_name;
-            document.getElementById("station_type").value = s.station_type;
-            document.getElementById("availability_status").value = s.availability_status;
-            document.getElementById("description").value = s.description || "";
-
-            document.getElementById("formTitle").innerText = "Update Station Parameters";
-            openPopup(true);
-
-            setTimeout(() => {
-                if (s.latitude && s.longitude) {
-                    setModalCoordinates(parseFloat(s.latitude), parseFloat(s.longitude), true);
-                }
-            }, 100);
-        }
-
-        /* ================= DELETE STATION PROCESS VIA NATIVE BROWSER CONFIRMATION ================= */
-        async function deleteStation(id) {
-            const confirmed = confirm("Are you sure you want to permanently delete this power station from the grid database? This cannot be undone.");
-            if (!confirmed) return;
-
-            try {
-                const result = await api(`${API_BASE}/delete.php`, {
-                    method: "POST",
-                    body: JSON.stringify({ station_id: id })
+                    `,
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 16]
                 });
 
-                showAlert(
-                    result.success ? "Success" : "Error",
-                    result.message || "Operation executed."
-                );
-
-                if (result.success) {
-                    loadStations();
-                }
-            } catch (err) {
-                console.error("Deletion exception:", err);
-                showAlert("System Error", "Failed to connect to the backend database.");
+                L.marker([lat, lng], { icon: userLocIcon })
+                    .addTo(map)
+                    .bindPopup("<strong class='text-xs text-white block text-center'>Registered Home Location</strong>");
             }
+        } catch (err) {
+            console.error("Home query interface exception:", err);
         }
-
-        /* ================= STATION CREATE/UPDATE SUBMISSION ================= */
-        document.getElementById("stationForm")?.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const id = document.getElementById("station_id")?.value;
-    const isEdit = id && id.trim() !== "";
-
-    const payload = {
-        station_name: document.getElementById("station_name").value,
-        location_name: document.getElementById("location_name").value,
-        station_type: document.getElementById("station_type").value,
-        availability_status: document.getElementById("availability_status").value,
-        description: document.getElementById("description").value,
-        latitude: document.getElementById("latitude").value,
-        longitude: document.getElementById("longitude").value
-    };
-
-    // ✅ Validate coordinates
-    if (!payload.latitude || !payload.longitude) {
-        showAlert(
-            "Missing Coordinates",
-            "Please select a location on the map before submitting.",
-            "error"
-        );
-        return;
     }
 
-    // ✅ Add ID only when editing
-    if (isEdit) {
-        payload.id = id;
-        payload.station_id = id;
+    /* ================= LOAD STATIONS telemetry ================= */
+    async function loadStations() {
+        try {
+            const endpoint = currentFilterMode === 'mine'
+                ? `${API_BASE}/get_my_posts.php`
+                : `${API_BASE}/get.php`;
+
+            const result = await api(endpoint);
+
+            if (!result.success) {
+                showAlert("Sync Issue", result.message || "Failed to load stations", "error");
+                return;
+            }
+
+            const stations = result.data || [];
+
+            allCachedReports = stations;
+
+            const keyword = document.getElementById("mapSearch")?.value || "";
+            if (keyword) {
+                filterStations(keyword);
+            } else {
+                filteredReports = [...stations];
+                renderMapMarkers(filteredReports);
+                renderStatisticsFeed();
+                renderPaginationControls();
+            }
+
+        } catch (err) {
+            console.error("loadStations error:", err);
+            showAlert("Network Error", "Failed to load stations.");
+        }
     }
 
-    const endpoint = isEdit
-        ? `${API_BASE}/update.php`
-        : `${API_BASE}/create.php`;
+    function toggleFilterMode(mode) {
+        currentFilterMode = mode;
+        currentPage = 1;
+        const btnAll = document.getElementById("filterBtnAll");
+        const btnMine = document.getElementById("filterBtnMine");
 
-    try {
-        const result = await fetch(endpoint, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
+        if (mode === 'mine') {
+            btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
+            btnAll.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
+        } else {
+            btnAll.className = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
+            btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
+        }
+        document.getElementById("mapSearch").value = "";
+        loadStations();
+    }
 
-            // 🔥 IMPORTANT FIX FOR 403 (AUTH / SESSION)
-            credentials: "include",
+    /* ================= STREAMING_CHUNK:Rendering live SVG coordinates onto Leaflet Canvas... ================= */
+    function renderMapMarkers(stations) {
+        layerGroup.clearLayers();
+        let liveCount = 0;
 
-            body: JSON.stringify(payload)
+        stations.forEach(s => {
+            const lat = parseFloat(s.latitude);
+            const lng = parseFloat(s.longitude);
+
+            if (isNaN(lat) || isNaN(lng)) return;
+            liveCount++;
+
+            const statusStr = String(s.availability_status || "Operational").toLowerCase();
+            let markerColor = "#34FB34";
+            if (statusStr.includes("offline") || statusStr.includes("decommissioned")) {
+                markerColor = "#FF2E1F";
+            } else if (statusStr.includes("maintenance")) {
+                markerColor = "#FFBB02";
+            } else if (statusStr.includes("planned")) {
+                markerColor = "#00E5FF";
+            }
+
+            const pulseIcon = L.divIcon({
+                className: 'custom-station-pulse-marker',
+                html: `
+                    <div class="relative flex items-center justify-center w-6 h-6 rounded-full border-2 border-white shadow-md" style="background-color: ${markerColor}">
+                        <svg class="w-3.5 h-3.5 text-[#03041A]" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                        </svg>
+                        <span class="absolute -top-1 -right-1 flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background-color: ${markerColor}"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2" style="background-color: ${markerColor}"></span>
+                        </span>
+                    </div>
+                `,
+                iconSize: [24, 24],
+                iconAnchor: [12, 12],
+                popupAnchor: [0, -12]
+            });
+
+            const popupContent = `
+                <div class="text-white text-xs p-1">
+                    <strong class="text-sm block border-b border-white/10 pb-1 mb-1 text-[#FFBB02]">${escapeHTML(s.station_name)}</strong>
+                    <p class="mb-1 text-white/50 uppercase tracking-widest text-[9px] font-bold">${escapeHTML(s.station_type)}</p>
+                    <p class="mb-2 text-white/80 text-[11px] leading-relaxed">${escapeHTML(s.description || 'No system parameter logs found.')}</p>
+                    <div class="flex items-center justify-between mt-2 pt-2 border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 rounded text-[9px] font-bold" style="background:${markerColor}20; color:${markerColor}; border:1px solid ${markerColor}40;">
+                            ${escapeHTML(s.availability_status)}
+                        </span>
+                        <span class="text-[10px] text-white/40 truncate max-w-[120px]">${escapeHTML(s.location_name)}</span>
+                    </div>
+                </div>
+            `;
+
+            L.marker([lat, lng], { icon: pulseIcon })
+                .bindPopup(popupContent)
+                .addTo(layerGroup);
         });
 
-        const data = await result.json();
-
-        showAlert(
-            data.success ? "Success" : "Error",
-            data.message || "Operation completed."
-        );
-
-        if (data.success) {
-            closePopup();
-            loadStations();
-        }
-
-    } catch (err) {
-        console.error("Submission exception:", err);
-        showAlert("System Error", "Failed to send request to server.");
+        document.getElementById("activeOutageCounter").innerHTML = `
+            <svg class="w-4 h-4 inline-block mr-1 fill-current text-[#00BA00]" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            Active Nodes: ${liveCount} Operational Stations Tracked
+        `;
     }
-});
 
-        /* ================= PAGINATION CONTROL INTERFACE ENGINE ================= */
-        function renderPaginationControls() {
-            const paginationContainer = document.getElementById("pagination");
-            paginationContainer.innerHTML = "";
+    /* ================= SEARCH FILTERING ================= */
+    function filterStations(keyword) {
+        filteredReports = allCachedReports.filter(r =>
+            String(r.station_name || "").toLowerCase().includes(keyword.toLowerCase()) ||
+            String(r.location_name || "").toLowerCase().includes(keyword.toLowerCase()) ||
+            String(r.station_type || "").toLowerCase().includes(keyword.toLowerCase()) ||
+            String(r.availability_status || "").toLowerCase().includes(keyword.toLowerCase())
+        );
+        currentPage = 1;
+        renderStatisticsFeed();
+        renderPaginationControls();
+    }
 
-            const totalPages = Math.ceil(filteredReports.length / perPage);
-            if (totalPages <= 1) return;
+    /* ================= STREAMING_CHUNK:Rendering dynamic HTML blocks for Station feed cards... ================= */
+    function renderStatisticsFeed() {
+        const feedContainer = document.getElementById("recentReports");
+        feedContainer.innerHTML = "";
 
-            const fragment = document.createDocumentFragment();
-
-            // Prev Button
-            const prevBtn = document.createElement("button");
-            prevBtn.textContent = "Prev";
-            prevBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all ${currentPage === 1 ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40' : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'}`;
-            prevBtn.disabled = currentPage === 1;
-            prevBtn.onclick = () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    renderStatisticsFeed();
-                    renderPaginationControls();
-                }
-            };
-            fragment.appendChild(prevBtn);
-
-            // Numeric keys
-            for (let i = 1; i <= totalPages; i++) {
-                const pageBtn = document.createElement("button");
-                pageBtn.textContent = i;
-                pageBtn.className = `px-3 py-1.5 text-xs font-black rounded-lg transition-all border ${i === currentPage ? 'bg-[#FFBB02] text-black border-[#FFBB02]' : 'bg-[#31324C]/20 text-[#B5B5B5] border-white/5 hover:text-white'}`;
-                pageBtn.onclick = () => {
-                    currentPage = i;
-                    renderStatisticsFeed();
-                    renderPaginationControls();
-                };
-                fragment.appendChild(pageBtn);
-            }
-
-            // Next Button
-            const nextBtn = document.createElement("button");
-            nextBtn.textContent = "Next";
-            nextBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all ${currentPage === totalPages ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40' : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'}`;
-            nextBtn.disabled = currentPage === totalPages;
-            nextBtn.onclick = () => {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    renderStatisticsFeed();
-                    renderPaginationControls();
-                }
-            };
-            fragment.appendChild(nextBtn);
-
-            paginationContainer.appendChild(fragment);
+        if (!filteredReports.length) {
+            feedContainer.innerHTML = `<p class="text-xs text-white/40 text-center py-12">No registered stations found matching the current search boundaries.</p>`;
+            return;
         }
 
-        /* ================= FILTER MODE SELECTION ================= */
-        function toggleFilterMode(mode) {
-            currentFilterMode = mode;
-            const btnAll = document.getElementById("filterBtnAll");
-            const btnMine = document.getElementById("filterBtnMine");
+        const start = (currentPage - 1) * perPage;
+        const pageData = filteredReports.slice(start, start + perPage);
 
-            if (mode === 'mine') {
-                btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
-                btnAll.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
-            } else {
-                btnAll.className = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
-                btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
+        const fragment = document.createDocumentFragment();
+
+        pageData.forEach((s) => {
+            const statusStr = String(s.availability_status || "operational").toLowerCase();
+            let badgeStyle = "bg-green-500/10 text-[#34FB34] border border-green-500/20";
+            if (statusStr.includes("offline") || statusStr.includes("decommissioned")) {
+                badgeStyle = "bg-red-500/10 text-[#FF2E1F] border border-red-500/20";
+            } else if (statusStr.includes("maintenance")) {
+                badgeStyle = "bg-yellow-500/10 text-[#FFBB02] border border-yellow-500/20";
+            } else if (statusStr.includes("planned")) {
+                badgeStyle = "bg-blue-500/10 text-[#00E5FF] border border-blue-500/20";
             }
-            currentPage = 1;
-            document.getElementById("mapSearch").value = "";
-            loadStations();
+
+            const card = document.createElement("div");
+            card.className = "card-hover flex flex-col p-4 border border-white/5 rounded-2xl bg-[#1C1D30]/30 transition-all hover:border-white/10";
+
+            card.innerHTML = `
+                <div class="flex flex-col">
+                    <div class="flex justify-between items-start gap-2">
+                        <span class="font-bold text-white text-sm md:text-base tracking-tight leading-tight truncate max-w-[210px]">${escapeHTML(s.station_name)}</span>
+                        <span class="text-[9px] font-black tracking-wider uppercase px-2 py-0.5 rounded-md ${badgeStyle}">
+                            ${escapeHTML(s.availability_status)}
+                        </span>
+                    </div>
+                    <span class="font-medium text-[11px] text-[#B5B5B5] mt-1.5 flex items-center gap-1">
+                        <svg class="w-3 h-3 text-[#FFBB02]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        </svg>
+                        ${escapeHTML(s.location_name)}
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mt-3">
+                    <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-1.5 text-center">
+                        <span class="text-[8px] text-[#B5B5B5] font-bold tracking-wider uppercase opacity-40">System Type</span>
+                        <span class="text-[11px] text-white font-extrabold mt-0.5 truncate">${escapeHTML(s.station_type)}</span>
+                    </div>
+                    <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-1.5 text-center">
+                        <span class="text-[8px] text-[#B5B5B5] font-bold tracking-wider uppercase opacity-40">Location</span>
+                        <span class="text-[11px] text-[#FFBB02] font-extrabold mt-0.5 truncate">${escapeHTML(s.location_name)}</span>
+                    </div>
+                </div>
+
+                <p class="text-white/60 text-[11px] font-medium leading-relaxed mt-2.5 line-clamp-2">${escapeHTML(s.description || 'No system parameter logs found.')}</p>
+            `;
+
+            const isAuthor = CURRENT_USER_ID && s.user_id && String(s.user_id) === String(CURRENT_USER_ID);
+            if (isAuthor) {
+                const controls = document.createElement("div");
+                controls.className = "flex gap-4 justify-end pt-2 mt-3 border-t border-white/5 text-xs";
+
+                const editBtn = document.createElement("button");
+                editBtn.className = "text-[#FFBB02] hover:underline font-semibold flex items-center gap-1";
+                editBtn.innerHTML = `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg> Edit`;
+                editBtn.onclick = () => editStationByObject(s);
+
+                const deleteBtn = document.createElement("button");
+                deleteBtn.className = "text-red-400 hover:underline font-semibold flex items-center gap-1";
+                deleteBtn.innerHTML = `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg> Delete`;
+                deleteBtn.onclick = () => deleteStation(s.id);
+
+                controls.appendChild(editBtn);
+                controls.appendChild(deleteBtn);
+                card.appendChild(controls);
+            }
+
+            fragment.appendChild(card);
+        });
+
+        feedContainer.appendChild(fragment);
+    }
+
+    /* ================= STREAMING_CHUNK:Configuring system edit modes... ================= */
+    function editStationByObject(s) {
+        if (!s) return;
+
+        document.getElementById("station_id").value = s.id;
+        document.getElementById("station_name").value = s.station_name;
+        document.getElementById("location_name").value = s.location_name;
+        document.getElementById("station_type").value = s.station_type;
+        document.getElementById("availability_status").value = s.availability_status;
+        document.getElementById("description").value = s.description || "";
+
+        document.getElementById("formTitle").innerText = "Update Station Parameters";
+        openPopup(true);
+
+        setTimeout(() => {
+            if (s.latitude && s.longitude) {
+                setModalCoordinates(parseFloat(s.latitude), parseFloat(s.longitude), true);
+            }
+        }, 100);
+    }
+
+    /* ================= DELETE STATION PROCESS VIA NATIVE BROWSER CONFIRMATION ================= */
+    async function deleteStation(id) {
+        const confirmed = confirm("Are you sure you want to permanently delete this power station from the grid database? This cannot be undone.");
+        if (!confirmed) return;
+
+        try {
+            const result = await api(`${API_BASE}/delete.php`, {
+                method: "POST",
+                body: JSON.stringify({ station_id: id })
+            });
+
+            showAlert(
+                result.success ? "Success" : "Error",
+                result.message || "Operation executed."
+            );
+
+            if (result.success) {
+                loadStations();
+            }
+        } catch (err) {
+            console.error("Deletion exception:", err);
+            showAlert("System Error", "Failed to connect to the backend database.");
+        }
+    }
+
+    /* ================= STATION CREATE/UPDATE SUBMISSION ================= */
+    document.getElementById("stationForm")?.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const id = document.getElementById("station_id")?.value;
+        const isEdit = id && id.trim() !== "";
+
+        const payload = {
+            station_name: document.getElementById("station_name").value,
+            location_name: document.getElementById("location_name").value,
+            station_type: document.getElementById("station_type").value,
+            availability_status: document.getElementById("availability_status").value,
+            description: document.getElementById("description").value,
+            latitude: document.getElementById("latitude").value,
+            longitude: document.getElementById("longitude").value
+        };
+
+        if (!payload.latitude || !payload.longitude) {
+            showAlert("Missing Coordinates", "Please select a location on the map before submitting.", "error");
+            return;
         }
 
-        /* ================= STREAMING_CHUNK:Implementing local hardware battery alerts... ================= */
-        function batteryDetection() {
-            if (!navigator.getBattery) return;
-            navigator.getBattery().then(battery => {
-                function update() {
-                    const levelSpan = document.getElementById("batteryLevel");
-                    const chargingSpan = document.getElementById("batteryCharging");
-                    const statusBox = document.getElementById("batteryStatus");
+        if (isEdit) {
+            payload.id = id;
+            payload.station_id = id;
+        }
 
-                    if (levelSpan) levelSpan.innerText = Math.round(battery.level * 100) + "%";
-                    if (chargingSpan) chargingSpan.innerText = battery.charging ? "Yes" : "No";
+        const endpoint = isEdit ? `${API_BASE}/update.php` : `${API_BASE}/create.php`;
 
-                    if (battery.level <= 0.20 && !battery.charging) {
-                        if (!hasAlertedBattery) {
-                            alert("Battery Low! Please connect your device to a power source to avoid disruptions in active telemetry logs tracking.");
-                            hasAlertedBattery = true;
-                        }
-                        if (statusBox) {
-                            statusBox.innerText = "Low Battery";
-                            statusBox.style.background = "#e74c3c";
-                        }
-                    } else if (battery.charging) {
-                        hasAlertedBattery = false;
-                        if (statusBox) {
-                            statusBox.innerText = "Charging";
-                            statusBox.style.background = "#2ecc71";
-                        }
-                    } else {
-                        hasAlertedBattery = false;
-                        if (statusBox) {
-                            statusBox.innerText = "Normal";
-                            statusBox.style.background = "#f39c12";
-                        }
+        try {
+            const result = await api(endpoint, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+
+            showAlert(
+                result.success ? "Success" : "Error",
+                result.message || "Operation completed."
+            );
+
+            if (result.success) {
+                closePopup();
+                loadStations();
+            }
+        } catch (err) {
+            console.error("Submission exception:", err);
+            showAlert("System Error", "Failed to send request to server.");
+        }
+    });
+
+    /* ================= PAGINATION CONTROL INTERFACE ENGINE ================= */
+    function renderPaginationControls() {
+        const paginationContainer = document.getElementById("pagination");
+        paginationContainer.innerHTML = "";
+
+        const totalPages = Math.ceil(filteredReports.length / perPage);
+        if (totalPages <= 1) return;
+
+        const fragment = document.createDocumentFragment();
+
+        const prevBtn = document.createElement("button");
+        prevBtn.textContent = "Prev";
+        prevBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all ${currentPage === 1 ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40' : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'}`;
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.onclick = () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderStatisticsFeed();
+                renderPaginationControls();
+            }
+        };
+        fragment.appendChild(prevBtn);
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageBtn = document.createElement("button");
+            pageBtn.textContent = i;
+            pageBtn.className = `px-3 py-1.5 text-xs font-black rounded-lg transition-all border ${i === currentPage ? 'bg-[#FFBB02] text-black border-[#FFBB02]' : 'bg-[#31324C]/20 text-[#B5B5B5] border-white/5 hover:text-white'}`;
+            pageBtn.onclick = () => {
+                currentPage = i;
+                renderStatisticsFeed();
+                renderPaginationControls();
+            };
+            fragment.appendChild(pageBtn);
+        }
+
+        const nextBtn = document.createElement("button");
+        nextBtn.textContent = "Next";
+        nextBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all ${currentPage === totalPages ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40' : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'}`;
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.onclick = () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderStatisticsFeed();
+                renderPaginationControls();
+            }
+        };
+        fragment.appendChild(nextBtn);
+
+        paginationContainer.appendChild(fragment);
+    }
+
+    /* ================= STREAMING_CHUNK:Implementing local hardware battery alerts... ================= */
+    function batteryDetection() {
+        if (!navigator.getBattery) return;
+        navigator.getBattery().then(battery => {
+            function update() {
+                const levelSpan = document.getElementById("batteryLevel");
+                const chargingSpan = document.getElementById("batteryCharging");
+                const statusBox = document.getElementById("batteryStatus");
+
+                if (levelSpan) levelSpan.innerText = Math.round(battery.level * 100) + "%";
+                if (chargingSpan) chargingSpan.innerText = battery.charging ? "Yes" : "No";
+
+                if (battery.level <= 0.20 && !battery.charging) {
+                    if (!hasAlertedBattery) {
+                        alert("Battery Low! Please connect your device to a power source to avoid disruptions in active telemetry logs tracking.");
+                        hasAlertedBattery = true;
+                    }
+                    if (statusBox) {
+                        statusBox.innerText = "Low Battery";
+                        statusBox.style.background = "#e74c3c";
+                    }
+                } else if (battery.charging) {
+                    hasAlertedBattery = false;
+                    if (statusBox) {
+                        statusBox.innerText = "Charging";
+                        statusBox.style.background = "#2ecc71";
+                    }
+                } else {
+                    hasAlertedBattery = false;
+                    if (statusBox) {
+                        statusBox.innerText = "Normal";
+                        statusBox.style.background = "#f39c12";
                     }
                 }
-                update();
-                battery.addEventListener("levelchange", update);
-                battery.addEventListener("chargingchange", update);
-            });
-        }
-
-        /* ================= INITIALIZATION RENDERING RUNTIME CONTROLS ================= */
-        document.addEventListener("DOMContentLoaded", () => {
-            loadUserLocation();
-            loadStations();
-            batteryDetection();
-            setInterval(loadStations, 10000); // Polling every 10 seconds
+            }
+            update();
+            battery.addEventListener("levelchange", update);
+            battery.addEventListener("chargingchange", update);
         });
+    }
 
-        /* ================= SIDEBAR VIEW MOBILE CONTROLS ================= */
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
+    /* ================= INITIALIZATION RENDERING RUNTIME CONTROLS ================= */
+    document.addEventListener("DOMContentLoaded", () => {
+        loadUserLocation();
+        loadStations();
+        batteryDetection();
+        setInterval(loadStations, 10000);
+    });
 
-        if (menuToggle && sidebar && overlay) {
-            menuToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('-translate-x-full');
-                overlay.classList.toggle('hidden');
-            });
-            overlay.addEventListener('click', () => {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-            });
-        }
-    </script>
+    /* ================= SIDEBAR VIEW MOBILE CONTROLS ================= */
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    if (menuToggle && sidebar && overlay) {
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        });
+        overlay.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        });
+    }
+</script>
 </body>
 
 </html>
