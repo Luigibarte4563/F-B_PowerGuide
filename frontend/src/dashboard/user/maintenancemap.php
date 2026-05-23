@@ -409,18 +409,8 @@ $current_user_id = $user['id'] ?? null;
                 // Re-apply existing filter (preserves pagination if bounds allow)
                 applyFiltersAndRender(document.getElementById('mapSearch').value);
 
-                document.getElementById("syncStatus").innerHTML = `
-    <span class="w-1.5 h-1.5 rounded-full bg-[#34D399] animate-pulse"></span>
-    System Sync Active
-`;
-
-                /* REMOVE GREEN BORDER + BACKGROUND */
-                document.getElementById('syncStatus').className =
-                    "flex items-center gap-1.5 text-[#34D399] font-medium";
             } catch (error) {
                 console.error("Fetch Error:", error);
-                document.getElementById('syncStatus').innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-[#EF4444]"></span> Connection Lost`;
-                document.getElementById('syncStatus').className = "flex items-center gap-1.5 text-[#EF4444] font-semibold bg-[#EF4444]/10 px-2 py-0.5 rounded-md border border-[#EF4444]/20";
             }
         }
 
