@@ -155,6 +155,6 @@ function redirect()
 if ($user['role'] === "electric_company") {
     header("Location: " . BACKEND_URL . "/public/dashboard/electric/dashboard.php");
 } else {
-    header("Location: " . FRONTEND_URL . "src/dashboard/user/dashboard.php");
+    header("Location: " . FRONTEND_URL . "/src/dashboard/user/dashboard.php");
 }
 exit;

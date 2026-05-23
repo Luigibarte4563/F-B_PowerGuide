@@ -142,7 +142,7 @@ try {
 
     } else {
 
-        header("Location: " . FRONTEND_URL . "src/dashboard/user/dashboard.php");
+        header("Location: " . FRONTEND_URL . "/src/dashboard/user/dashboard.php");
     }
 
     exit;

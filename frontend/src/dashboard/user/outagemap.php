@@ -178,16 +178,6 @@ $current_user_id = $user['id'] ?? null;
                 <span
                     class="text-[11px] font-bold tracking-widest text-white px-4 pt-4 mb-2 opacity-50">COMMUNITY</span>
 
-                <a href="reports.html"
-                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
-                    <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-black transition-colors" fill="none"
-                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <span>Reports</span>
-                </a>
-
                 <a href="settings.html"
                     class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
                     <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-black transition-colors" fill="none"
@@ -852,18 +842,33 @@ $current_user_id = $user['id'] ?? null;
         /* ================= STREAMING_CHUNK:Synchronizing the data points with the Leaflet map... ================= */
         async function initGridSynchronization() {
             try {
-                const mapRes = await fetch(`${API_BASE}/get.php`, { credentials: "include" });
-                const mapResult = await mapRes.json();
-                const publicReports = mapResult.data || [];
-                renderMapMarkers(publicReports);
+                // 1. Fetch both endpoints concurrently (credentials: 'include' ensures PHP reads your session)
+                const [publicRes, mineRes] = await Promise.all([
+                    fetch(`${API_BASE}/get.php`, { credentials: "include" }),
+                    fetch(`${API_BASE}/get_my_report.php`, { credentials: "include" })
+                ]);
 
-                const targetUrl = (currentFilterMode === 'mine') ? `${API_BASE}/get_my_report.php` : `${API_BASE}/get.php`;
-                const feedRes = await fetch(targetUrl, { credentials: "include" });
-                const feedResult = await feedRes.json();
+                const publicResult = await publicRes.json();
+                const mineResult = await mineRes.json();
 
-                allCachedReports = feedResult.data || [];
+                const publicReports = publicResult.data || [];
+                const myReports = mineResult.data || [];
 
-                const currentKeyword = document.getElementById("mapSearch").value;
+                // 2. Merge reports to ensure user data ALWAYS appears in the "all" view
+                // Using a Map prevents duplicate markers if a report exists in both endpoints
+                const combinedMap = new Map();
+                publicReports.forEach(r => combinedMap.set(r.id, r));
+                myReports.forEach(r => combinedMap.set(r.id, r)); // Overwrites with user's version if duplicate
+                const allReports = Array.from(combinedMap.values());
+
+                // 3. Assign data based on the active tab
+                allCachedReports = (currentFilterMode === 'mine') ? myReports : allReports;
+
+                // 4. FIX: Render map using the currently filtered data, not just publicReports
+                renderMapMarkers(allCachedReports);
+
+                // 5. Handle feed filtering and rendering
+                const currentKeyword = document.getElementById("mapSearch")?.value || "";
                 if (currentKeyword) {
                     filterBarangay(currentKeyword);
                 } else {
