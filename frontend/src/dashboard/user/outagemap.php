@@ -268,12 +268,6 @@ $current_user_id = $user['id'] ?? null;
                             placeholder="Search barangay..."
                             class="w-[240px] sm:w-[280px] h-11 pl-10 pr-4 rounded-xl bg-[#31324C]/40 border border-white/5 text-sm font-medium outline-none placeholder:text-white/40 focus:border-[#FFBB02] transition-colors focus:bg-[#03041A]">
                     </div>
-
-                    <!-- Layout Connected Profile Icon Button -->
-                    <div id="profileBtn"
-                        class="h-10 w-10 rounded-xl border-2 border-[#FFBB02] bg-[#31324C] overflow-hidden flex items-center justify-center shadow-lg transition-all transform hover:scale-105">
-                        <img src="<?= htmlspecialchars($picture) ?>" alt="Avatar" class="h-full w-full object-cover">
-                    </div>
                 </div>
             </header>
 

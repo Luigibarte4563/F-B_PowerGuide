@@ -286,11 +286,6 @@ $picture = $user['picture'] ?? $defaultPicture;
                         </div>
                     </div>
 
-                    <!-- Profile Avatar Image Button Placeholder -->
-                    <div id="profileBtn"
-                        class="h-10 w-10 rounded-xl border-2 border-[#FFBB02] bg-[#31324C] overflow-hidden flex items-center justify-center shadow-lg transition-all duration-200 transform hover:scale-105">
-                        <img src="<?= htmlspecialchars($picture) ?>" alt="Avatar" class="h-full w-full object-cover">
-                    </div>
                 </div>
             </header>
 
