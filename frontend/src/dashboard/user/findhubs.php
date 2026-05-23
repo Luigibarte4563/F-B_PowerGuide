@@ -24,7 +24,7 @@ $current_user_id = $user['id'] ?? null;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PowerGuide - Power Station Console</title>
+    <title>PowerGuide - Find Stations & Hubs</title>
 
     <!-- CDN Deliveries (Tailwind, Montserrat, Leaflet Map) -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -121,7 +121,6 @@ $current_user_id = $user['id'] ?? null;
                 border-r-2 border-white/10 bg-[#03041A] z-40
                 -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
 
-            <!-- Logo -->
             <div class="flex items-center gap-3 ml-4 mb-8">
                 <div
                     class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#FFBB02] to-[#E39A00] rounded-xl flex items-center justify-center shadow-lg shadow-[#FFBB02]/10">
@@ -142,8 +141,7 @@ $current_user_id = $user['id'] ?? null;
 
             <!-- Nav Links -->
             <div class="flex flex-col gap-1.5 text-left">
-                <span class="text-[11px] font-bold tracking-widest text-white px-4 pt-2 mb-2 opacity-50">MAIN
-                    MENU</span>
+                <span class="text-[11px] font-bold tracking-widest text-white px-4 pt-2 mb-2 opacity-50">MAIN MENU</span>
 
                 <a href="dashboard.php"
                     class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
@@ -176,8 +174,7 @@ $current_user_id = $user['id'] ?? null;
                     <span>Find Hubs</span>
                 </a>
 
-                <span
-                    class="text-[11px] font-bold tracking-widest text-white px-4 pt-4 mb-2 opacity-50">COMMUNITY</span>
+                <span class="text-[11px] font-bold tracking-widest text-white px-4 pt-4 mb-2 opacity-50">COMMUNITY</span>
 
                 <a href="reports.html"
                     class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
@@ -205,8 +202,8 @@ $current_user_id = $user['id'] ?? null;
             <div
                 class="flex flex-col text-left mt-auto mb-3 mx-2 p-5 rounded-2xl bg-[#31324C]/30 border border-white/5">
                 <span class="text-[#FEBB02] text-xs font-bold tracking-wider mb-1">PRO TIP</span>
-                <span class="text-white/50 text-xs font-normal leading-relaxed">Limit high wattage consumption during
-                    peak hours to preserve active local transformer runtimes.</span>
+                <span class="text-white/50 text-xs font-normal leading-relaxed">Lower screen brightness to 40% to save
+                    roughly 15 minutes of device runtime.</span>
             </div>
 
             <!-- Profile Info Panel -->
@@ -242,7 +239,7 @@ $current_user_id = $user['id'] ?? null;
         <!-- ================= MAIN CONTENT AREA ================= -->
         <main class="flex-1 overflow-y-auto bg-[#03041A]">
 
-            <!-- HEADER BAR MATCHING COMPACT STYLE -->
+            <!-- HEADER BAR MATCHING THE COMPACT DASHBOARD ARCHITECTURE STYLE -->
             <header
                 class="mx-4 lg:mx-8 mt-14 lg:mt-8 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
@@ -256,7 +253,7 @@ $current_user_id = $user['id'] ?? null;
                 </div>
 
                 <div class="flex items-center gap-4 self-end sm:self-auto">
-                    <!-- Submit Station Button Layout Trigger -->
+                    <!-- Register Station Button Layout Trigger -->
                     <button onclick="openPopup()"
                         class="cursor-pointer px-5 py-2.5 bg-[#FFBB02] text-black rounded-xl hover:bg-[#D99A00] transition-all transform hover:scale-105 active:scale-95 font-bold text-xs md:text-sm shadow-md shadow-[#FFBB02]/10">
                         + Register Station
@@ -273,7 +270,7 @@ $current_user_id = $user['id'] ?? null;
                         </span>
                         <input type="search" id="mapSearch" oninput="filterStations(this.value)"
                             placeholder="Search stations..."
-                            class="w-[200px] sm:w-[280px] h-11 pl-10 pr-4 rounded-xl bg-[#31324C]/40 border border-white/5 text-sm font-medium outline-none placeholder:text-white/40 focus:border-[#FFBB02] transition-colors focus:bg-[#03041A]">
+                            class="w-[240px] sm:w-[280px] h-11 pl-10 pr-4 rounded-xl bg-[#31324C]/40 border border-white/5 text-sm font-medium outline-none placeholder:text-white/40 focus:border-[#FFBB02] transition-colors focus:bg-[#03041A]">
                     </div>
 
                     <!-- Profile Avatar Icon Button -->
@@ -399,8 +396,7 @@ $current_user_id = $user['id'] ?? null;
                             <span class="text-[10px] font-bold tracking-wider text-[#FFBB02] uppercase">Geographic
                                 Pinpoint</span>
                         </div>
-                        <p class="text-[11px] text-white/60 font-normal mt-0.5 leading-relaxed">Click anywhere on the
-                            map or drag the node to set station coordinates.</p>
+                        <p class="text-[11px] text-white/60 font-normal mt-0.5 leading-relaxed">Click or drag the map node inside this viewport to match the power station bounds.</p>
                     </div>
                 </div>
 
@@ -414,10 +410,8 @@ $current_user_id = $user['id'] ?? null;
                     <div class="space-y-4">
                         <!-- Header -->
                         <div>
-                            <h3 id="formTitle" class="text-2xl font-bold text-white tracking-tight">Register Power
-                                Station</h3>
-                            <p class="text-xs text-white/50 mt-1">Specify grid parameters and coordinates for
-                                crowdsourced infrastructure logs.</p>
+                            <h3 id="formTitle" class="text-2xl font-bold text-white tracking-tight">Register Power Station</h3>
+                            <p class="text-xs text-white/50 mt-1">Specify grid parameters and coordinates for crowdsourced infrastructure logs.</p>
                         </div>
 
                         <!-- GPS Trigger Button -->
@@ -438,8 +432,7 @@ $current_user_id = $user['id'] ?? null;
                         <!-- Station Name Field -->
                         <div>
                             <label
-                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Station
-                                Name</label>
+                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Station Name</label>
                             <input id="station_name" required
                                 class="w-full px-4 h-11 bg-white/[0.03] border border-white/10 rounded-xl text-sm text-white outline-none placeholder-white/20 focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all focus:bg-[#141527]"
                                 type="text" placeholder="e.g., Calasiao Transmission Substation">
@@ -449,11 +442,10 @@ $current_user_id = $user['id'] ?? null;
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label
-                                    class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Station
-                                    Type</label>
+                                    class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Station Type</label>
                                 <div class="relative">
                                     <select id="station_type" required
-                                        class="w-full h-11 pl-3 pr-8 bg-[#1E203C] border border-white/10 rounded-xl text-sm text-white/90 outline-none focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all cursor-pointer appearance-none">
+                                        class="w-full h-11 pl-3 pr-8 bg-[#1E203C] border border-white/10 rounded-xl text-sm text-white/90 outline-none focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all cursor-pointer appearance-none focus:bg-[#141527]">
                                         <option value="Substation">Grid Substation</option>
                                         <option value="Solar Plant">Solar Energy Plant</option>
                                         <option value="Wind Farm">Wind Generation Farm</option>
@@ -474,11 +466,10 @@ $current_user_id = $user['id'] ?? null;
                             </div>
                             <div>
                                 <label
-                                    class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Availability
-                                    Status</label>
+                                    class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Availability Status</label>
                                 <div class="relative">
                                     <select id="availability_status" required
-                                        class="w-full h-11 pl-3 pr-8 bg-[#1E203C] border border-white/10 rounded-xl text-sm text-white/90 outline-none focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all cursor-pointer appearance-none">
+                                        class="w-full h-11 pl-3 pr-8 bg-[#1E203C] border border-white/10 rounded-xl text-sm text-white/90 outline-none focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all cursor-pointer appearance-none focus:bg-[#141527]">
                                         <option value="Operational">Operational</option>
                                         <option value="Under Maintenance">Under Maintenance</option>
                                         <option value="Offline">Offline</option>
@@ -499,8 +490,7 @@ $current_user_id = $user['id'] ?? null;
                         <!-- Geographic Location Name -->
                         <div>
                             <label
-                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Geographic
-                                Location Name</label>
+                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Geographic Location Name</label>
                             <input id="location_name" required
                                 class="w-full px-4 h-11 bg-white/[0.03] border border-white/10 rounded-xl text-sm text-white outline-none placeholder-white/20 focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all focus:bg-[#141527]"
                                 type="text" placeholder="Street, Barangay, City or Coordinates">
@@ -509,8 +499,7 @@ $current_user_id = $user['id'] ?? null;
                         <!-- Description notes -->
                         <div>
                             <label
-                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Operating
-                                Notes / Description</label>
+                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Operating Notes / Description</label>
                             <textarea id="description"
                                 class="w-full h-16 border border-white/10 p-3 rounded-xl bg-white/[0.03] text-white placeholder-white/20 focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 outline-none text-sm resize-none transition-all focus:bg-[#141527]"
                                 placeholder="Describe operating configurations, transformers, or current structural logs..."></textarea>
@@ -518,11 +507,44 @@ $current_user_id = $user['id'] ?? null;
                     </div>
 
                     <!-- Submit Button -->
-                    <button type="submit"
+                    <button type="submit" id="submitBtn"
                         class="w-full h-12 mt-6 rounded-xl bg-gradient-to-r from-[#FFBB02] to-[#E5A800] hover:from-[#FFC422] hover:to-[#F5B400] text-[#03041A] font-bold text-sm tracking-wide transition-all shadow-[0_4px_20px_rgba(255,187,2,0.15)] hover:shadow-[0_4px_25px_rgba(255,187,2,0.3)] transform hover:-translate-y-0.5 active:translate-y-0 shrink-0">
                         Submit Station Node
                     </button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= PREMIUM CUSTOM LIGHTWEIGHT ALERT MODAL ================= -->
+    <div id="customAlert" 
+         class="fixed inset-0 bg-[#03041A]/85 backdrop-blur-sm z-[6000] flex justify-center items-center p-4 opacity-0 invisible transition-all duration-300">
+        <div class="bg-gradient-to-b from-[#1E203C] to-[#141527] border border-white/10 rounded-2xl max-w-sm w-full p-6 shadow-2xl transform scale-95 transition-all duration-300">
+            <div id="alertIconContainer" class="w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                <!-- Dynamic SVG icon -->
+            </div>
+            <h3 id="alertTitle" class="text-white text-lg font-bold">Alert</h3>
+            <p id="alertMessage" class="text-white/60 text-sm mt-2 leading-relaxed">Notification content goes here.</p>
+            <div class="mt-6">
+                <button id="alertCloseBtn" class="w-full py-2.5 bg-[#FFBB02] hover:bg-[#D99A00] text-[#03041A] rounded-xl text-sm font-bold shadow-lg transition-all">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= PREMIUM CUSTOM CONFIRMATION OVERLAY ================= -->
+    <div id="customConfirm" 
+         class="fixed inset-0 bg-[#03041A]/85 backdrop-blur-sm z-[5500] flex justify-center items-center p-4 opacity-0 invisible transition-all duration-300">
+        <div class="bg-gradient-to-b from-[#1E203C] to-[#141527] border border-white/10 rounded-2xl max-w-md w-full p-6 shadow-2xl transform scale-95 transition-all duration-300">
+            <div class="w-12 h-12 bg-red-500/10 text-red-500 rounded-xl flex items-center justify-center mb-4">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+            </div>
+            <h3 class="text-white text-lg font-bold">Confirm Action</h3>
+            <p id="confirmMessage" class="text-white/60 text-sm mt-2 leading-relaxed">Are you absolutely sure you want to proceed with this destructive operation?</p>
+            <div class="flex gap-3 mt-6">
+                <button id="confirmCancelBtn" class="flex-1 py-2.5 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-white rounded-xl text-sm font-semibold transition-all">Cancel</button>
+                <button id="confirmProceedBtn" class="flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all">Proceed</button>
             </div>
         </div>
     </div>
@@ -558,9 +580,87 @@ $current_user_id = $user['id'] ?? null;
             .replace(/'/g, "&#039;");
     }
 
-    /* ================= REPLACED POPUPS WITH STANDARD BROWSER ALERTS ================= */
+    /* ================= STREAMING_CHUNK:Implementing premium custom modal alert triggers... ================= */
     function showAlert(title, message, type = "info") {
-        alert(`${title ? title.toUpperCase() + ': ' : ''}${message}`);
+        const modal = document.getElementById("customAlert");
+        if (!modal) {
+            console.warn(title, message);
+            return;
+        }
+        const iconContainer = document.getElementById("alertIconContainer");
+        const aTitle = document.getElementById("alertTitle");
+        const aMsg = document.getElementById("alertMessage");
+
+        if (aTitle) aTitle.innerText = title.toUpperCase();
+        if (aMsg) aMsg.innerText = message;
+
+        // Dynamic icon styling
+        if (iconContainer) {
+            iconContainer.className = "w-12 h-12 rounded-xl flex items-center justify-center mb-4";
+            if (type === "success") {
+                iconContainer.classList.add("bg-green-500/10", "text-green-400");
+                iconContainer.innerHTML = `
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                `;
+            } else if (type === "error") {
+                iconContainer.classList.add("bg-red-500/10", "text-red-400");
+                iconContainer.innerHTML = `
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                `;
+            } else {
+                iconContainer.classList.add("bg-[#FFBB02]/10", "text-[#FFBB02]");
+                iconContainer.innerHTML = `
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                `;
+            }
+        }
+
+        modal.classList.remove("invisible", "opacity-0");
+        const innerBox = modal.querySelector("div");
+        if (innerBox) innerBox.classList.remove("scale-95");
+    }
+
+    document.getElementById("alertCloseBtn").addEventListener("click", () => {
+        const modal = document.getElementById("customAlert");
+        if (modal) {
+            modal.classList.add("invisible", "opacity-0");
+            const innerBox = modal.querySelector("div");
+            if (innerBox) innerBox.classList.add("scale-95");
+        }
+    });
+
+    /* ================= STREAMING_CHUNK:Implementing custom overlay confirm promise... ================= */
+    let resolveConfirm;
+    function showConfirm(message) {
+        document.getElementById("confirmMessage").innerText = message;
+        const modal = document.getElementById("customConfirm");
+        modal.classList.remove("invisible", "opacity-0");
+        modal.querySelector("div").classList.remove("scale-95");
+
+        return new Promise((resolve) => {
+            resolveConfirm = resolve;
+        });
+    }
+
+    document.getElementById("confirmCancelBtn").addEventListener("click", () => {
+        closeConfirmModal(false);
+    });
+
+    document.getElementById("confirmProceedBtn").addEventListener("click", () => {
+        closeConfirmModal(true);
+    });
+
+    function closeConfirmModal(result) {
+        const modal = document.getElementById("customConfirm");
+        modal.classList.add("invisible", "opacity-0");
+        modal.querySelector("div").classList.add("scale-95");
+        if (resolveConfirm) resolveConfirm(result);
     }
 
     /* ================= STREAMING_CHUNK:Initializing picker map viewport components... ================= */
@@ -589,7 +689,7 @@ $current_user_id = $user['id'] ?? null;
 
         if (modalSelectionMarker) {
             modalSelectionMarker.setLatLng([lat, lng]);
-        } else {
+        } else if (modalMap) {
             modalSelectionMarker = L.marker([lat, lng], { draggable: true }).addTo(modalMap);
             modalSelectionMarker.on('dragend', function (event) {
                 const marker = event.target;
@@ -597,7 +697,10 @@ $current_user_id = $user['id'] ?? null;
                 setModalCoordinates(position.lat, position.lng, false);
             });
         }
-        modalMap.panTo([lat, lng]);
+        
+        if (modalMap) {
+            modalMap.panTo([lat, lng]);
+        }
 
         if (!skipGeocode) {
             const locationInput = document.getElementById("location_name");
@@ -686,6 +789,10 @@ $current_user_id = $user['id'] ?? null;
                 document.getElementById("stationForm").reset();
                 document.getElementById("station_id").value = "";
                 document.getElementById("formTitle").innerText = "Register Power Station";
+                const submitBtn = document.getElementById("submitBtn");
+                if (submitBtn) {
+                    submitBtn.textContent = "Submit Station Node";
+                }
                 setModalCoordinates(16.043, 120.333, true);
             }
         }, 50);
@@ -784,7 +891,7 @@ $current_user_id = $user['id'] ?? null;
 
         } catch (err) {
             console.error("loadStations error:", err);
-            showAlert("Network Error", "Failed to load stations.");
+            showAlert("Network Error", "Failed to load stations.", "error");
         }
     }
 
@@ -944,19 +1051,32 @@ $current_user_id = $user['id'] ?? null;
                 <p class="text-white/60 text-[11px] font-medium leading-relaxed mt-2.5 line-clamp-2">${escapeHTML(s.description || 'No system parameter logs found.')}</p>
             `;
 
-            const isAuthor = CURRENT_USER_ID && s.user_id && String(s.user_id) === String(CURRENT_USER_ID);
+            const isAuthor = (CURRENT_USER_ID && s.user_id && String(s.user_id) === String(CURRENT_USER_ID)) || (currentFilterMode === 'mine');
             if (isAuthor) {
+                /* ================= EDIT + DELETE BUTTONS ================= */
                 const controls = document.createElement("div");
                 controls.className = "flex gap-4 justify-end pt-2 mt-3 border-t border-white/5 text-xs";
 
+                // EDIT BUTTON
                 const editBtn = document.createElement("button");
                 editBtn.className = "text-[#FFBB02] hover:underline font-semibold flex items-center gap-1";
-                editBtn.innerHTML = `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg> Edit`;
+                editBtn.innerHTML = `
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                    </svg>
+                    Edit
+                `;
                 editBtn.onclick = () => editStationByObject(s);
 
+                // DELETE BUTTON
                 const deleteBtn = document.createElement("button");
                 deleteBtn.className = "text-red-400 hover:underline font-semibold flex items-center gap-1";
-                deleteBtn.innerHTML = `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg> Delete`;
+                deleteBtn.innerHTML = `
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    Delete
+                `;
                 deleteBtn.onclick = () => deleteStation(s.id);
 
                 controls.appendChild(editBtn);
@@ -974,16 +1094,26 @@ $current_user_id = $user['id'] ?? null;
     function editStationByObject(s) {
         if (!s) return;
 
+        // Populate form inputs mapped to power station attributes
         document.getElementById("station_id").value = s.id;
-        document.getElementById("station_name").value = s.station_name;
-        document.getElementById("location_name").value = s.location_name;
-        document.getElementById("station_type").value = s.station_type;
-        document.getElementById("availability_status").value = s.availability_status;
+        document.getElementById("station_name").value = s.station_name || "";
+        document.getElementById("location_name").value = s.location_name || "";
+        document.getElementById("station_type").value = s.station_type || "Substation";
+        document.getElementById("availability_status").value = s.availability_status || "Operational";
         document.getElementById("description").value = s.description || "";
+        document.getElementById("latitude").value = s.latitude || "";
+        document.getElementById("longitude").value = s.longitude || "";
 
+        // Dynamically alter modal properties to present an update paradigm
         document.getElementById("formTitle").innerText = "Update Station Parameters";
+        const submitBtn = document.getElementById("submitBtn") || document.querySelector('#stationForm button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.textContent = "Update Station Node";
+        }
+        
         openPopup(true);
 
+        // Load correct coordinates and map markers to fit context maps
         setTimeout(() => {
             if (s.latitude && s.longitude) {
                 setModalCoordinates(parseFloat(s.latitude), parseFloat(s.longitude), true);
@@ -991,9 +1121,9 @@ $current_user_id = $user['id'] ?? null;
         }, 100);
     }
 
-    /* ================= DELETE STATION PROCESS VIA NATIVE BROWSER CONFIRMATION ================= */
+    /* ================= DELETE STATION PROCESS VIA CUSTOM CONFIRM OVERLAY ================= */
     async function deleteStation(id) {
-        const confirmed = confirm("Are you sure you want to permanently delete this power station from the grid database? This cannot be undone.");
+        const confirmed = await showConfirm("Are you sure you want to permanently delete this power station from the grid database? This cannot be undone.");
         if (!confirmed) return;
 
         try {
@@ -1004,7 +1134,8 @@ $current_user_id = $user['id'] ?? null;
 
             showAlert(
                 result.success ? "Success" : "Error",
-                result.message || "Operation executed."
+                result.message || "Operation executed.",
+                result.success ? "success" : "error"
             );
 
             if (result.success) {
@@ -1012,7 +1143,7 @@ $current_user_id = $user['id'] ?? null;
             }
         } catch (err) {
             console.error("Deletion exception:", err);
-            showAlert("System Error", "Failed to connect to the backend database.");
+            showAlert("System Error", "Failed to connect to the backend database.", "error");
         }
     }
 
@@ -1053,7 +1184,8 @@ $current_user_id = $user['id'] ?? null;
 
             showAlert(
                 result.success ? "Success" : "Error",
-                result.message || "Operation completed."
+                result.message || "Operation completed.",
+                result.success ? "success" : "error"
             );
 
             if (result.success) {
@@ -1062,7 +1194,7 @@ $current_user_id = $user['id'] ?? null;
             }
         } catch (err) {
             console.error("Submission exception:", err);
-            showAlert("System Error", "Failed to send request to server.");
+            showAlert("System Error", "Failed to send request to server.", "error");
         }
     });
 
@@ -1130,22 +1262,21 @@ $current_user_id = $user['id'] ?? null;
                 if (chargingSpan) chargingSpan.innerText = battery.charging ? "Yes" : "No";
 
                 if (battery.level <= 0.20 && !battery.charging) {
-                    if (!hasAlertedBattery) {
-                        alert("Battery Low! Please connect your device to a power source to avoid disruptions in active telemetry logs tracking.");
-                        hasAlertedBattery = true;
+                    const toast = document.getElementById("battery-warning");
+                    if (toast) {
+                        toast.classList.remove("invisible", "opacity-0");
+                        document.getElementById("batteryBox").classList.remove("scale-95", "opacity-0");
                     }
                     if (statusBox) {
                         statusBox.innerText = "Low Battery";
                         statusBox.style.background = "#e74c3c";
                     }
                 } else if (battery.charging) {
-                    hasAlertedBattery = false;
                     if (statusBox) {
                         statusBox.innerText = "Charging";
                         statusBox.style.background = "#2ecc71";
                     }
                 } else {
-                    hasAlertedBattery = false;
                     if (statusBox) {
                         statusBox.innerText = "Normal";
                         statusBox.style.background = "#f39c12";
@@ -1156,6 +1287,10 @@ $current_user_id = $user['id'] ?? null;
             battery.addEventListener("levelchange", update);
             battery.addEventListener("chargingchange", update);
         });
+    }
+
+    function closeBatteryWarning() {
+        document.getElementById("battery-warning").classList.add("invisible", "opacity-0");
     }
 
     /* ================= INITIALIZATION RENDERING RUNTIME CONTROLS ================= */
@@ -1182,6 +1317,3 @@ $current_user_id = $user['id'] ?? null;
         });
     }
 </script>
-</body>
-
-</html>
