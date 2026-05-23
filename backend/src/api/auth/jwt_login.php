@@ -138,7 +138,7 @@ try {
 
     } elseif ($user['role'] === "electric_company") {
 
-        header("Location: " . BACKEND_URL . "/public/dashboard/electric/dashboard.php");
+        header("Location: " . FRONTEND_URL . "/src/dashboard/electric/dashboard.php");
 
     } else {
 
