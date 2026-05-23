@@ -116,9 +116,9 @@ $current_user_id = $user['id'] ?? null;
 
         <!-- SIDEBAR NAV -->
         <nav id="sidebar" class="flex flex-col fixed lg:sticky top-0 h-screen w-[280px] lg:w-[340px]
-                    text-[#B5B5B5] text-center pt-8 px-5
-                    border-r-2 border-white/10 bg-[#03041A] z-40
-                    -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+                text-[#B5B5B5] text-center pt-8 px-5
+                border-r-2 border-white/10 bg-[#03041A] z-40
+                -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
 
             <!-- Logo -->
             <div class="flex items-center gap-3 ml-4 mb-8">
@@ -145,9 +145,8 @@ $current_user_id = $user['id'] ?? null;
                     MENU</span>
 
                 <a href="dashboard.php"
-                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
-                    <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-black transition-colors" fill="none"
-                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
                     </svg>
@@ -155,9 +154,9 @@ $current_user_id = $user['id'] ?? null;
                 </a>
 
                 <a href="outagemap.php"
-                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl bg-[#FEBB02] text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
-                    <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="2"
-                        viewBox="0 0 24 24">
+                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl bg-[#FEBB02] text-black hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
+                    <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-black text-black transition-colors" fill="none"
+                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 4L9 7" />
                     </svg>
@@ -173,6 +172,17 @@ $current_user_id = $user['id'] ?? null;
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     <span>Find Hubs</span>
+                </a>
+
+                <!-- Added Maintenance Map -->
+                <a href="maintenancemap.php"
+                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
+                    <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-black transition-colors" fill="none"
+                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    <span>Maintenance Map</span>
                 </a>
 
                 <span
@@ -198,7 +208,7 @@ $current_user_id = $user['id'] ?? null;
                     roughly 15 minutes of device runtime.</span>
             </div>
 
-            <!-- Profile Info Panel (Repositioned to bottom of sidebar) -->
+            <!-- Profile Info Panel -->
             <div
                 class="flex flex-row items-center justify-between gap-3 px-4 py-3 mb-8 rounded-2xl bg-[#31324C]/20 border border-white/5 text-left">
                 <div class="flex items-center gap-3 min-w-0">
@@ -237,9 +247,9 @@ $current_user_id = $user['id'] ?? null;
                 <div>
                     <h1 class="text-2xl lg:text-3xl font-black tracking-tight">Interactive Outage Map</h1>
                     <span class="text-xs lg:text-sm text-[#B5B5B5] flex items-center gap-2 mt-1">
-                        Grid status:
-                        <span class="flex items-center gap-1.5 text-[#00BA00] font-medium" id="activeOutageCounter">
-                            Synchronizing live grid loops...
+                        System status:
+                        <span class="flex items-center gap-1.5 text-[#34D399] font-medium" id="syncStatus">
+                            Synchronizing...
                         </span>
                     </span>
                 </div>
@@ -890,6 +900,7 @@ $current_user_id = $user['id'] ?? null;
                 activeAlertsCount++;
 
                 const severity = (r.severity || "moderate").toLowerCase();
+                let markerColor; // Scoped variable fix
 
                 if (severity.includes("critical") || severity.includes("high")) {
                     markerColor = "#FF2E1F"; // Critical Severity
@@ -918,12 +929,20 @@ $current_user_id = $user['id'] ?? null;
                     .addTo(layerGroup);
             });
 
-            document.getElementById("activeOutageCounter").innerHTML = `
-                <svg class="w-4 h-4 inline-block mr-1 fill-current text-[#00BA00]" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                </svg>
-                Active Incidents: ${activeAlertsCount} Locations Reporting
-            `;
+            // Defensive Check: Ensure the element exists before accessing .innerHTML
+            const counterElement = document.getElementById("activeOutageCounter");
+            
+            if (counterElement) {
+                counterElement.innerHTML = `
+                    <svg class="w-4 h-4 inline-block mr-1 fill-current text-[#00BA00]" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    Active Incidents: ${activeAlertsCount} Locations Reporting
+                `;
+            } else {
+                // Fails silently but gracefully in production; logs a warning for development
+                console.warn("UI Element missing: #activeOutageCounter not found in the DOM.");
+            }
         }
 
         function filterBarangay(keyword) {

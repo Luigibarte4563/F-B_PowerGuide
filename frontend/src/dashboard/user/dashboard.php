@@ -238,7 +238,7 @@ $picture = $user['picture'] ?? $defaultPicture;
                     </h1>
                     <span class="text-xs lg:text-sm text-[#B5B5B5] flex items-center gap-2 mt-1">
                         Status Context:
-                        <span class="flex items-center gap-1.5 text-[#FFBB02] font-medium" id="status">
+                        <span class="flex items-center gap-1.5 text-[#00BA00] font-medium" id="status">
                             Initializing infrastructure links...
                         </span>
                     </span>
