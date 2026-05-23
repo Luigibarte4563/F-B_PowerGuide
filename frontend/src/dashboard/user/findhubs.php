@@ -121,6 +121,7 @@ $current_user_id = $user['id'] ?? null;
                 border-r-2 border-white/10 bg-[#03041A] z-40
                 -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
 
+            <!-- Logo -->
             <div class="flex items-center gap-3 ml-4 mb-8">
                 <div
                     class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#FFBB02] to-[#E39A00] rounded-xl flex items-center justify-center shadow-lg shadow-[#FFBB02]/10">
@@ -141,12 +142,12 @@ $current_user_id = $user['id'] ?? null;
 
             <!-- Nav Links -->
             <div class="flex flex-col gap-1.5 text-left">
-                <span class="text-[11px] font-bold tracking-widest text-white px-4 pt-2 mb-2 opacity-50">MAIN MENU</span>
+                <span class="text-[11px] font-bold tracking-widest text-white px-4 pt-2 mb-2 opacity-50">MAIN
+                    MENU</span>
 
                 <a href="dashboard.php"
-                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
-                    <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-black transition-colors" fill="none"
-                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
                     </svg>
@@ -164,9 +165,9 @@ $current_user_id = $user['id'] ?? null;
                 </a>
 
                 <a href="findhubs.php"
-                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl bg-[#FEBB02] text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
-                    <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="2"
-                        viewBox="0 0 24 24">
+                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl bg-[#FEBB02] text-black hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
+                    <svg class="w-5 h-5 text-[#B5B5B5] text-black group-hover:text-black transition-colors" fill="none"
+                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -174,7 +175,19 @@ $current_user_id = $user['id'] ?? null;
                     <span>Find Hubs</span>
                 </a>
 
-                <span class="text-[11px] font-bold tracking-widest text-white px-4 pt-4 mb-2 opacity-50">COMMUNITY</span>
+                <!-- Added Maintenance Map -->
+                <a href="maintenancemap.php"
+                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
+                    <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-black transition-colors" fill="none"
+                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    <span>Maintenance Map</span>
+                </a>
+
+                <span
+                    class="text-[11px] font-bold tracking-widest text-white px-4 pt-4 mb-2 opacity-50">COMMUNITY</span>
 
                 <a href="settings.html"
                     class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
@@ -207,14 +220,14 @@ $current_user_id = $user['id'] ?? null;
                     </div>
                     <div class="min-w-0 flex flex-col">
                         <span
-                            class="text-xs font-bold text-white truncate"><?= htmlspecialchars($user['name'] ?? 'Authorized Staff') ?></span>
+                            class="text-xs font-bold text-white truncate"><?= htmlspecialchars($user['name']) ?></span>
                         <span
-                            class="text-[10px] font-medium text-[#B5B5B5] truncate"><?= htmlspecialchars($user['email'] ?? 'staff@powerguide.gov') ?></span>
+                            class="text-[10px] font-medium text-[#B5B5B5] truncate"><?= htmlspecialchars($user['email']) ?></span>
                     </div>
                 </div>
 
                 <!-- Logout Button -->
-                <a href="<?= defined('BACKEND_URL') ? BACKEND_URL : '/logout.php' ?>/public/logout.php"
+                <a href="<?= BACKEND_URL ?>/public/logout.php"
                     class="p-2 text-[#B5B5B5] hover:text-[#CB3435] hover:bg-[#CB3435]/10 rounded-xl transition-all flex-shrink-0 group"
                     title="Logout">
                     <svg class="w-5 h-5 transform group-hover:translate-x-0.5 transition-transform" fill="none"

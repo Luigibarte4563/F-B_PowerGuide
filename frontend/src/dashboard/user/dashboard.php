@@ -162,6 +162,17 @@ $picture = $user['picture'] ?? $defaultPicture;
                     <span>Find Hubs</span>
                 </a>
 
+                <!-- Added Maintenance Map -->
+                <a href="maintenancemap.php"
+                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
+                    <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-black transition-colors" fill="none"
+                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    <span>Maintenance Map</span>
+                </a>
+
                 <span
                     class="text-[11px] font-bold tracking-widest text-white px-4 pt-4 mb-2 opacity-50">COMMUNITY</span>
 
@@ -185,7 +196,7 @@ $picture = $user['picture'] ?? $defaultPicture;
                     roughly 15 minutes of device runtime.</span>
             </div>
 
-            <!-- Profile Info Panel (Repositioned to bottom of sidebar) -->
+            <!-- Profile Info Panel -->
             <div
                 class="flex flex-row items-center justify-between gap-3 px-4 py-3 mb-8 rounded-2xl bg-[#31324C]/20 border border-white/5 text-left">
                 <div class="flex items-center gap-3 min-w-0">
@@ -260,10 +271,12 @@ $picture = $user['picture'] ?? $defaultPicture;
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                                         </svg>
-                                        <h1 class="text-xs font-bold text-white uppercase tracking-wider">Live System Feed</h1>
+                                        <h1 class="text-xs font-bold text-white uppercase tracking-wider">Live System
+                                            Feed</h1>
                                     </div>
                                     <button onclick="markAllAsRead()"
-                                        class="text-[10px] text-[#FFBB02] hover:underline font-bold tracking-wide uppercase bg-[#31324C]/30 px-2 py-1 rounded">Mark All</button>
+                                        class="text-[10px] text-[#FFBB02] hover:underline font-bold tracking-wide uppercase bg-[#31324C]/30 px-2 py-1 rounded">Mark
+                                        All</button>
                                 </div>
 
                                 <div id="notifFeed"
@@ -386,7 +399,8 @@ $picture = $user['picture'] ?? $defaultPicture;
                                 <div class="flex items-center gap-2">
                                     <span
                                         class="text-[#00BA00] px-2.5 py-1 bg-[#00BA00]/10 text-xs rounded-lg font-bold border border-[#00BA00]/20 flex items-center gap-1">
-                                        <span class="w-1.5 h-1.5 bg-[#00BA00] rounded-full animate-pulse"></span> LIVE LOOP
+                                        <span class="w-1.5 h-1.5 bg-[#00BA00] rounded-full animate-pulse"></span> LIVE
+                                        LOOP
                                     </span>
                                 </div>
                             </div>
@@ -403,7 +417,8 @@ $picture = $user['picture'] ?? $defaultPicture;
 
                             <!-- Card Header -->
                             <div class="flex justify-between items-center">
-                                <span class="text-white text-xs font-bold uppercase tracking-widest opacity-60">System Power</span>
+                                <span class="text-white text-xs font-bold uppercase tracking-widest opacity-60">System
+                                    Power</span>
                                 <span id="batteryBadge"
                                     class="text-[11px] font-extrabold tracking-widest text-[#FFBB02] bg-white/5 px-3 py-1.5 rounded-lg border border-white/5 transition-colors duration-300">
                                     DETECTING STATUS
@@ -460,7 +475,8 @@ $picture = $user['picture'] ?? $defaultPicture;
                 <div class="w-full">
                     <div
                         class="rounded-2xl border border-white/5 bg-[#31324C]/20 flex flex-col p-6 shadow-xl min-h-[300px]">
-                        <span class="text-white text-xs font-bold uppercase tracking-widest opacity-60 mb-4">Nearby Power Stations</span>
+                        <span class="text-white text-xs font-bold uppercase tracking-widest opacity-60 mb-4">Nearby
+                            Power Stations</span>
 
                         <!-- Dynamic Station Feed Render Element Container (Wide) -->
                         <div id="list"
@@ -502,7 +518,7 @@ $picture = $user['picture'] ?? $defaultPicture;
         let userMarker = null;
         let stationsData = [];
         let currentPage = 1;
-        const perPage = 3; 
+        const perPage = 3;
         let notifications = [];
 
         /* =========================
@@ -748,7 +764,7 @@ $picture = $user['picture'] ?? $defaultPicture;
                 btn.className = `h-7 w-7 flex items-center justify-center rounded-lg font-bold text-[11px] transition-all duration-150 ${i === currentPage
                     ? "bg-[#FFBB02] text-black shadow-md shadow-[#FFBB02]/10"
                     : "bg-[#31324C]/40 text-[#B5B5B5] hover:bg-[#31324C]/80 hover:text-white"
-                }`;
+                    }`;
 
                 btn.onclick = () => {
                     currentPage = i;
