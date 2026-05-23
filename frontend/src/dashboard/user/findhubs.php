@@ -387,7 +387,8 @@ $current_user_id = $user['id'] ?? null;
                             <span class="text-[10px] font-bold tracking-wider text-[#FFBB02] uppercase">Geographic
                                 Pinpoint</span>
                         </div>
-                        <p class="text-[11px] text-white/60 font-normal mt-0.5 leading-relaxed">Click or drag the map node inside this viewport to match the power station bounds.</p>
+                        <p class="text-[11px] text-white/60 font-normal mt-0.5 leading-relaxed">Click or drag the map
+                            node inside this viewport to match the power station bounds.</p>
                     </div>
                 </div>
 
@@ -401,8 +402,10 @@ $current_user_id = $user['id'] ?? null;
                     <div class="space-y-4">
                         <!-- Header -->
                         <div>
-                            <h3 id="formTitle" class="text-2xl font-bold text-white tracking-tight">Register Power Station</h3>
-                            <p class="text-xs text-white/50 mt-1">Specify grid parameters and coordinates for crowdsourced infrastructure logs.</p>
+                            <h3 id="formTitle" class="text-2xl font-bold text-white tracking-tight">Register Power
+                                Station</h3>
+                            <p class="text-xs text-white/50 mt-1">Specify grid parameters and coordinates for
+                                crowdsourced infrastructure logs.</p>
                         </div>
 
                         <!-- GPS Trigger Button -->
@@ -423,7 +426,8 @@ $current_user_id = $user['id'] ?? null;
                         <!-- Station Name Field -->
                         <div>
                             <label
-                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Station Name</label>
+                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Station
+                                Name</label>
                             <input id="station_name" required
                                 class="w-full px-4 h-11 bg-white/[0.03] border border-white/10 rounded-xl text-sm text-white outline-none placeholder-white/20 focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all focus:bg-[#141527]"
                                 type="text" placeholder="e.g., Calasiao Transmission Substation">
@@ -433,7 +437,8 @@ $current_user_id = $user['id'] ?? null;
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label
-                                    class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Station Type</label>
+                                    class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Station
+                                    Type</label>
                                 <div class="relative">
                                     <select id="station_type" required
                                         class="w-full h-11 pl-3 pr-8 bg-[#1E203C] border border-white/10 rounded-xl text-sm text-white/90 outline-none focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all cursor-pointer appearance-none focus:bg-[#141527]">
@@ -457,7 +462,8 @@ $current_user_id = $user['id'] ?? null;
                             </div>
                             <div>
                                 <label
-                                    class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Availability Status</label>
+                                    class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Availability
+                                    Status</label>
                                 <div class="relative">
                                     <select id="availability_status" required
                                         class="w-full h-11 pl-3 pr-8 bg-[#1E203C] border border-white/10 rounded-xl text-sm text-white/90 outline-none focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all cursor-pointer appearance-none focus:bg-[#141527]">
@@ -481,7 +487,8 @@ $current_user_id = $user['id'] ?? null;
                         <!-- Geographic Location Name -->
                         <div>
                             <label
-                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Geographic Location Name</label>
+                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Geographic
+                                Location Name</label>
                             <input id="location_name" required
                                 class="w-full px-4 h-11 bg-white/[0.03] border border-white/10 rounded-xl text-sm text-white outline-none placeholder-white/20 focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 transition-all focus:bg-[#141527]"
                                 type="text" placeholder="Street, Barangay, City or Coordinates">
@@ -490,7 +497,8 @@ $current_user_id = $user['id'] ?? null;
                         <!-- Description notes -->
                         <div>
                             <label
-                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Operating Notes / Description</label>
+                                class="text-white/40 font-semibold text-[10px] tracking-wider mb-1 block uppercase">Operating
+                                Notes / Description</label>
                             <textarea id="description"
                                 class="w-full h-16 border border-white/10 p-3 rounded-xl bg-white/[0.03] text-white placeholder-white/20 focus:border-[#FFBB02] focus:ring-1 focus:ring-[#FFBB02]/20 outline-none text-sm resize-none transition-all focus:bg-[#141527]"
                                 placeholder="Describe operating configurations, transformers, or current structural logs..."></textarea>
@@ -509,643 +517,1086 @@ $current_user_id = $user['id'] ?? null;
 
     <!-- ================= JAVASCRIPT SYSTEM ENGINE ================= -->
     <script>
-    /* ================= STREAMING_CHUNK:Configuring Leaflet Map layers and parameters... ================= */
-    const map = L.map('map', { zoomControl: false }).setView([16.04, 120.33], 12);
-    L.control.zoom({ position: 'bottomright' }).addTo(map);
+        /* ================= LEAFLET MAP ================= */
+        /* ================= LEAFLET MAP ================= */
+const map = L.map('map', { zoomControl: false }).setView([16.04, 120.33], 12);
+L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
 
-    let layerGroup = L.layerGroup().addTo(map);
+let layerGroup = L.layerGroup().addTo(map);
 
-    // Pagination & Global Cache Layer Data States
-    let allCachedReports = [];
-    let filteredReports = [];
-    let currentFilterMode = 'all';
-    let currentPage = 1;
-    const perPage = 3;
+let allCachedReports  = [];
+let filteredReports   = [];
+let currentFilterMode = 'all';
+let currentPage       = 1;
+const perPage         = 3;
 
-    /* ================= SAFE DOM HELPERS (PREVENT NULL ERRORS) ================= */
-    function getEl(id) {
-        return document.getElementById(id);
+/* ================= DOM HELPERS ================= */
+function getEl(id) { return document.getElementById(id); }
+
+function setValue(id, value) {
+    const el = getEl(id);
+    if (el) el.value = value ?? "";
+}
+
+/**
+ * Force-sets a <select> by iterating options (case-insensitive).
+ * el.value = x silently fails when value casing doesn't match an option.
+ */
+function setSelectValue(id, value) {
+    const el = getEl(id);
+    if (!el) return;
+
+    if (value === null || value === undefined || String(value).trim() === "") {
+        el.selectedIndex = 0;
+        return;
     }
 
-    function setValue(id, value) {
-        const el = getEl(id);
-        if (el) el.value = value ?? "";
-    }
+    const normalized = String(value).toLowerCase().trim();
+    let matched = false;
 
-    function setText(id, value) {
-        const el = getEl(id);
-        if (el) el.textContent = value ?? "";
-    }
-
-    function setHTML(id, value) {
-        const el = getEl(id);
-        if (el) el.innerHTML = value ?? "";
-    }
-
-    /* ================= SAFE TEXT HELPER (XSS PROTECTION) ================= */
-    function escapeHTML(str) {
-        return String(str ?? "")
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-
-    /* ================= CENTRALIZED STATUS HELPERS ================= */
-    function getStatusColor(status) {
-        const s = String(status || "available").toLowerCase().trim();
-        switch (s) {
-            case "available": return "#34FB34";
-            case "busy": return "#FFBB02";
-            case "offline": return "#FF2E1F";
-            case "maintenance": return "#00E5FF";
-            default: return "#34FB34";
+    for (let i = 0; i < el.options.length; i++) {
+        if (el.options[i].value.toLowerCase().trim() === normalized) {
+            el.selectedIndex = i;
+            matched = true;
+            break;
         }
     }
 
-    function getStatusBadgeStyle(status) {
-        const s = String(status || "available").toLowerCase().trim();
-        switch (s) {
-            case "available": return "bg-green-500/10 text-[#34FB34] border border-green-500/20";
-            case "busy": return "bg-yellow-500/10 text-[#FFBB02] border border-yellow-500/20";
-            case "offline": return "bg-red-500/10 text-[#FF2E1F] border border-red-500/20";
-            case "maintenance": return "bg-blue-500/10 text-[#00E5FF] border border-blue-500/20";
-            default: return "bg-green-500/10 text-[#34FB34] border border-green-500/20";
-        }
+    if (!matched) {
+        console.warn(`setSelectValue: no option matching "${value}" in #${id}`);
+        el.selectedIndex = 0;
     }
+}
 
-    /* ================= STREAMING_CHUNK:Implementing simple standard alert dialogue... ================= */
-    function showAlert(title, message, type = "info") {
-        alert((title ? title.toUpperCase() + ": " : "") + message);
+function setText(id, value) {
+    const el = getEl(id);
+    if (el) el.textContent = value ?? "";
+}
+
+function setHTML(id, value) {
+    const el = getEl(id);
+    if (el) el.innerHTML = value ?? "";
+}
+
+function escapeHTML(str) {
+    return String(str ?? "")
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+/* ================= STATUS HELPERS ================= */
+function getStatusColor(status) {
+    switch (String(status || "").toLowerCase().trim()) {
+        case "available":   return "#34FB34";
+        case "busy":        return "#FFBB02";
+        case "offline":     return "#FF2E1F";
+        case "maintenance": return "#00E5FF";
+        default:            return "#34FB34";
     }
+}
 
-    /* ================= STREAMING_CHUNK:Implementing simple standard confirm dialogue... ================= */
-    function showConfirm(message) {
-        return Promise.resolve(confirm(message));
+function getStatusBadgeStyle(status) {
+    switch (String(status || "").toLowerCase().trim()) {
+        case "available":   return "bg-green-500/10 text-[#34FB34] border border-green-500/20";
+        case "busy":        return "bg-yellow-500/10 text-[#FFBB02] border border-yellow-500/20";
+        case "offline":     return "bg-red-500/10 text-[#FF2E1F] border border-red-500/20";
+        case "maintenance": return "bg-blue-500/10 text-[#00E5FF] border border-blue-500/20";
+        default:            return "bg-green-500/10 text-[#34FB34] border border-green-500/20";
     }
+}
 
-    /* ================= STREAMING_CHUNK:Initializing picker map viewport components... ================= */
-    let modalMap;
-    let modalSelectionMarker;
+/* ================= ALERT HELPERS ================= */
+function showAlert(title, message, type = "info") {
+    alert((title ? title.toUpperCase() + ": " : "") + message);
+}
+function showConfirm(message) { return Promise.resolve(confirm(message)); }
 
-    function initModalMap() {
-        if (modalMap) return;
-        modalMap = L.map('modalMap', { zoomControl: false }).setView([16.04, 120.33], 13);
-        L.control.zoom({ position: 'bottomright' }).addTo(modalMap);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(modalMap);
+/* ================= MODAL MAP STATE ================= */
+// Two separate Leaflet map instances — one for create, one for edit.
+// They must never share state or interfere with each other.
+let createMap;
+let createMarker;
 
-        modalMap.on('click', function (e) {
-            setModalCoordinates(e.latlng.lat, e.latlng.lng, false);
+let editMap;
+let editMarker;
+
+/* ================= MODAL MAP: CREATE ================= */
+function initCreateMap(lat = 16.043, lng = 120.333) {
+    if (!createMap) {
+        createMap = L.map('createModalMap', { zoomControl: false }).setView([lat, lng], 13);
+        L.control.zoom({ position: 'bottomright' }).addTo(createMap);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(createMap);
+
+        createMap.on('click', function (e) {
+            syncCreateCoords(e.latlng.lat, e.latlng.lng, false);
         });
     }
 
-    /* ================= STREAMING_CHUNK:Implementing geocoding & coordinate triggers... ================= */
-    function setModalCoordinates(lat, lng, skipGeocode = false) {
-        setValue("latitude", Number(lat).toFixed(6));
-        setValue("longitude", Number(lng).toFixed(6));
+    createMap.setView([lat, lng], 13);
+    createMap.invalidateSize();
 
-        if (modalSelectionMarker) {
-            modalSelectionMarker.setLatLng([lat, lng]);
-        } else if (modalMap) {
-            modalSelectionMarker = L.marker([lat, lng], { draggable: true }).addTo(modalMap);
-            modalSelectionMarker.on('dragend', function (event) {
-                const position = event.target.getLatLng();
-                setModalCoordinates(position.lat, position.lng, false);
-            });
-        }
-        
-        if (modalMap) {
-            modalMap.panTo([lat, lng]);
-        }
-
-        if (!skipGeocode) {
-            const locationInput = getEl("location_name");
-            if (locationInput) {
-                locationInput.value = "Fetching address from GPS telemetry...";
-                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (locationInput) locationInput.value = data.display_name || `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
-                    })
-                    .catch(() => {
-                        if (locationInput) locationInput.value = `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
-                    });
-            }
-        }
+    if (createMarker) {
+        createMarker.setLatLng([lat, lng]);
+    } else {
+        createMarker = L.marker([lat, lng], { draggable: true }).addTo(createMap);
+        createMarker.on('dragend', function (e) {
+            const pos = e.target.getLatLng();
+            syncCreateCoords(pos.lat, pos.lng, false);
+        });
     }
 
-    /* ================= STREAMING_CHUNK:Structuring geolocation search patterns... ================= */
-    function useLocation() {
-        if (!navigator.geolocation) {
-            showAlert("System Error", "Geolocation is not supported by your browser.", "error");
-            return;
-        }
+    setValue("create_latitude",  lat.toFixed(8));
+    setValue("create_longitude", lng.toFixed(8));
+}
 
-        const locationInput = getEl("location_name");
-        if (locationInput) locationInput.value = "Interrogating GPS Satellite telemetry...";
+/**
+ * Updates the create form's lat/lng inputs and optionally reverse-geocodes.
+ * Called on map click and marker dragend.
+ */
+function syncCreateCoords(lat, lng, skipGeocode = false) {
+    setValue("create_latitude",  Number(lat).toFixed(8));
+    setValue("create_longitude", Number(lng).toFixed(8));
 
-        navigator.geolocation.getCurrentPosition(
-            async (position) => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                setModalCoordinates(lat, lng, false);
-
-                if (!modalMap) initModalMap();
-
-                setTimeout(() => {
-                    if (modalMap) {
-                        modalMap.invalidateSize();
-                        modalMap.setView([lat, lng], 16);
-                    }
-                }, 100);
-            },
-            (error) => {
-                console.error("Geolocation error:", error);
-                const locationInput = getEl("location_name");
-                if (locationInput && locationInput.value.includes("GPS")) locationInput.value = "";
-
-                let msg = "Unable to fetch location telemetry.";
-                switch (error.code) {
-                    case error.PERMISSION_DENIED: msg = "Permission denied. Please allow location access."; break;
-                    case error.POSITION_UNAVAILABLE: msg = "Location unavailable."; break;
-                    case error.TIMEOUT: msg = "Location query timed out."; break;
-                }
-                showAlert("GPS Error", msg, "error");
-            },
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-        );
+    if (createMarker) {
+        createMarker.setLatLng([lat, lng]);
     }
+    if (createMap) createMap.panTo([lat, lng]);
 
-    /* ================= STREAMING_CHUNK:Managing form popup display transitions... ================= */
-    function openPopup(editMode = false) {
-        const popup = getEl("popup");
-        if (popup) popup.classList.remove("invisible", "opacity-0");
-
-        setTimeout(() => {
-            initModalMap();
-            if (modalMap) modalMap.invalidateSize();
-
-            if (!editMode) {
-                const form = getEl("stationForm");
-                if (form) form.reset();
-                
-                setValue("station_id", "");
-                setText("formTitle", "Register Power Station");
-                
-                const submitBtn = getEl("submitBtn");
-                if (submitBtn) submitBtn.textContent = "Submit Station Node";
-                
-                setModalCoordinates(16.043, 120.333, true);
-            }
-        }, 50);
-    }
-
-    function closePopup() {
-        const popup = getEl("popup");
-        if (popup) popup.classList.add("invisible", "opacity-0");
-    }
-
-    /* ================= STREAMING_CHUNK:Establishing AJAX integration workflows with Power station API... ================= */
-    const API_BASE = "http://localhost/crowdsourcedapi/api/power_station";
-
-    async function api(url, options = {}) {
-        try {
-            const res = await fetch(url, {
-                method: options.method || "GET",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: options.body || null
-            });
-            return await res.json();
-        } catch (err) {
-            console.error("API Error:", err);
-            return { success: false, message: "Network error occurred" };
-        }
-    }
-
-    /* ================= GET USER INITIAL TELEMETRY LOCATION ================= */
-    async function loadUserLocation() {
-        try {
-            const result = await api(`${API_BASE}/get_near_location.php`);
-            if (!result.success) return;
-
-            const lat = parseFloat(result.data.latitude);
-            const lng = parseFloat(result.data.longitude);
-
-            if (!isNaN(lat) && !isNaN(lng)) {
-                map.setView([lat, lng], 14);
-
-                const userLocIcon = L.divIcon({
-                    className: 'custom-user-location-marker',
-                    html: `<div class="relative flex items-center justify-center w-8 h-8 rounded-full border-2 border-white shadow-xl bg-[#007AFF]"><svg class="w-4 h-4 text-white animate-pulse" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg><span class="absolute inset-0 rounded-full bg-[#007AFF] opacity-30 animate-ping"></span></div>`,
-                    iconSize: [32, 32],
-                    iconAnchor: [16, 16]
+    if (!skipGeocode) {
+        const locationInput = getEl("create_location_name");
+        if (locationInput) {
+            locationInput.value = "Fetching address...";
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (locationInput)
+                        locationInput.value = data.display_name || `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
+                })
+                .catch(() => {
+                    if (locationInput)
+                        locationInput.value = `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
                 });
-
-                L.marker([lat, lng], { icon: userLocIcon }).addTo(map).bindPopup("<strong class='text-xs text-white block text-center'>Registered Home Location</strong>");
-            }
-        } catch (err) {
-            console.error("Home query interface exception:", err);
         }
     }
+}
 
-    /* ================= LOAD STATIONS telemetry ================= */
-    async function loadStations() {
-        try {
-            const endpoint = currentFilterMode === 'mine' ? `${API_BASE}/get_my_posts.php` : `${API_BASE}/get.php`;
-            const result = await api(endpoint);
+/* ================= MODAL MAP: EDIT ================= */
+/**
+ * initEditMap — always called with the station's saved coordinates.
+ * Creates the edit map once; subsequent calls reposition it.
+ * Marker drag and map click BOTH immediately update the hidden lat/lng inputs.
+ */
+function initEditMap(lat, lng) {
+    if (!editMap) {
+        editMap = L.map('editModalMap', { zoomControl: false }).setView([lat, lng], 15);
+        L.control.zoom({ position: 'bottomright' }).addTo(editMap);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(editMap);
 
-            if (!result.success) {
-                showAlert("Sync Issue", result.message || "Failed to load stations", "error");
-                return;
-            }
-
-            allCachedReports = result.data || [];
-            const keyword = getEl("mapSearch")?.value?.trim() || "";
-
-            if (keyword) {
-                filterStations(keyword);
-            } else {
-                filteredReports = [...allCachedReports];
-                renderMapMarkers(filteredReports);
-                renderStatisticsFeed();
-                renderPaginationControls();
-            }
-        } catch (err) {
-            console.error("loadStations error:", err);
-            showAlert("Network Error", "Failed to load stations.", "error");
-        }
+        // ✅ Map click repositions marker AND syncs inputs immediately
+        editMap.on('click', function (e) {
+            syncEditCoords(e.latlng.lat, e.latlng.lng);
+        });
+    } else {
+        editMap.setView([lat, lng], 15);
     }
 
-    function toggleFilterMode(mode) {
-        currentFilterMode = mode;
-        currentPage = 1;
-        const btnAll = getEl("filterBtnAll");
-        const btnMine = getEl("filterBtnMine");
+    editMap.invalidateSize();
 
-        if (mode === 'mine') {
-            if (btnMine) btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
-            if (btnAll) btnAll.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
-        } else {
-            if (btnAll) btnAll.className = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
-            if (btnMine) btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
-        }
-        setValue("mapSearch", "");
-        loadStations();
+    if (editMarker) {
+        editMarker.setLatLng([lat, lng]);
+    } else {
+        editMarker = L.marker([lat, lng], { draggable: true }).addTo(editMap);
+
+        // ✅ Marker drag syncs inputs immediately — no stale coordinates on submit
+        editMarker.on('dragend', function (e) {
+            const pos = e.target.getLatLng();
+            syncEditCoords(pos.lat, pos.lng);
+        });
     }
 
-    /* ================= STREAMING_CHUNK:Rendering live SVG coordinates onto Leaflet Canvas... ================= */
-    function renderMapMarkers(stations) {
-        layerGroup.clearLayers();
-        let liveCount = 0;
+    // Sync inputs to current position
+    syncEditCoords(lat, lng);
+}
 
-        stations.forEach(s => {
-            const lat = parseFloat(s.latitude);
-            const lng = parseFloat(s.longitude);
-            if (isNaN(lat) || isNaN(lng)) return;
-            liveCount++;
+/**
+ * Single source of truth for edit modal coordinate state.
+ * Always called instead of writing lat/lng inputs directly.
+ */
+function syncEditCoords(lat, lng) {
+    setValue("edit_latitude",  Number(lat).toFixed(8));
+    setValue("edit_longitude", Number(lng).toFixed(8));
 
-            const markerColor = getStatusColor(s.availability_status);
+    if (editMarker) editMarker.setLatLng([lat, lng]);
+    if (editMap)    editMap.panTo([lat, lng]);
+}
 
-            const pulseIcon = L.divIcon({
-                className: 'custom-station-pulse-marker',
-                html: `<div class="relative flex items-center justify-center w-6 h-6 rounded-full border-2 border-white shadow-md" style="background-color: ${markerColor}"><svg class="w-3.5 h-3.5 text-[#03041A]" fill="currentColor" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg><span class="absolute -top-1 -right-1 flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background-color: ${markerColor}"></span><span class="relative inline-flex rounded-full h-2 w-2" style="background-color: ${markerColor}"></span></span></div>`,
-                iconSize: [24, 24],
-                iconAnchor: [12, 12]
-            });
+/* ================= GPS LOCATION (CREATE MODAL) ================= */
+function useCreateLocation() {
+    if (!navigator.geolocation) {
+        showAlert("System Error", "Geolocation not supported.", "error");
+        return;
+    }
+    const locationInput = getEl("create_location_name");
+    if (locationInput) locationInput.value = "Acquiring GPS position...";
 
-            const popupContent = `
-                <div class="text-white text-xs p-1">
-                    <strong class="text-sm block border-b border-white/10 pb-1 mb-1 text-[#FFBB02]">${escapeHTML(s.station_name)}</strong>
-                    <p class="mb-1 text-white/50 uppercase tracking-widest text-[9px] font-bold">${escapeHTML(s.station_type)}</p>
-                    <p class="mb-2 text-white/80 text-[11px] leading-relaxed">${escapeHTML(s.description || 'No description available.')}</p>
-                    <div class="flex items-center justify-between mt-2 pt-2 border-t border-white/5">
-                        <span class="inline-block px-2 py-0.5 rounded text-[9px] font-bold" style="background:${markerColor}20; color:${markerColor}; border:1px solid ${markerColor}40;">
-                            ${escapeHTML(s.availability_status)}
-                        </span>
-                        <span class="text-[10px] text-white/40 truncate max-w-[120px]">${escapeHTML(s.location_name)}</span>
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            syncCreateCoords(lat, lng, false);
+            if (createMap) {
+                createMap.invalidateSize();
+                createMap.setView([lat, lng], 16);
+            }
+        },
+        (error) => {
+            const locationInput = getEl("create_location_name");
+            if (locationInput && locationInput.value.includes("GPS")) locationInput.value = "";
+            let msg = "Unable to fetch location.";
+            switch (error.code) {
+                case error.PERMISSION_DENIED:    msg = "Permission denied."; break;
+                case error.POSITION_UNAVAILABLE: msg = "Location unavailable."; break;
+                case error.TIMEOUT:              msg = "Request timed out."; break;
+            }
+            showAlert("GPS Error", msg, "error");
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+}
+
+/* ================= MODAL HTML BUILDER ================= */
+/**
+ * Builds both modals (create + edit) and injects them into #modalContainer or body.
+ * All <select> elements have a blank first option — no "selected" attribute anywhere.
+ * This prevents form.reset() from snapping selects back to a hardcoded default.
+ */
+function buildModalHTML() {
+    const target = getEl("modalContainer") || document.body;
+
+    // Shared select option HTML — defined once, reused in both modals
+    const stationTypeOptions = `
+        <option value="">— Select Type —</option>
+        <option value="power_station">Power Station</option>
+        <option value="solar_station">Solar Station</option>
+        <option value="charging_station">Charging Station</option>
+        <option value="generator_station">Generator Station</option>`;
+
+    const accessTypeOptions = `
+        <option value="">— Select Access —</option>
+        <option value="free">Free</option>
+        <option value="paid">Paid</option>`;
+
+    // ✅ CRITICAL: blank first option, NO "selected" attribute on any option
+    const statusOptions = `
+        <option value="">— Select Status —</option>
+        <option value="available">Available</option>
+        <option value="busy">Busy</option>
+        <option value="offline">Offline</option>
+        <option value="maintenance">Maintenance</option>`;
+
+    const chargingTypeOptions = `
+        <option value="">— Select Charging —</option>
+        <option value="AC Level 1">AC Level 1</option>
+        <option value="AC Level 2">AC Level 2</option>
+        <option value="DC Fast Charge">DC Fast Charge</option>
+        <option value="Solar Direct">Solar Direct</option>
+        <option value="Generator">Generator</option>
+        <option value="Standard Outlet">Standard Outlet</option>`;
+
+    target.insertAdjacentHTML("beforeend", `
+
+    <!-- ==================== CREATE MODAL ==================== -->
+    <div id="createPopup"
+         class="invisible opacity-0 fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm transition-all duration-200 p-4">
+        <div class="relative w-full max-w-2xl max-h-[95vh] overflow-y-auto rounded-2xl bg-[#13142A] border border-white/10 shadow-2xl">
+
+            <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 bg-[#13142A] border-b border-white/10">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-[#FFBB02]/10 border border-[#FFBB02]/20 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-[#FFBB02]" fill="currentColor" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    </div>
+                    <span class="text-white font-bold text-base tracking-tight">Register Power Station</span>
+                </div>
+                <button onclick="closeCreatePopup()"
+                        class="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition-all">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="createForm" class="px-6 py-5 space-y-5">
+
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Station Name <span class="text-red-400">*</span></label>
+                    <input id="create_station_name" type="text" placeholder="e.g. Urdaneta Solar Hub"
+                           class="w-full bg-[#1C1D30] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#FFBB02]/50 transition-all" required>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Location Name <span class="text-red-400">*</span></label>
+                    <div class="flex gap-2">
+                        <input id="create_location_name" type="text" placeholder="Address or area name"
+                               class="flex-1 bg-[#1C1D30] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#FFBB02]/50 transition-all" required>
+                        <button type="button" onclick="useCreateLocation()"
+                                class="shrink-0 px-3 py-2 rounded-xl bg-[#FFBB02]/10 border border-[#FFBB02]/20 text-[#FFBB02] hover:bg-[#FFBB02]/20 transition-all" title="Use GPS">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
-            `;
 
-            L.marker([lat, lng], { icon: pulseIcon }).bindPopup(popupContent).addTo(layerGroup);
-        });
-
-        setHTML("activeOutageCounter", `
-            <svg class="w-4 h-4 inline-block mr-1 fill-current text-[#00BA00]" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-            </svg>
-            Active Nodes: ${liveCount}
-        `);
-    }
-
-    /* ================= SEARCH FILTERING ================= */
-    function filterStations(keyword) {
-        const term = (keyword || "").toLowerCase().trim();
-        filteredReports = allCachedReports.filter(r =>
-            String(r.station_name || "").toLowerCase().includes(term) ||
-            String(r.location_name || "").toLowerCase().includes(term) ||
-            String(r.station_type || "").toLowerCase().includes(term) ||
-            String(r.availability_status || "").toLowerCase().includes(term)
-        );
-        currentPage = 1;
-        renderStatisticsFeed();
-        renderPaginationControls();
-    }
-
-    /* ================= STREAMING_CHUNK:Rendering dynamic HTML blocks for Station feed cards... ================= */
-    function renderStatisticsFeed() {
-        const feedContainer = getEl("recentReports");
-        if (!feedContainer) return;
-        feedContainer.innerHTML = "";
-
-        if (!filteredReports.length) {
-            feedContainer.innerHTML = `<p class="text-xs text-white/40 text-center py-12">No registered stations found matching the current search boundaries.</p>`;
-            return;
-        }
-
-        const start = (currentPage - 1) * perPage;
-        const pageData = filteredReports.slice(start, start + perPage);
-        const fragment = document.createDocumentFragment();
-
-        pageData.forEach((s) => {
-            const badgeStyle = getStatusBadgeStyle(s.availability_status);
-
-            const card = document.createElement("div");
-            card.className = "card-hover flex flex-col p-4 border border-white/5 rounded-2xl bg-[#1C1D30]/30 transition-all hover:border-white/10";
-
-            card.innerHTML = `
-                ${s.image ? `<img src="${escapeHTML(s.image)}" class="w-full h-40 object-cover rounded-xl mb-3" alt="${escapeHTML(s.station_name)}">` : '<div class="w-full h-40 bg-[#31324C]/60 rounded-xl mb-3 flex items-center justify-center text-white/30 text-xs">No Image</div>'}
-                <div class="flex justify-between items-start gap-2">
-                    <span class="font-bold text-white text-sm md:text-base tracking-tight leading-tight truncate max-w-[210px]">${escapeHTML(s.station_name)}</span>
-                    <span class="text-[9px] font-black tracking-wider uppercase px-2 py-0.5 rounded-md ${badgeStyle}">${escapeHTML(s.availability_status)}</span>
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Pin Location <span class="text-red-400">*</span></label>
+                    <div id="createModalMap" class="w-full h-52 rounded-xl overflow-hidden border border-white/10"></div>
+                    <p class="text-[10px] text-white/30">Click the map or drag the pin to set coordinates.</p>
                 </div>
-                <span class="font-medium text-[11px] text-[#B5B5B5] mt-1.5 flex items-center gap-1">
-                    <svg class="w-3 h-3 text-[#FFBB02]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
-                    ${escapeHTML(s.location_name)}
-                </span>
-                <div class="grid grid-cols-2 gap-2 mt-4">
-                    <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-1.5 text-center">
-                        <span class="text-[8px] text-[#B5B5B5] font-bold tracking-wider uppercase opacity-40">Type</span>
-                        <span class="text-[11px] text-white font-extrabold mt-0.5 truncate">${escapeHTML(s.station_type)}</span>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Latitude</label>
+                        <input id="create_latitude" type="text" placeholder="16.04000000" readonly
+                               class="w-full bg-[#1C1D30]/60 border border-white/5 rounded-xl px-4 py-3 text-white/60 text-sm cursor-not-allowed">
                     </div>
-                    <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-1.5 text-center">
-                        <span class="text-[8px] text-[#B5B5B5] font-bold tracking-wider uppercase opacity-40">Access</span>
-                        <span class="text-[11px] text-white font-extrabold mt-0.5 truncate">${escapeHTML(s.access_type || 'free')}</span>
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Longitude</label>
+                        <input id="create_longitude" type="text" placeholder="120.33000000" readonly
+                               class="w-full bg-[#1C1D30]/60 border border-white/5 rounded-xl px-4 py-3 text-white/60 text-sm cursor-not-allowed">
                     </div>
                 </div>
-                <div class="mt-3 grid grid-cols-2 gap-x-6 text-xs text-white/70">
-                    <div><span class="opacity-60">Hours:</span> ${escapeHTML(s.operating_hours || 'N/A')}</div>
-                    <div><span class="opacity-60">Charging:</span> ${escapeHTML(s.charging_type || 'N/A')}</div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Station Type <span class="text-red-400">*</span></label>
+                        <select id="create_station_type"
+                                class="w-full bg-[#1C1D30] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#FFBB02]/50 transition-all appearance-none">
+                            ${stationTypeOptions}
+                        </select>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Access Type</label>
+                        <select id="create_access_type"
+                                class="w-full bg-[#1C1D30] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#FFBB02]/50 transition-all appearance-none">
+                            ${accessTypeOptions}
+                        </select>
+                    </div>
                 </div>
-                <p class="text-white/60 text-[11px] font-medium leading-relaxed mt-3 line-clamp-3">${escapeHTML(s.description || 'No description provided.')}</p>
-            `;
 
-            const isAuthor = (typeof CURRENT_USER_ID !== "undefined" && s.created_by && String(s.created_by) === String(CURRENT_USER_ID)) || (currentFilterMode === 'mine');
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Availability Status <span class="text-red-400">*</span></label>
+                        <select id="create_availability_status"
+                                class="w-full bg-[#1C1D30] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#FFBB02]/50 transition-all appearance-none">
+                            ${statusOptions}
+                        </select>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Charging Type</label>
+                        <select id="create_charging_type"
+                                class="w-full bg-[#1C1D30] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#FFBB02]/50 transition-all appearance-none">
+                            ${chargingTypeOptions}
+                        </select>
+                    </div>
+                </div>
 
-            if (isAuthor) {
-                const controls = document.createElement("div");
-                controls.className = "flex gap-4 justify-end pt-3 mt-3 border-t border-white/5 text-xs";
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Operating Hours</label>
+                    <input id="create_operating_hours" type="text" placeholder="e.g. 24/7 or Mon–Fri 8AM–6PM"
+                           class="w-full bg-[#1C1D30] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#FFBB02]/50 transition-all">
+                </div>
 
-                const editBtn = document.createElement("button");
-                editBtn.className = "text-[#FFBB02] hover:underline font-semibold flex items-center gap-1";
-                editBtn.innerHTML = `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg> Edit`;
-                editBtn.onclick = () => editStationByObject(s);
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Description</label>
+                    <textarea id="create_description" rows="3" placeholder="Brief description of this station..."
+                              class="w-full bg-[#1C1D30] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#FFBB02]/50 transition-all resize-none"></textarea>
+                </div>
 
-                const deleteBtn = document.createElement("button");
-                deleteBtn.className = "text-red-400 hover:underline font-semibold flex items-center gap-1";
-                deleteBtn.innerHTML = `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg> Delete`;
-                deleteBtn.onclick = () => deleteStation(s.id);
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="closeCreatePopup()"
+                            class="flex-1 py-3 rounded-xl border border-white/10 text-white/60 hover:text-white hover:border-white/20 text-sm font-semibold transition-all">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="flex-1 py-3 rounded-xl bg-[#FFBB02] hover:bg-[#FFBB02]/90 text-black font-bold text-sm transition-all">
+                        Submit Station Node
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-                controls.appendChild(editBtn);
-                controls.appendChild(deleteBtn);
-                card.appendChild(controls);
-            }
+    <!-- ==================== EDIT MODAL ==================== -->
+    <div id="editPopup"
+         class="invisible opacity-0 fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm transition-all duration-200 p-4">
+        <div class="relative w-full max-w-2xl max-h-[95vh] overflow-y-auto rounded-2xl bg-[#13142A] border border-white/10 shadow-2xl">
 
-            fragment.appendChild(card);
-        });
+            <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 bg-[#13142A] border-b border-white/10">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-[#FFBB02]/10 border border-[#FFBB02]/20 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-[#FFBB02]" fill="currentColor" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    </div>
+                    <span class="text-white font-bold text-base tracking-tight">Update Station Parameters</span>
+                </div>
+                <button onclick="closeEditPopup()"
+                        class="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition-all">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
 
-        feedContainer.appendChild(fragment);
-    }
+            <form id="editForm" class="px-6 py-5 space-y-5">
 
-    /* ================= STREAMING_CHUNK:Configuring system edit modes... ================= */
-    function editStationByObject(s) {
-        if (!s) return;
+                <!-- Hidden ID — the single source of truth for which record to update -->
+                <input type="hidden" id="edit_id">
 
-        setValue("station_id", s.id || "");
-        setValue("station_name", s.station_name || "");
-        setValue("location_name", s.location_name || "");
-        setValue("latitude", s.latitude || "");
-        setValue("longitude", s.longitude || "");
-        setValue("station_type", s.station_type || "power_station");
-        setValue("access_type", s.access_type || "free");
-        setValue("availability_status", s.availability_status || "available");
-        setValue("operating_hours", s.operating_hours || "");
-        setValue("charging_type", s.charging_type || "");
-        setValue("description", s.description || "");
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Station Name <span class="text-red-400">*</span></label>
+                    <input id="edit_station_name" type="text"
+                           class="w-full bg-[#1C1D30] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#FFBB02]/50 transition-all" required>
+                </div>
 
-        setText("formTitle", "Update Station Parameters");
-        const submitBtn = getEl("submitBtn");
-        if (submitBtn) submitBtn.textContent = "Update Station Node";
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Location Name <span class="text-red-400">*</span></label>
+                    <input id="edit_location_name" type="text"
+                           class="w-full bg-[#1C1D30] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#FFBB02]/50 transition-all" required>
+                </div>
 
-        openPopup(true);
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Reposition on Map</label>
+                    <div id="editModalMap" class="w-full h-52 rounded-xl overflow-hidden border border-white/10"></div>
+                    <p class="text-[10px] text-white/30">Drag the pin or click to update coordinates.</p>
+                </div>
 
-        setTimeout(() => {
-            if (s.latitude && s.longitude) {
-                setModalCoordinates(parseFloat(s.latitude), parseFloat(s.longitude), true);
-            }
-        }, 100);
-    }
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Latitude</label>
+                        <input id="edit_latitude" type="text" readonly
+                               class="w-full bg-[#1C1D30]/60 border border-white/5 rounded-xl px-4 py-3 text-white/60 text-sm cursor-not-allowed">
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Longitude</label>
+                        <input id="edit_longitude" type="text" readonly
+                               class="w-full bg-[#1C1D30]/60 border border-white/5 rounded-xl px-4 py-3 text-white/60 text-sm cursor-not-allowed">
+                    </div>
+                </div>
 
-    /* ================= DELETE STATION PROCESS VIA CUSTOM CONFIRM OVERLAY ================= */
-    async function deleteStation(id) {
-        const confirmed = await showConfirm("Are you sure you want to permanently delete this power station from the grid database? This cannot be undone.");
-        if (!confirmed) return;
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Station Type <span class="text-red-400">*</span></label>
+                        <select id="edit_station_type"
+                                class="w-full bg-[#1C1D30] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#FFBB02]/50 transition-all appearance-none">
+                            ${stationTypeOptions}
+                        </select>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Access Type</label>
+                        <select id="edit_access_type"
+                                class="w-full bg-[#1C1D30] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#FFBB02]/50 transition-all appearance-none">
+                            ${accessTypeOptions}
+                        </select>
+                    </div>
+                </div>
 
-        try {
-            const result = await api(`${API_BASE}/delete.php`, {
-                method: "POST",
-                body: JSON.stringify({ station_id: id })
-            });
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Availability Status <span class="text-red-400">*</span></label>
+                        <select id="edit_availability_status"
+                                class="w-full bg-[#1C1D30] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#FFBB02]/50 transition-all appearance-none">
+                            ${statusOptions}
+                        </select>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Charging Type</label>
+                        <select id="edit_charging_type"
+                                class="w-full bg-[#1C1D30] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#FFBB02]/50 transition-all appearance-none">
+                            ${chargingTypeOptions}
+                        </select>
+                    </div>
+                </div>
 
-            showAlert(result.success ? "Success" : "Error", result.message || "Operation executed.", result.success ? "success" : "error");
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Operating Hours</label>
+                    <input id="edit_operating_hours" type="text" placeholder="e.g. 24/7 or Mon–Fri 8AM–6PM"
+                           class="w-full bg-[#1C1D30] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#FFBB02]/50 transition-all">
+                </div>
 
-            if (result.success) loadStations();
-        } catch (err) {
-            console.error("Deletion exception:", err);
-            showAlert("System Error", "Failed to connect to the backend database.", "error");
-        }
-    }
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-[#B5B5B5] uppercase tracking-widest">Description</label>
+                    <textarea id="edit_description" rows="3"
+                              class="w-full bg-[#1C1D30] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#FFBB02]/50 transition-all resize-none"></textarea>
+                </div>
 
-    /* ================= STATION CREATE/UPDATE SUBMISSION ================= */
-    const stationForm = getEl("stationForm");
-    if (stationForm) {
-        stationForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="closeEditPopup()"
+                            class="flex-1 py-3 rounded-xl border border-white/10 text-white/60 hover:text-white hover:border-white/20 text-sm font-semibold transition-all">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="flex-1 py-3 rounded-xl bg-[#FFBB02] hover:bg-[#FFBB02]/90 text-black font-bold text-sm transition-all">
+                        Update Station Node
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    `);
+}
 
-            const id = getEl("station_id")?.value?.trim();
-            const isEdit = !!id;
+/* ================= POPUP CONTROLS: CREATE ================= */
+function openCreatePopup() {
+    const popup = getEl("createPopup");
+    if (popup) popup.classList.remove("invisible", "opacity-0");
 
-            const payload = {
-                station_name: getEl("station_name")?.value || "",
-                location_name: getEl("location_name")?.value || "",
-                latitude: getEl("latitude")?.value || "",
-                longitude: getEl("longitude")?.value || "",
-                station_type: getEl("station_type")?.value || "",
-                access_type: getEl("access_type")?.value || "free",
-                availability_status: getEl("availability_status")?.value || "available",
-                operating_hours: getEl("operating_hours")?.value || "",
-                charging_type: getEl("charging_type")?.value || "",
-                description: getEl("description")?.value || ""
-            };
+    // Reset the create form fully — safe because this is always a new record
+    const form = getEl("createForm");
+    if (form) form.reset();
 
-            if (!payload.latitude || !payload.longitude) {
-                showAlert("Missing Coordinates", "Please select a location on the map before submitting.", "error");
-                return;
-            }
-
-            if (isEdit) payload.id = id;
-
-            const endpoint = isEdit ? `${API_BASE}/update.php` : `${API_BASE}/create.php`;
-
-            try {
-                const result = await api(endpoint, { method: "POST", body: JSON.stringify(payload) });
-
-                showAlert(result.success ? "Success" : "Error", result.message || "Operation completed.", result.success ? "success" : "error");
-
-                if (result.success) {
-                    closePopup();
-                    loadStations();
-                }
-            } catch (err) {
-                console.error("Submission exception:", err);
-                showAlert("System Error", "Failed to send request to server.", "error");
-            }
-        });
-    }
-
-    /* ================= PAGINATION CONTROL INTERFACE ENGINE ================= */
-    function renderPaginationControls() {
-        const paginationContainer = getEl("pagination");
-        if (!paginationContainer) return;
-        paginationContainer.innerHTML = "";
-
-        const totalPages = Math.ceil(filteredReports.length / perPage);
-        if (totalPages <= 1) return;
-
-        const fragment = document.createDocumentFragment();
-
-        const prevBtn = document.createElement("button");
-        prevBtn.textContent = "Prev";
-        prevBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all ${currentPage === 1 ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40' : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'}`;
-        prevBtn.onclick = () => {
-            if (currentPage > 1) {
-                currentPage--;
-                renderStatisticsFeed();
-                renderPaginationControls();
-            }
-        };
-        fragment.appendChild(prevBtn);
-
-        for (let i = 1; i <= totalPages; i++) {
-            const pageBtn = document.createElement("button");
-            pageBtn.textContent = i;
-            pageBtn.className = `px-3 py-1.5 text-xs font-black rounded-lg transition-all border ${i === currentPage ? 'bg-[#FFBB02] text-black border-[#FFBB02]' : 'bg-[#31324C]/20 text-[#B5B5B5] border-white/5 hover:text-white'}`;
-            pageBtn.onclick = () => {
-                currentPage = i;
-                renderStatisticsFeed();
-                renderPaginationControls();
-            };
-            fragment.appendChild(pageBtn);
-        }
-
-        const nextBtn = document.createElement("button");
-        nextBtn.textContent = "Next";
-        nextBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all ${currentPage === totalPages ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40' : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'}`;
-        nextBtn.onclick = () => {
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderStatisticsFeed();
-                renderPaginationControls();
-            }
-        };
-        fragment.appendChild(nextBtn);
-
-        paginationContainer.appendChild(fragment);
-    }
-
-    /* ================= STREAMING_CHUNK:Implementing local hardware battery alerts... ================= */
-    function batteryDetection() {
-        if (!navigator.getBattery) return;
-        navigator.getBattery().then(battery => {
-            function update() {
-                const levelSpan = getEl("batteryLevel");
-                const chargingSpan = getEl("batteryCharging");
-                const statusBox = getEl("batteryStatus");
-
-                if (levelSpan) levelSpan.innerText = Math.round(battery.level * 100) + "%";
-                if (chargingSpan) chargingSpan.innerText = battery.charging ? "Yes" : "No";
-
-                if (battery.level <= 0.20 && !battery.charging) {
-                    const toast = getEl("battery-warning");
-                    if (toast) toast.classList.remove("invisible", "opacity-0");
-                    if (statusBox) {
-                        statusBox.innerText = "Low Battery";
-                        statusBox.style.background = "#e74c3c";
-                    }
-                } else if (battery.charging) {
-                    if (statusBox) {
-                        statusBox.innerText = "Charging";
-                        statusBox.style.background = "#2ecc71";
-                    }
-                } else {
-                    if (statusBox) {
-                        statusBox.innerText = "Normal";
-                        statusBox.style.background = "#f39c12";
-                    }
-                }
-            }
-            update();
-            battery.addEventListener("levelchange", update);
-            battery.addEventListener("chargingchange", update);
-        });
-    }
-
-    function closeBatteryWarning() {
-        const toast = getEl("battery-warning");
-        if (toast) toast.classList.add("invisible", "opacity-0");
-    }
-
-    /* ================= INITIALIZATION RENDERING RUNTIME CONTROLS ================= */
-    document.addEventListener("DOMContentLoaded", () => {
-        loadUserLocation();
-        loadStations();
-        batteryDetection();
-        setInterval(loadStations, 10000);
+    // Reset all selects to blank placeholder explicitly
+    ["create_station_type", "create_access_type", "create_availability_status", "create_charging_type"].forEach(id => {
+        const el = getEl(id);
+        if (el) el.selectedIndex = 0;
     });
 
-    /* ================= SIDEBAR VIEW MOBILE CONTROLS ================= */
-    const menuToggle = getEl('menuToggle');
-    const sidebar = getEl('sidebar');
-    const overlay = getEl('overlay');
+    // Init map after DOM is visible so Leaflet can read container dimensions
+    setTimeout(() => {
+        initCreateMap(16.043, 120.333);
+    }, 50);
+}
 
-    if (menuToggle && sidebar && overlay) {
-        menuToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
+function closeCreatePopup() {
+    const popup = getEl("createPopup");
+    if (popup) popup.classList.add("invisible", "opacity-0");
+}
+
+/* ================= POPUP CONTROLS: EDIT ================= */
+/**
+ * openEdit — the reference entry point for editing a station.
+ * Follows the exact pattern: populate fields → init map → open popup.
+ * NO form.reset() is called here — that would wipe the values we just set.
+ */
+function openEdit(s) {
+    if (!s || !s.id) {
+        showAlert("Error", "Invalid station data.");
+        return;
+    }
+
+    // ── Step 1: Populate all fields from the station object ──────────────────
+    // Hidden ID — single source of truth, never changes until form submits
+    setValue("edit_id", s.id);
+
+    // Text inputs — use ?? "" so null/undefined become empty string, not "null"
+    setValue("edit_station_name",    s.station_name    ?? "");
+    setValue("edit_location_name",   s.location_name   ?? "");
+    setValue("edit_operating_hours", s.operating_hours ?? "");
+    setValue("edit_description",     s.description     ?? "");
+
+    // ✅ Selects — setSelectValue iterates options for exact match.
+    //    This is the fix for availability_status always being "available":
+    //    el.value = "offline" silently fails if the browser hasn't matched it;
+    //    selectedIndex assignment on a confirmed match never fails.
+    setSelectValue("edit_station_type",        s.station_type);
+    setSelectValue("edit_access_type",         s.access_type);
+    setSelectValue("edit_availability_status", s.availability_status);
+    setSelectValue("edit_charging_type",       s.charging_type);
+
+    // ── Step 2: Show the popup ────────────────────────────────────────────────
+    const popup = getEl("editPopup");
+    if (popup) popup.classList.remove("invisible", "opacity-0");
+
+    // ── Step 3: Init edit map after popup is visible ──────────────────────────
+    // Delay ensures the #editModalMap container has rendered dimensions before
+    // Leaflet tries to measure it. Coordinates come from the station object.
+    setTimeout(() => {
+        const lat = parseFloat(s.latitude);
+        const lng = parseFloat(s.longitude);
+        const safeLat = isNaN(lat) ? 16.043 : lat;
+        const safeLng = isNaN(lng) ? 120.333 : lng;
+        initEditMap(safeLat, safeLng);
+    }, 50);
+}
+
+function closeEditPopup() {
+    const popup = getEl("editPopup");
+    if (popup) popup.classList.add("invisible", "opacity-0");
+    // Wipe ID so a stale edit can't accidentally re-submit
+    setValue("edit_id", "");
+}
+
+// Legacy alias — keeps any existing onclick="openPopup()" calls working
+function openPopup(editMode = false) {
+    if (editMode) return; // edit path now uses openEdit()
+    openCreatePopup();
+}
+function closePopup() { closeCreatePopup(); }
+
+/* ================= API HELPER ================= */
+const API_BASE = "http://localhost/crowdsourcedapi/api/power_station";
+
+async function api(url, options = {}) {
+    try {
+        const res = await fetch(url, {
+            method:      options.method || "GET",
+            headers:     { "Content-Type": "application/json" },
+            credentials: "include",
+            body:        options.body || null
         });
-        overlay.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
+
+        if (!res.ok) {
+            const errText = await res.text();
+            console.error(`API ${res.status} from ${url}:`, errText);
+            return { success: false, message: `Server error ${res.status}: ${errText}` };
+        }
+
+        return await res.json();
+    } catch (err) {
+        console.error("API Error:", err);
+        return { success: false, message: "Network error occurred" };
+    }
+}
+
+/* ================= LOAD FUNCTIONS ================= */
+async function loadUserLocation() {
+    try {
+        const result = await api(`${API_BASE}/get_near_location.php`);
+        if (!result.success) return;
+        const lat = parseFloat(result.data.latitude);
+        const lng = parseFloat(result.data.longitude);
+        if (!isNaN(lat) && !isNaN(lng)) {
+            map.setView([lat, lng], 14);
+            const userLocIcon = L.divIcon({
+                className: 'custom-user-location-marker',
+                html: `<div class="relative flex items-center justify-center w-8 h-8 rounded-full border-2 border-white shadow-xl bg-[#007AFF]">
+                    <svg class="w-4 h-4 text-white animate-pulse" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    <span class="absolute inset-0 rounded-full bg-[#007AFF] opacity-30 animate-ping"></span>
+                </div>`,
+                iconSize: [32, 32], iconAnchor: [16, 16]
+            });
+            L.marker([lat, lng], { icon: userLocIcon }).addTo(map)
+                .bindPopup("<strong class='text-xs text-white block text-center'>Registered Home Location</strong>");
+        }
+    } catch (err) {
+        console.error("loadUserLocation error:", err);
+    }
+}
+
+async function loadStations() {
+    try {
+        const endpoint = currentFilterMode === 'mine'
+            ? `${API_BASE}/get_my_posts.php`
+            : `${API_BASE}/get.php`;
+        const result = await api(endpoint);
+
+        if (!result.success) {
+            showAlert("Sync Issue", result.message || "Failed to load stations", "error");
+            return;
+        }
+
+        allCachedReports = result.data || [];
+        const keyword = getEl("mapSearch")?.value?.trim() || "";
+
+        if (keyword) {
+            filterStations(keyword);
+        } else {
+            filteredReports = [...allCachedReports];
+            renderMapMarkers(filteredReports);
+            renderStatisticsFeed();
+            renderPaginationControls();
+        }
+    } catch (err) {
+        console.error("loadStations error:", err);
+        showAlert("Network Error", "Failed to load stations.", "error");
+    }
+}
+
+function toggleFilterMode(mode) {
+    currentFilterMode = mode;
+    currentPage = 1;
+    const btnAll  = getEl("filterBtnAll");
+    const btnMine = getEl("filterBtnMine");
+
+    if (mode === 'mine') {
+        if (btnMine) btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
+        if (btnAll)  btnAll.className  = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
+    } else {
+        if (btnAll)  btnAll.className  = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
+        if (btnMine) btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
+    }
+    setValue("mapSearch", "");
+    loadStations();
+}
+
+/* ================= MAP RENDERING ================= */
+function renderMapMarkers(stations) {
+    layerGroup.clearLayers();
+    let liveCount = 0;
+
+    stations.forEach(s => {
+        const lat = parseFloat(s.latitude);
+        const lng = parseFloat(s.longitude);
+        if (isNaN(lat) || isNaN(lng) || (lat === 0 && lng === 0)) return;
+        liveCount++;
+
+        const markerColor = getStatusColor(s.availability_status);
+        const pulseIcon = L.divIcon({
+            className: 'custom-station-pulse-marker',
+            html: `<div class="relative flex items-center justify-center w-6 h-6 rounded-full border-2 border-white shadow-md" style="background-color:${markerColor}">
+                <svg class="w-3.5 h-3.5 text-[#03041A]" fill="currentColor" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <span class="absolute -top-1 -right-1 flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background-color:${markerColor}"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2" style="background-color:${markerColor}"></span>
+                </span>
+            </div>`,
+            iconSize: [24, 24], iconAnchor: [12, 12]
+        });
+
+        const popupContent = `
+            <div class="text-white text-xs p-1">
+                <strong class="text-sm block border-b border-white/10 pb-1 mb-1 text-[#FFBB02]">${escapeHTML(s.station_name)}</strong>
+                <p class="mb-1 text-white/50 uppercase tracking-widest text-[9px] font-bold">${escapeHTML(s.station_type)}</p>
+                <p class="mb-2 text-white/80 text-[11px] leading-relaxed">${escapeHTML(s.description || 'No description available.')}</p>
+                <div class="flex items-center justify-between mt-2 pt-2 border-t border-white/5">
+                    <span class="inline-block px-2 py-0.5 rounded text-[9px] font-bold"
+                          style="background:${markerColor}20;color:${markerColor};border:1px solid ${markerColor}40">
+                        ${escapeHTML(s.availability_status)}
+                    </span>
+                    <span class="text-[10px] text-white/40 truncate max-w-[120px]">${escapeHTML(s.location_name)}</span>
+                </div>
+            </div>`;
+
+        L.marker([lat, lng], { icon: pulseIcon }).bindPopup(popupContent).addTo(layerGroup);
+    });
+
+    setHTML("activeOutageCounter", `
+        <svg class="w-4 h-4 inline-block mr-1 fill-current text-[#00BA00]" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        Active Nodes: ${liveCount}`);
+}
+
+function filterStations(keyword) {
+    const term = (keyword || "").toLowerCase().trim();
+    filteredReports = allCachedReports.filter(r =>
+        String(r.station_name        || "").toLowerCase().includes(term) ||
+        String(r.location_name       || "").toLowerCase().includes(term) ||
+        String(r.station_type        || "").toLowerCase().includes(term) ||
+        String(r.availability_status || "").toLowerCase().includes(term)
+    );
+    currentPage = 1;
+    renderStatisticsFeed();
+    renderPaginationControls();
+}
+
+function renderStatisticsFeed() {
+    const feedContainer = getEl("recentReports");
+    if (!feedContainer) return;
+    feedContainer.innerHTML = "";
+
+    if (!filteredReports.length) {
+        feedContainer.innerHTML = `<p class="text-xs text-white/40 text-center py-12">No registered stations found.</p>`;
+        return;
+    }
+
+    const start    = (currentPage - 1) * perPage;
+    const pageData = filteredReports.slice(start, start + perPage);
+    const fragment = document.createDocumentFragment();
+
+    pageData.forEach((s) => {
+        const badgeStyle = getStatusBadgeStyle(s.availability_status);
+        const card = document.createElement("div");
+        card.className = "card-hover flex flex-col p-4 border border-white/5 rounded-2xl bg-[#1C1D30]/30 transition-all hover:border-white/10";
+
+        card.innerHTML = `
+            ${s.image
+                ? `<img src="${escapeHTML(s.image)}" class="w-full h-40 object-cover rounded-xl mb-3" alt="${escapeHTML(s.station_name)}">`
+                : '<div class="w-full h-40 bg-[#31324C]/60 rounded-xl mb-3 flex items-center justify-center text-white/30 text-xs">No Image</div>'
+            }
+            <div class="flex justify-between items-start gap-2">
+                <span class="font-bold text-white text-sm tracking-tight leading-tight truncate max-w-[210px]">${escapeHTML(s.station_name)}</span>
+                <span class="text-[9px] font-black tracking-wider uppercase px-2 py-0.5 rounded-md ${badgeStyle}">${escapeHTML(s.availability_status)}</span>
+            </div>
+            <span class="font-medium text-[11px] text-[#B5B5B5] mt-1.5 flex items-center gap-1">
+                <svg class="w-3 h-3 text-[#FFBB02]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                </svg>
+                ${escapeHTML(s.location_name)}
+            </span>
+            <div class="grid grid-cols-2 gap-2 mt-4">
+                <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-1.5 text-center">
+                    <span class="text-[8px] text-[#B5B5B5] font-bold tracking-wider uppercase opacity-40">Type</span>
+                    <span class="text-[11px] text-white font-extrabold mt-0.5 truncate">${escapeHTML(s.station_type)}</span>
+                </div>
+                <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-1.5 text-center">
+                    <span class="text-[8px] text-[#B5B5B5] font-bold tracking-wider uppercase opacity-40">Access</span>
+                    <span class="text-[11px] text-white font-extrabold mt-0.5 truncate">${escapeHTML(s.access_type || '—')}</span>
+                </div>
+            </div>
+            <div class="mt-3 grid grid-cols-2 gap-x-6 text-xs text-white/70">
+                <div><span class="opacity-60">Hours:</span> ${escapeHTML(s.operating_hours || 'N/A')}</div>
+                <div><span class="opacity-60">Charging:</span> ${escapeHTML(s.charging_type || 'N/A')}</div>
+            </div>
+            <p class="text-white/60 text-[11px] font-medium leading-relaxed mt-3 line-clamp-3">${escapeHTML(s.description || 'No description provided.')}</p>`;
+
+        const isAuthor = (typeof CURRENT_USER_ID !== "undefined" &&
+                          s.created_by && String(s.created_by) === String(CURRENT_USER_ID))
+                         || (currentFilterMode === 'mine');
+
+        if (isAuthor) {
+            const controls = document.createElement("div");
+            controls.className = "flex gap-4 justify-end pt-3 mt-3 border-t border-white/5 text-xs";
+
+            const editBtn = document.createElement("button");
+            editBtn.className = "text-[#FFBB02] hover:underline font-semibold flex items-center gap-1";
+            editBtn.innerHTML = `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+            </svg> Edit`;
+            editBtn.onclick = () => openEdit(s);   // ← uses the new openEdit()
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.className = "text-red-400 hover:underline font-semibold flex items-center gap-1";
+            deleteBtn.innerHTML = `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg> Delete`;
+            deleteBtn.onclick = () => deleteStation(s.id);
+
+            controls.appendChild(editBtn);
+            controls.appendChild(deleteBtn);
+            card.appendChild(controls);
+        }
+
+        fragment.appendChild(card);
+    });
+
+    feedContainer.appendChild(fragment);
+}
+
+/* ================= DELETE ================= */
+async function deleteStation(id) {
+    const confirmed = await showConfirm("Permanently delete this station? This cannot be undone.");
+    if (!confirmed) return;
+
+    try {
+        const result = await api(`${API_BASE}/delete.php`, {
+            method: "POST",
+            body: JSON.stringify({ station_id: id })
+        });
+        showAlert(result.success ? "Success" : "Error", result.message || "Operation complete.", result.success ? "success" : "error");
+        if (result.success) loadStations();
+    } catch (err) {
+        console.error("deleteStation error:", err);
+        showAlert("System Error", "Failed to connect to server.", "error");
+    }
+}
+
+/* ================= SUBMIT: CREATE ================= */
+document.addEventListener("DOMContentLoaded", () => {
+
+    buildModalHTML();
+
+    /* ── Create form ── */
+    const createForm = getEl("createForm");
+    if (createForm) {
+        createForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            // ✅ Read every value fresh from the DOM at submit time
+            const payload = {
+                station_name:        (getEl("create_station_name")?.value        ?? "").trim(),
+                location_name:       (getEl("create_location_name")?.value       ?? "").trim(),
+                latitude:            (getEl("create_latitude")?.value            ?? "").trim(),
+                longitude:           (getEl("create_longitude")?.value           ?? "").trim(),
+                station_type:         getEl("create_station_type")?.value        ?? "",
+                access_type:          getEl("create_access_type")?.value         ?? "",
+                availability_status:  getEl("create_availability_status")?.value ?? "",
+                charging_type:        getEl("create_charging_type")?.value       ?? "",
+                operating_hours:     (getEl("create_operating_hours")?.value     ?? "").trim(),
+                description:         (getEl("create_description")?.value         ?? "").trim(),
+            };
+
+            if (!payload.station_name)  { showAlert("Validation Error", "Station name is required.", "error"); return; }
+            if (!payload.location_name) { showAlert("Validation Error", "Location name is required.", "error"); return; }
+            if (!payload.latitude || !payload.longitude) { showAlert("Missing Coordinates", "Pin a location on the map.", "error"); return; }
+            if (!payload.station_type)  { showAlert("Validation Error", "Select a station type.", "error"); return; }
+            if (!payload.availability_status) { showAlert("Validation Error", "Select an availability status.", "error"); return; }
+
+            console.log("🚀 CREATE payload:", payload);
+
+            try {
+                const result = await api(`${API_BASE}/create.php`, {
+                    method: "POST",
+                    body:   JSON.stringify(payload)
+                });
+
+                console.log("📥 CREATE response:", result);
+
+                if (result.success) {
+                    showAlert("Success", result.message || "Station created successfully.");
+                    closeCreatePopup();
+                    createForm.reset();
+                    loadStations();
+                } else {
+                    showAlert("Error", result.message || "Create failed.", "error");
+                }
+            } catch (err) {
+                console.error("Create submit error:", err);
+                showAlert("System Error", "Failed to reach server.", "error");
+            }
         });
     }
-</script>
+
+    /* ── Edit / Update form ── */
+    const editForm = getEl("editForm");
+    if (editForm) {
+        editForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            // ✅ ID comes ONLY from the hidden input — never from a JS variable
+            const id = (getEl("edit_id")?.value ?? "").trim();
+            if (!id) {
+                showAlert("Error", "Station ID is missing. Please re-open the edit modal.", "error");
+                return;
+            }
+
+            // ✅ Every field read fresh — no stale object data, no default overrides
+            const payload = {
+                id,
+                station_name:        (getEl("edit_station_name")?.value        ?? "").trim(),
+                location_name:       (getEl("edit_location_name")?.value       ?? "").trim(),
+                latitude:            (getEl("edit_latitude")?.value            ?? "").trim(),
+                longitude:           (getEl("edit_longitude")?.value           ?? "").trim(),
+                station_type:         getEl("edit_station_type")?.value        ?? "",
+                access_type:          getEl("edit_access_type")?.value         ?? "",
+                availability_status:  getEl("edit_availability_status")?.value ?? "",
+                charging_type:        getEl("edit_charging_type")?.value       ?? "",
+                operating_hours:     (getEl("edit_operating_hours")?.value     ?? "").trim(),
+                description:         (getEl("edit_description")?.value         ?? "").trim(),
+            };
+
+            if (!payload.station_name)  { showAlert("Validation Error", "Station name is required.", "error"); return; }
+            if (!payload.location_name) { showAlert("Validation Error", "Location name is required.", "error"); return; }
+            if (!payload.latitude || !payload.longitude) { showAlert("Missing Coordinates", "Pin a location on the map.", "error"); return; }
+            if (!payload.station_type)  { showAlert("Validation Error", "Select a station type.", "error"); return; }
+            if (!payload.availability_status) { showAlert("Validation Error", "Select an availability status.", "error"); return; }
+
+            console.log("🚀 UPDATE payload:", payload);
+
+            try {
+                const result = await api(`${API_BASE}/update.php`, {
+                    method: "POST",
+                    body:   JSON.stringify(payload)
+                });
+
+                console.log("📥 UPDATE response:", result);
+
+                if (result.success) {
+                    showAlert("Success", result.message || "Station updated successfully.");
+                    closeEditPopup();
+                    loadStations();
+                } else {
+                    showAlert("Error", result.message || "Update failed.", "error");
+                }
+            } catch (err) {
+                console.error("Edit submit error:", err);
+                showAlert("System Error", "Failed to reach server.", "error");
+            }
+        });
+    }
+
+    loadUserLocation();
+    loadStations();
+    batteryDetection();
+    setInterval(loadStations, 10000);
+});
+
+/* ================= PAGINATION ================= */
+function renderPaginationControls() {
+    const paginationContainer = getEl("pagination");
+    if (!paginationContainer) return;
+    paginationContainer.innerHTML = "";
+
+    const totalPages = Math.ceil(filteredReports.length / perPage);
+    if (totalPages <= 1) return;
+
+    const fragment = document.createDocumentFragment();
+
+    const prevBtn = document.createElement("button");
+    prevBtn.textContent = "Prev";
+    prevBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all ${currentPage === 1 ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40' : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'}`;
+    prevBtn.onclick = () => { if (currentPage > 1) { currentPage--; renderStatisticsFeed(); renderPaginationControls(); } };
+    fragment.appendChild(prevBtn);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement("button");
+        pageBtn.textContent = i;
+        pageBtn.className = `px-3 py-1.5 text-xs font-black rounded-lg transition-all border ${i === currentPage ? 'bg-[#FFBB02] text-black border-[#FFBB02]' : 'bg-[#31324C]/20 text-[#B5B5B5] border-white/5 hover:text-white'}`;
+        pageBtn.onclick = () => { currentPage = i; renderStatisticsFeed(); renderPaginationControls(); };
+        fragment.appendChild(pageBtn);
+    }
+
+    const nextBtn = document.createElement("button");
+    nextBtn.textContent = "Next";
+    nextBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all ${currentPage === totalPages ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40' : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'}`;
+    nextBtn.onclick = () => { if (currentPage < totalPages) { currentPage++; renderStatisticsFeed(); renderPaginationControls(); } };
+    fragment.appendChild(nextBtn);
+
+    paginationContainer.appendChild(fragment);
+}
+
+/* ================= BATTERY ================= */
+function batteryDetection() {
+    if (!navigator.getBattery) return;
+    navigator.getBattery().then(battery => {
+        function update() {
+            const levelSpan    = getEl("batteryLevel");
+            const chargingSpan = getEl("batteryCharging");
+            const statusBox    = getEl("batteryStatus");
+            if (levelSpan)    levelSpan.innerText    = Math.round(battery.level * 100) + "%";
+            if (chargingSpan) chargingSpan.innerText = battery.charging ? "Yes" : "No";
+            if (battery.level <= 0.20 && !battery.charging) {
+                const toast = getEl("battery-warning");
+                if (toast) toast.classList.remove("invisible", "opacity-0");
+                if (statusBox) { statusBox.innerText = "Low Battery"; statusBox.style.background = "#e74c3c"; }
+            } else if (battery.charging) {
+                if (statusBox) { statusBox.innerText = "Charging"; statusBox.style.background = "#2ecc71"; }
+            } else {
+                if (statusBox) { statusBox.innerText = "Normal"; statusBox.style.background = "#f39c12"; }
+            }
+        }
+        update();
+        battery.addEventListener("levelchange", update);
+        battery.addEventListener("chargingchange", update);
+    });
+}
+
+function closeBatteryWarning() {
+    const toast = getEl("battery-warning");
+    if (toast) toast.classList.add("invisible", "opacity-0");
+}
+
+/* ================= MOBILE MENU ================= */
+const menuToggle = getEl('menuToggle');
+const sidebar    = getEl('sidebar');
+const overlay    = getEl('overlay');
+
+if (menuToggle && sidebar && overlay) {
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('-translate-x-full');
+        overlay.classList.toggle('hidden');
+    });
+    overlay.addEventListener('click', () => {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+    });
+}
+    </script>
 </body>
 
 </html>
