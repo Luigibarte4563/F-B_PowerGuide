@@ -11,7 +11,7 @@ $conn = getConnection();
    AUTH CHECK
 ========================= */
 if (!isset($_SESSION['user'])) {
-    header("Location: " . PUBLIC_URL . "/auth/auth.php?page=login");
+    header("Location: " . FRONTEND_URL . "/src/auth/auth.php?page=login");
     exit();
 }
 
@@ -19,7 +19,7 @@ if (!isset($_SESSION['user'])) {
    METHOD CHECK
 ========================= */
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: " . PUBLIC_URL . "/dashboard/user/user.php");
+    header("Location: " . FRONTEND_URL . "/src/dashboard/user/settings.php");
     exit();
 }
 
@@ -30,41 +30,50 @@ $name  = trim($_POST['name'] ?? '');
 $email = trim($_POST['email'] ?? '');
 
 if ($name === '' || $email === '') {
-    header("Location: " . PUBLIC_URL . "/dashboard/update_profile.php?error=empty_fields");
+    header("Location: " . FRONTEND_URL . "/src/dashboard/user/settings.php?error=empty_fields");
     exit();
 }
 
 /* =========================
    IMAGE UPLOAD
 ========================= */
+
 $picturePath = null;
 
 if (isset($_FILES['picture']) && $_FILES['picture']['error'] === 0) {
 
-    $uploadDir = __DIR__ . "/../../../public/uploads/";
+    // ✅ FIXED: correct physical upload directory
+    $uploadDir = __DIR__ . '/../../../backend/public/uploads/';
 
-    // ensure folder exists
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
 
-    $fileName = time() . "_" . basename($_FILES["picture"]["name"]);
+    // original filename
+    $originalName = basename($_FILES["picture"]["name"]);
+
+    // sanitize filename
+    $safeName = preg_replace("/[^a-zA-Z0-9\._-]/", "", $originalName);
+
+    // unique filename
+    $fileName = time() . "_" . $safeName;
+
     $targetFile = $uploadDir . $fileName;
 
-    // safer extension check
-    $imageFileType = strtolower(pathinfo($_FILES["picture"]["name"], PATHINFO_EXTENSION));
-
+    // validate extension from ORIGINAL file
+    $ext = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
     $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
-    if (!in_array($imageFileType, $allowed)) {
-        header("Location: " . PUBLIC_URL . "/dashboard/update_profile.php?error=invalid_image");
+    if (!in_array($ext, $allowed)) {
+        header("Location: " . FRONTEND_URL . "/src/dashboard/user/settings.php?error=invalid_image");
         exit();
     }
 
+    // move file
     if (move_uploaded_file($_FILES["picture"]["tmp_name"], $targetFile)) {
 
-        // ✅ FIXED: correct public URL path (NO HARDCODED PowerGuide)
-        $picturePath = PUBLIC_URL . "/uploads/" . $fileName;
+        // ✅ FIXED PUBLIC URL (THIS MUST MATCH YOUR PROJECT FOLDER)
+        $picturePath = "/PowerGuides/backend/public/uploads/" . $fileName;
     }
 }
 
@@ -105,5 +114,5 @@ if ($picturePath) {
 /* =========================
    REDIRECT SUCCESS
 ========================= */
-header("Location: " . PUBLIC_URL . "/dashboard/user/user.php?success=1");
+header("Location: " . FRONTEND_URL . "/src/dashboard/user/settings.php?success=1");
 exit();

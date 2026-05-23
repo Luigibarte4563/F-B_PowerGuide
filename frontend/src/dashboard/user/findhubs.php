@@ -189,7 +189,7 @@ $current_user_id = $user['id'] ?? null;
                 <span
                     class="text-[11px] font-bold tracking-widest text-white px-4 pt-4 mb-2 opacity-50">COMMUNITY</span>
 
-                <a href="settings.html"
+                <a href="settings.php"
                     class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
                     <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-black transition-colors" fill="none"
                         stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

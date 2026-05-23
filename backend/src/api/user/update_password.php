@@ -7,40 +7,59 @@ require_once __DIR__ . '/../../../src/config/app.php';
 
 $conn = getConnection();
 
+/* =========================
+   AUTH CHECK
+========================= */
 if (!isset($_SESSION['user'])) {
-
-    header("Location: " . PUBLIC_URL . "/auth/auth.php?page=login");
+    header("Location: " . FRONTEND_URL . "/auth/auth.php?page=login");
     exit();
 }
 
 $user_id = $_SESSION['user']['id'];
 
-$current = $_POST['current_password'] ?? '';
-$new = $_POST['new_password'] ?? '';
-$confirm = $_POST['confirm_password'] ?? '';
+/* =========================
+   INPUT
+========================= */
+$current = trim($_POST['current_password'] ?? '');
+$new     = trim($_POST['new_password'] ?? '');
+$confirm = trim($_POST['confirm_password'] ?? '');
 
-if (empty($current) || empty($new) || empty($confirm)) {
-
-    header("Location: " . PUBLIC_URL . "/dashboard/user/user.php?error=empty_fields");
+/* =========================
+   VALIDATION
+========================= */
+if ($current === '' || $new === '' || $confirm === '') {
+    header("Location: " . FRONTEND_URL . "/src/dashboard/user/settings.php?error=empty_fields");
     exit();
 }
 
 if ($new !== $confirm) {
-
-    header("Location: " . PUBLIC_URL . "/dashboard/user/user.php?error=password_mismatch");
+    header("Location: " . FRONTEND_URL . "/src/dashboard/user/settings.php?error=password_mismatch");
     exit();
 }
 
-$stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+/* =========================
+   GET USER
+========================= */
+$stmt = $conn->prepare("SELECT password FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!password_verify($current, $user['password'])) {
-
-    header("Location: " . PUBLIC_URL . "/dashboard/user/user.php?error=wrong_password");
+if (!$user) {
+    header("Location: " . FRONTEND_URL . "/src/dashboard/user/settings.php?error=user_not_found");
     exit();
 }
 
+/* =========================
+   VERIFY PASSWORD
+========================= */
+if (!password_verify($current, $user['password'])) {
+    header("Location: " . FRONTEND_URL . "/src/dashboard/user/settings.php?error=wrong_password");
+    exit();
+}
+
+/* =========================
+   UPDATE PASSWORD
+========================= */
 $newHashed = password_hash($new, PASSWORD_BCRYPT);
 
 $stmt = $conn->prepare("
@@ -51,6 +70,8 @@ $stmt = $conn->prepare("
 
 $stmt->execute([$newHashed, $user_id]);
 
-header("Location: " . PUBLIC_URL . "/dashboard/user/user.php?success=password_updated");
+/* =========================
+   SUCCESS
+========================= */
+header("Location: " . FRONTEND_URL . "/src/dashboard/user/settings.php?success=password_updated");
 exit();
-?>
