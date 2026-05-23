@@ -241,14 +241,6 @@ $current_user_id = $user['id'] ?? null;
             <!-- Title and Status -->
             <div>
                 <h1 class="text-2xl lg:text-3xl font-black tracking-tight text-white">Scheduled Maintenance</h1>
-                <span class="text-xs lg:text-sm text-[#B5B5B5] flex items-center gap-2 mt-1">
-                    System status:
-                    <span class="flex items-center gap-1.5 text-[#34D399] font-medium" id="syncStatus">
-                        <!-- Loading state indicator before JS replaces it -->
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#34D399] animate-pulse"></span>
-                        Synchronizing...
-                    </span>
-                </span>
             </div>
 
             <!-- Actions and Search -->

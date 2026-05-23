@@ -246,12 +246,6 @@ $current_user_id = $user['id'] ?? null;
                 class="mx-4 lg:mx-8 mt-14 lg:mt-8 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h1 class="text-2xl lg:text-3xl font-black tracking-tight">Interactive Outage Map</h1>
-                    <span class="text-xs lg:text-sm text-[#B5B5B5] flex items-center gap-2 mt-1">
-                        System status:
-                        <span class="flex items-center gap-1.5 text-[#34D399] font-medium" id="syncStatus">
-                            Synchronizing...
-                        </span>
-                    </span>
                 </div>
 
                 <div class="flex items-center gap-4 self-end sm:self-auto">
