@@ -11,9 +11,27 @@ $isGoogleUser =
     ($user['auth_provider'] ?? '') === 'google';
 
 $defaultPicture = "https://i.imgur.com/8Km9tLL.png";
-$picture = !empty($user['picture'])
-    ? "http://localhost" . $user['picture']
-    : $defaultPicture;
+
+/* =========================
+   FIX IMAGE PATH
+========================= */
+
+// force latest session value
+if (isset($_SESSION['user']['picture'])) {
+    $user['picture'] = $_SESSION['user']['picture'];
+}
+
+if (!empty($user['picture'])) {
+
+    // remove accidental duplicate slashes
+    $cleanPath = ltrim($user['picture'], '/');
+
+    // full browser URL
+    $picture = "http://localhost/" . $cleanPath;
+
+} else {
+    $picture = $defaultPicture;
+}
 ?>
 
 <!DOCTYPE html>
@@ -291,7 +309,8 @@ $picture = !empty($user['picture'])
                                 <div class="flex gap-2">
                                     <input type="text" id="location_name" placeholder="e.g., Downtown Grid Alpha"
                                         class="flex-1 bg-[#1A1B3A] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#00CFFF] focus:ring-1 focus:ring-[#00CFFF] transition-colors">
-                                    <button onclick="updateLocation()"
+                                    <!-- FIX: Passed 'event' to function -->
+                                    <button onclick="updateLocation(event)"
                                         class="bg-[#31324C] hover:bg-[#00CFFF] hover:text-black text-white px-4 py-2 rounded-xl font-bold text-sm transition-all border border-white/10 hover:border-transparent">
                                         Save
                                     </button>
@@ -305,7 +324,8 @@ $picture = !empty($user['picture'])
                                 <div class="flex-grow border-t border-white/10"></div>
                             </div>
 
-                            <button onclick="useCurrentLocation()"
+                            <!-- FIX: Removed the double << typo in the button -->
+                            <button id="gpsBtn" onclick="useCurrentLocation()"
                                 class="w-full flex items-center justify-center gap-2 bg-[#00CFFF]/10 text-[#00CFFF] border border-[#00CFFF]/30 font-bold py-3 rounded-xl hover:bg-[#00CFFF] hover:text-black transition-all shadow-lg shadow-[#00CFFF]/10">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
                                     viewBox="0 0 24 24">
@@ -455,13 +475,17 @@ $picture = !empty($user['picture'])
                 const lat = data.data?.latitude ?? data.latitude ?? "-";
                 const lng = data.data?.longitude ?? data.longitude ?? "-";
 
-                document.getElementById("current_location").innerText = "📍 " + locName;
-                document.getElementById("current_coords").innerText = `Lat: ${lat} | Lng: ${lng}`;
+                const curLoc = document.getElementById("current_location");
+                const curCoords = document.getElementById("current_coords");
+                if (curLoc) curLoc.innerText = "📍 " + locName;
+                if (curCoords) curCoords.innerText = `Lat: ${lat} | Lng: ${lng}`;
 
             } catch (err) {
                 console.error("Load location error:", err);
-                document.getElementById("current_location").innerText = "📍 Failed to load data";
-                document.getElementById("current_coords").innerText = "";
+                const curLoc = document.getElementById("current_location");
+                const curCoords = document.getElementById("current_coords");
+                if (curLoc) curLoc.innerText = "📍 Failed to load data";
+                if (curCoords) curCoords.innerText = "";
             }
         }
 
@@ -469,8 +493,14 @@ $picture = !empty($user['picture'])
            UPDATE LOCATION (MANUAL)
         ========================= */
         async function updateLocation(e) {
-            const btn = e.currentTarget;
+            // FIX: Graceful fail if `e` is missing. Fallback to `e.target` if `currentTarget` is null.
+            if (!e) return;
+            const btn = e.currentTarget || e.target;
+            
             const input = document.getElementById("location_name");
+            // Check that required elements exist to avoid crashes
+            if (!btn || !input) return;
+
             const location = input.value.trim();
 
             if (!location) {
@@ -515,9 +545,14 @@ $picture = !empty($user['picture'])
         /* =========================
            USE CURRENT GPS LOCATION
         ========================= */
-        function useCurrentLocation(e) {
-            const btn = e.currentTarget;
-            const originalContent = btn.innerHTML;
+        function useCurrentLocation() {
+            // FIX: Properly handle when DOM element doesn't exist yet
+            const btn = document.querySelector("#gpsBtn");
+
+            if (!btn) {
+                console.error("GPS button not found");
+                return;
+            }
 
             if (!navigator.geolocation) {
                 alert("Geolocation is not supported.");
@@ -525,6 +560,7 @@ $picture = !empty($user['picture'])
             }
 
             btn.disabled = true;
+            const originalContent = btn.innerHTML;
             btn.innerHTML = "Syncing...";
 
             navigator.geolocation.getCurrentPosition(

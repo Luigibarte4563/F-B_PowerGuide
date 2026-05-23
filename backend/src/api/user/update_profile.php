@@ -42,26 +42,29 @@ $picturePath = null;
 
 if (isset($_FILES['picture']) && $_FILES['picture']['error'] === 0) {
 
-    // ✅ FIXED: correct physical upload directory
-    $uploadDir = __DIR__ . '/../../../backend/public/uploads/';
+    // ✅ Correct physical uploads folder
+    $uploadDir = __DIR__ . '/../../../public/uploads/';
 
+    // ✅ Create uploads folder if missing
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
 
-    // original filename
-    $originalName = basename($_FILES["picture"]["name"]);
+    // ✅ Original filename
+    $originalName = basename($_FILES['picture']['name']);
 
-    // sanitize filename
-    $safeName = preg_replace("/[^a-zA-Z0-9\._-]/", "", $originalName);
+    // ✅ Sanitize filename
+    $safeName = preg_replace("/[^a-zA-Z0-9._-]/", "", $originalName);
 
-    // unique filename
+    // ✅ Unique filename
     $fileName = time() . "_" . $safeName;
 
-    $targetFile = $uploadDir . $fileName;
+    // ✅ Final physical file path
+    $targetFile = rtrim($uploadDir, '/\\') . DIRECTORY_SEPARATOR . $fileName;
 
-    // validate extension from ORIGINAL file
+    // ✅ Validate extension
     $ext = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+
     $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
     if (!in_array($ext, $allowed)) {
@@ -69,17 +72,22 @@ if (isset($_FILES['picture']) && $_FILES['picture']['error'] === 0) {
         exit();
     }
 
-    // move file
-    if (move_uploaded_file($_FILES["picture"]["tmp_name"], $targetFile)) {
+    // ✅ Upload file
+    if (move_uploaded_file($_FILES['picture']['tmp_name'], $targetFile)) {
 
-        // ✅ FIXED PUBLIC URL (THIS MUST MATCH YOUR PROJECT FOLDER)
+        // ✅ Correct browser-accessible path
         $picturePath = "/PowerGuides/backend/public/uploads/" . $fileName;
+
+    } else {
+
+        header("Location: " . FRONTEND_URL . "/src/dashboard/user/settings.php?error=upload_failed");
+        exit();
     }
 }
-
 /* =========================
    UPDATE DATABASE
 ========================= */
+
 $user_id = $_SESSION['user']['id'];
 
 if ($picturePath) {
@@ -104,6 +112,7 @@ if ($picturePath) {
 /* =========================
    UPDATE SESSION
 ========================= */
+
 $_SESSION['user']['name'] = $name;
 $_SESSION['user']['email'] = $email;
 
@@ -114,5 +123,7 @@ if ($picturePath) {
 /* =========================
    REDIRECT SUCCESS
 ========================= */
+
 header("Location: " . FRONTEND_URL . "/src/dashboard/user/settings.php?success=1");
 exit();
+?>
