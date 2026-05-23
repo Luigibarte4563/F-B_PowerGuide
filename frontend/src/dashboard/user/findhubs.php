@@ -516,39 +516,6 @@ $current_user_id = $user['id'] ?? null;
         </div>
     </div>
 
-    <!-- ================= PREMIUM CUSTOM LIGHTWEIGHT ALERT MODAL ================= -->
-    <div id="customAlert" 
-         class="fixed inset-0 bg-[#03041A]/85 backdrop-blur-sm z-[6000] flex justify-center items-center p-4 opacity-0 invisible transition-all duration-300">
-        <div class="bg-gradient-to-b from-[#1E203C] to-[#141527] border border-white/10 rounded-2xl max-w-sm w-full p-6 shadow-2xl transform scale-95 transition-all duration-300">
-            <div id="alertIconContainer" class="w-12 h-12 rounded-xl flex items-center justify-center mb-4">
-                <!-- Dynamic SVG icon -->
-            </div>
-            <h3 id="alertTitle" class="text-white text-lg font-bold">Alert</h3>
-            <p id="alertMessage" class="text-white/60 text-sm mt-2 leading-relaxed">Notification content goes here.</p>
-            <div class="mt-6">
-                <button id="alertCloseBtn" class="w-full py-2.5 bg-[#FFBB02] hover:bg-[#D99A00] text-[#03041A] rounded-xl text-sm font-bold shadow-lg transition-all">OK</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= PREMIUM CUSTOM CONFIRMATION OVERLAY ================= -->
-    <div id="customConfirm" 
-         class="fixed inset-0 bg-[#03041A]/85 backdrop-blur-sm z-[5500] flex justify-center items-center p-4 opacity-0 invisible transition-all duration-300">
-        <div class="bg-gradient-to-b from-[#1E203C] to-[#141527] border border-white/10 rounded-2xl max-w-md w-full p-6 shadow-2xl transform scale-95 transition-all duration-300">
-            <div class="w-12 h-12 bg-red-500/10 text-red-500 rounded-xl flex items-center justify-center mb-4">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-            </div>
-            <h3 class="text-white text-lg font-bold">Confirm Action</h3>
-            <p id="confirmMessage" class="text-white/60 text-sm mt-2 leading-relaxed">Are you absolutely sure you want to proceed with this destructive operation?</p>
-            <div class="flex gap-3 mt-6">
-                <button id="confirmCancelBtn" class="flex-1 py-2.5 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-white rounded-xl text-sm font-semibold transition-all">Cancel</button>
-                <button id="confirmProceedBtn" class="flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-sm font-bold shadow-lg transition-all">Proceed</button>
-            </div>
-        </div>
-    </div>
-
     <!-- ================= JAVASCRIPT SYSTEM ENGINE ================= -->
     <script>
     /* ================= STREAMING_CHUNK:Configuring Leaflet Map layers and parameters... ================= */
@@ -568,7 +535,26 @@ $current_user_id = $user['id'] ?? null;
     let currentFilterMode = 'all';
     let currentPage = 1;
     const perPage = 3;
-    let hasAlertedBattery = false;
+
+    /* ================= SAFE DOM HELPERS (PREVENT NULL ERRORS) ================= */
+    function getEl(id) {
+        return document.getElementById(id);
+    }
+
+    function setValue(id, value) {
+        const el = getEl(id);
+        if (el) el.value = value ?? "";
+    }
+
+    function setText(id, value) {
+        const el = getEl(id);
+        if (el) el.textContent = value ?? "";
+    }
+
+    function setHTML(id, value) {
+        const el = getEl(id);
+        if (el) el.innerHTML = value ?? "";
+    }
 
     /* ================= SAFE TEXT HELPER (XSS PROTECTION) ================= */
     function escapeHTML(str) {
@@ -580,87 +566,37 @@ $current_user_id = $user['id'] ?? null;
             .replace(/'/g, "&#039;");
     }
 
-    /* ================= STREAMING_CHUNK:Implementing premium custom modal alert triggers... ================= */
+    /* ================= CENTRALIZED STATUS HELPERS ================= */
+    function getStatusColor(status) {
+        const s = String(status || "available").toLowerCase().trim();
+        switch (s) {
+            case "available": return "#34FB34";
+            case "busy": return "#FFBB02";
+            case "offline": return "#FF2E1F";
+            case "maintenance": return "#00E5FF";
+            default: return "#34FB34";
+        }
+    }
+
+    function getStatusBadgeStyle(status) {
+        const s = String(status || "available").toLowerCase().trim();
+        switch (s) {
+            case "available": return "bg-green-500/10 text-[#34FB34] border border-green-500/20";
+            case "busy": return "bg-yellow-500/10 text-[#FFBB02] border border-yellow-500/20";
+            case "offline": return "bg-red-500/10 text-[#FF2E1F] border border-red-500/20";
+            case "maintenance": return "bg-blue-500/10 text-[#00E5FF] border border-blue-500/20";
+            default: return "bg-green-500/10 text-[#34FB34] border border-green-500/20";
+        }
+    }
+
+    /* ================= STREAMING_CHUNK:Implementing simple standard alert dialogue... ================= */
     function showAlert(title, message, type = "info") {
-        const modal = document.getElementById("customAlert");
-        if (!modal) {
-            console.warn(title, message);
-            return;
-        }
-        const iconContainer = document.getElementById("alertIconContainer");
-        const aTitle = document.getElementById("alertTitle");
-        const aMsg = document.getElementById("alertMessage");
-
-        if (aTitle) aTitle.innerText = title.toUpperCase();
-        if (aMsg) aMsg.innerText = message;
-
-        // Dynamic icon styling
-        if (iconContainer) {
-            iconContainer.className = "w-12 h-12 rounded-xl flex items-center justify-center mb-4";
-            if (type === "success") {
-                iconContainer.classList.add("bg-green-500/10", "text-green-400");
-                iconContainer.innerHTML = `
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                `;
-            } else if (type === "error") {
-                iconContainer.classList.add("bg-red-500/10", "text-red-400");
-                iconContainer.innerHTML = `
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                `;
-            } else {
-                iconContainer.classList.add("bg-[#FFBB02]/10", "text-[#FFBB02]");
-                iconContainer.innerHTML = `
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                `;
-            }
-        }
-
-        modal.classList.remove("invisible", "opacity-0");
-        const innerBox = modal.querySelector("div");
-        if (innerBox) innerBox.classList.remove("scale-95");
+        alert((title ? title.toUpperCase() + ": " : "") + message);
     }
 
-    document.getElementById("alertCloseBtn").addEventListener("click", () => {
-        const modal = document.getElementById("customAlert");
-        if (modal) {
-            modal.classList.add("invisible", "opacity-0");
-            const innerBox = modal.querySelector("div");
-            if (innerBox) innerBox.classList.add("scale-95");
-        }
-    });
-
-    /* ================= STREAMING_CHUNK:Implementing custom overlay confirm promise... ================= */
-    let resolveConfirm;
+    /* ================= STREAMING_CHUNK:Implementing simple standard confirm dialogue... ================= */
     function showConfirm(message) {
-        document.getElementById("confirmMessage").innerText = message;
-        const modal = document.getElementById("customConfirm");
-        modal.classList.remove("invisible", "opacity-0");
-        modal.querySelector("div").classList.remove("scale-95");
-
-        return new Promise((resolve) => {
-            resolveConfirm = resolve;
-        });
-    }
-
-    document.getElementById("confirmCancelBtn").addEventListener("click", () => {
-        closeConfirmModal(false);
-    });
-
-    document.getElementById("confirmProceedBtn").addEventListener("click", () => {
-        closeConfirmModal(true);
-    });
-
-    function closeConfirmModal(result) {
-        const modal = document.getElementById("customConfirm");
-        modal.classList.add("invisible", "opacity-0");
-        modal.querySelector("div").classList.add("scale-95");
-        if (resolveConfirm) resolveConfirm(result);
+        return Promise.resolve(confirm(message));
     }
 
     /* ================= STREAMING_CHUNK:Initializing picker map viewport components... ================= */
@@ -669,13 +605,9 @@ $current_user_id = $user['id'] ?? null;
 
     function initModalMap() {
         if (modalMap) return;
-
         modalMap = L.map('modalMap', { zoomControl: false }).setView([16.04, 120.33], 13);
         L.control.zoom({ position: 'bottomright' }).addTo(modalMap);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19
-        }).addTo(modalMap);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(modalMap);
 
         modalMap.on('click', function (e) {
             setModalCoordinates(e.latlng.lat, e.latlng.lng, false);
@@ -684,16 +616,15 @@ $current_user_id = $user['id'] ?? null;
 
     /* ================= STREAMING_CHUNK:Implementing geocoding & coordinate triggers... ================= */
     function setModalCoordinates(lat, lng, skipGeocode = false) {
-        document.getElementById("latitude").value = Number(lat).toFixed(6);
-        document.getElementById("longitude").value = Number(lng).toFixed(6);
+        setValue("latitude", Number(lat).toFixed(6));
+        setValue("longitude", Number(lng).toFixed(6));
 
         if (modalSelectionMarker) {
             modalSelectionMarker.setLatLng([lat, lng]);
         } else if (modalMap) {
             modalSelectionMarker = L.marker([lat, lng], { draggable: true }).addTo(modalMap);
             modalSelectionMarker.on('dragend', function (event) {
-                const marker = event.target;
-                const position = marker.getLatLng();
+                const position = event.target.getLatLng();
                 setModalCoordinates(position.lat, position.lng, false);
             });
         }
@@ -703,16 +634,16 @@ $current_user_id = $user['id'] ?? null;
         }
 
         if (!skipGeocode) {
-            const locationInput = document.getElementById("location_name");
+            const locationInput = getEl("location_name");
             if (locationInput) {
                 locationInput.value = "Fetching address from GPS telemetry...";
                 fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
                     .then(res => res.json())
                     .then(data => {
-                        locationInput.value = data.display_name || `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
+                        if (locationInput) locationInput.value = data.display_name || `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
                     })
                     .catch(() => {
-                        locationInput.value = `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
+                        if (locationInput) locationInput.value = `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
                     });
             }
         }
@@ -725,82 +656,68 @@ $current_user_id = $user['id'] ?? null;
             return;
         }
 
-        const locationInput = document.getElementById("location_name");
-        if (locationInput) {
-            locationInput.value = "Interrogating GPS Satellite telemetry...";
-        }
+        const locationInput = getEl("location_name");
+        if (locationInput) locationInput.value = "Interrogating GPS Satellite telemetry...";
 
         navigator.geolocation.getCurrentPosition(
             async (position) => {
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
-
                 setModalCoordinates(lat, lng, false);
 
-                if (!modalMap) {
-                    initModalMap();
-                }
+                if (!modalMap) initModalMap();
 
                 setTimeout(() => {
-                    modalMap.invalidateSize();
-                    modalMap.setView([lat, lng], 16);
+                    if (modalMap) {
+                        modalMap.invalidateSize();
+                        modalMap.setView([lat, lng], 16);
+                    }
                 }, 100);
             },
             (error) => {
                 console.error("Geolocation error:", error);
-                if (locationInput && locationInput.value.includes("GPS")) {
-                    locationInput.value = "";
-                }
+                const locationInput = getEl("location_name");
+                if (locationInput && locationInput.value.includes("GPS")) locationInput.value = "";
 
                 let msg = "Unable to fetch location telemetry.";
-
                 switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                        msg = "Permission denied. Please allow location access.";
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        msg = "Location unavailable.";
-                        break;
-                    case error.TIMEOUT:
-                        msg = "Location query timed out.";
-                        break;
+                    case error.PERMISSION_DENIED: msg = "Permission denied. Please allow location access."; break;
+                    case error.POSITION_UNAVAILABLE: msg = "Location unavailable."; break;
+                    case error.TIMEOUT: msg = "Location query timed out."; break;
                 }
-
                 showAlert("GPS Error", msg, "error");
             },
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
-            }
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
         );
     }
 
     /* ================= STREAMING_CHUNK:Managing form popup display transitions... ================= */
     function openPopup(editMode = false) {
-        const popup = document.getElementById("popup");
-        popup.classList.remove("invisible", "opacity-0");
+        const popup = getEl("popup");
+        if (popup) popup.classList.remove("invisible", "opacity-0");
 
         setTimeout(() => {
             initModalMap();
-            modalMap.invalidateSize();
+            if (modalMap) modalMap.invalidateSize();
 
             if (!editMode) {
-                document.getElementById("stationForm").reset();
-                document.getElementById("station_id").value = "";
-                document.getElementById("formTitle").innerText = "Register Power Station";
-                const submitBtn = document.getElementById("submitBtn");
-                if (submitBtn) {
-                    submitBtn.textContent = "Submit Station Node";
-                }
+                const form = getEl("stationForm");
+                if (form) form.reset();
+                
+                setValue("station_id", "");
+                setText("formTitle", "Register Power Station");
+                
+                const submitBtn = getEl("submitBtn");
+                if (submitBtn) submitBtn.textContent = "Submit Station Node";
+                
                 setModalCoordinates(16.043, 120.333, true);
             }
         }, 50);
     }
 
     function closePopup() {
-        const popup = document.getElementById("popup");
-        popup.classList.add("invisible", "opacity-0");
+        const popup = getEl("popup");
+        if (popup) popup.classList.add("invisible", "opacity-0");
     }
 
     /* ================= STREAMING_CHUNK:Establishing AJAX integration workflows with Power station API... ================= */
@@ -825,11 +742,7 @@ $current_user_id = $user['id'] ?? null;
     async function loadUserLocation() {
         try {
             const result = await api(`${API_BASE}/get_near_location.php`);
-
-            if (!result.success) {
-                console.log("Relative Location telemetry unavailable:", result.message);
-                return;
-            }
+            if (!result.success) return;
 
             const lat = parseFloat(result.data.latitude);
             const lng = parseFloat(result.data.longitude);
@@ -839,22 +752,12 @@ $current_user_id = $user['id'] ?? null;
 
                 const userLocIcon = L.divIcon({
                     className: 'custom-user-location-marker',
-                    html: `
-                        <div class="relative flex items-center justify-center w-8 h-8 rounded-full border-2 border-white shadow-xl bg-[#007AFF]">
-                            <svg class="w-4 h-4 text-white animate-pulse" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="10"/>
-                                <circle cx="12" cy="12" r="3"/>
-                            </svg>
-                            <span class="absolute inset-0 rounded-full bg-[#007AFF] opacity-30 animate-ping"></span>
-                        </div>
-                    `,
+                    html: `<div class="relative flex items-center justify-center w-8 h-8 rounded-full border-2 border-white shadow-xl bg-[#007AFF]"><svg class="w-4 h-4 text-white animate-pulse" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg><span class="absolute inset-0 rounded-full bg-[#007AFF] opacity-30 animate-ping"></span></div>`,
                     iconSize: [32, 32],
                     iconAnchor: [16, 16]
                 });
 
-                L.marker([lat, lng], { icon: userLocIcon })
-                    .addTo(map)
-                    .bindPopup("<strong class='text-xs text-white block text-center'>Registered Home Location</strong>");
+                L.marker([lat, lng], { icon: userLocIcon }).addTo(map).bindPopup("<strong class='text-xs text-white block text-center'>Registered Home Location</strong>");
             }
         } catch (err) {
             console.error("Home query interface exception:", err);
@@ -864,10 +767,7 @@ $current_user_id = $user['id'] ?? null;
     /* ================= LOAD STATIONS telemetry ================= */
     async function loadStations() {
         try {
-            const endpoint = currentFilterMode === 'mine'
-                ? `${API_BASE}/get_my_posts.php`
-                : `${API_BASE}/get.php`;
-
+            const endpoint = currentFilterMode === 'mine' ? `${API_BASE}/get_my_posts.php` : `${API_BASE}/get.php`;
             const result = await api(endpoint);
 
             if (!result.success) {
@@ -875,20 +775,17 @@ $current_user_id = $user['id'] ?? null;
                 return;
             }
 
-            const stations = result.data || [];
+            allCachedReports = result.data || [];
+            const keyword = getEl("mapSearch")?.value?.trim() || "";
 
-            allCachedReports = stations;
-
-            const keyword = document.getElementById("mapSearch")?.value || "";
             if (keyword) {
                 filterStations(keyword);
             } else {
-                filteredReports = [...stations];
+                filteredReports = [...allCachedReports];
                 renderMapMarkers(filteredReports);
                 renderStatisticsFeed();
                 renderPaginationControls();
             }
-
         } catch (err) {
             console.error("loadStations error:", err);
             showAlert("Network Error", "Failed to load stations.", "error");
@@ -898,17 +795,17 @@ $current_user_id = $user['id'] ?? null;
     function toggleFilterMode(mode) {
         currentFilterMode = mode;
         currentPage = 1;
-        const btnAll = document.getElementById("filterBtnAll");
-        const btnMine = document.getElementById("filterBtnMine");
+        const btnAll = getEl("filterBtnAll");
+        const btnMine = getEl("filterBtnMine");
 
         if (mode === 'mine') {
-            btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
-            btnAll.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
+            if (btnMine) btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
+            if (btnAll) btnAll.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
         } else {
-            btnAll.className = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
-            btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
+            if (btnAll) btnAll.className = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
+            if (btnMine) btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
         }
-        document.getElementById("mapSearch").value = "";
+        setValue("mapSearch", "");
         loadStations();
     }
 
@@ -920,43 +817,23 @@ $current_user_id = $user['id'] ?? null;
         stations.forEach(s => {
             const lat = parseFloat(s.latitude);
             const lng = parseFloat(s.longitude);
-
             if (isNaN(lat) || isNaN(lng)) return;
             liveCount++;
 
-            const statusStr = String(s.availability_status || "Operational").toLowerCase();
-            let markerColor = "#34FB34";
-            if (statusStr.includes("offline") || statusStr.includes("decommissioned")) {
-                markerColor = "#FF2E1F";
-            } else if (statusStr.includes("maintenance")) {
-                markerColor = "#FFBB02";
-            } else if (statusStr.includes("planned")) {
-                markerColor = "#00E5FF";
-            }
+            const markerColor = getStatusColor(s.availability_status);
 
             const pulseIcon = L.divIcon({
                 className: 'custom-station-pulse-marker',
-                html: `
-                    <div class="relative flex items-center justify-center w-6 h-6 rounded-full border-2 border-white shadow-md" style="background-color: ${markerColor}">
-                        <svg class="w-3.5 h-3.5 text-[#03041A]" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                        </svg>
-                        <span class="absolute -top-1 -right-1 flex h-2 w-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background-color: ${markerColor}"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2" style="background-color: ${markerColor}"></span>
-                        </span>
-                    </div>
-                `,
+                html: `<div class="relative flex items-center justify-center w-6 h-6 rounded-full border-2 border-white shadow-md" style="background-color: ${markerColor}"><svg class="w-3.5 h-3.5 text-[#03041A]" fill="currentColor" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg><span class="absolute -top-1 -right-1 flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background-color: ${markerColor}"></span><span class="relative inline-flex rounded-full h-2 w-2" style="background-color: ${markerColor}"></span></span></div>`,
                 iconSize: [24, 24],
-                iconAnchor: [12, 12],
-                popupAnchor: [0, -12]
+                iconAnchor: [12, 12]
             });
 
             const popupContent = `
                 <div class="text-white text-xs p-1">
                     <strong class="text-sm block border-b border-white/10 pb-1 mb-1 text-[#FFBB02]">${escapeHTML(s.station_name)}</strong>
                     <p class="mb-1 text-white/50 uppercase tracking-widest text-[9px] font-bold">${escapeHTML(s.station_type)}</p>
-                    <p class="mb-2 text-white/80 text-[11px] leading-relaxed">${escapeHTML(s.description || 'No system parameter logs found.')}</p>
+                    <p class="mb-2 text-white/80 text-[11px] leading-relaxed">${escapeHTML(s.description || 'No description available.')}</p>
                     <div class="flex items-center justify-between mt-2 pt-2 border-t border-white/5">
                         <span class="inline-block px-2 py-0.5 rounded text-[9px] font-bold" style="background:${markerColor}20; color:${markerColor}; border:1px solid ${markerColor}40;">
                             ${escapeHTML(s.availability_status)}
@@ -966,26 +843,25 @@ $current_user_id = $user['id'] ?? null;
                 </div>
             `;
 
-            L.marker([lat, lng], { icon: pulseIcon })
-                .bindPopup(popupContent)
-                .addTo(layerGroup);
+            L.marker([lat, lng], { icon: pulseIcon }).bindPopup(popupContent).addTo(layerGroup);
         });
 
-        document.getElementById("activeOutageCounter").innerHTML = `
+        setHTML("activeOutageCounter", `
             <svg class="w-4 h-4 inline-block mr-1 fill-current text-[#00BA00]" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
             </svg>
-            Active Nodes: ${liveCount} Operational Stations Tracked
-        `;
+            Active Nodes: ${liveCount}
+        `);
     }
 
     /* ================= SEARCH FILTERING ================= */
     function filterStations(keyword) {
+        const term = (keyword || "").toLowerCase().trim();
         filteredReports = allCachedReports.filter(r =>
-            String(r.station_name || "").toLowerCase().includes(keyword.toLowerCase()) ||
-            String(r.location_name || "").toLowerCase().includes(keyword.toLowerCase()) ||
-            String(r.station_type || "").toLowerCase().includes(keyword.toLowerCase()) ||
-            String(r.availability_status || "").toLowerCase().includes(keyword.toLowerCase())
+            String(r.station_name || "").toLowerCase().includes(term) ||
+            String(r.location_name || "").toLowerCase().includes(term) ||
+            String(r.station_type || "").toLowerCase().includes(term) ||
+            String(r.availability_status || "").toLowerCase().includes(term)
         );
         currentPage = 1;
         renderStatisticsFeed();
@@ -994,7 +870,8 @@ $current_user_id = $user['id'] ?? null;
 
     /* ================= STREAMING_CHUNK:Rendering dynamic HTML blocks for Station feed cards... ================= */
     function renderStatisticsFeed() {
-        const feedContainer = document.getElementById("recentReports");
+        const feedContainer = getEl("recentReports");
+        if (!feedContainer) return;
         feedContainer.innerHTML = "";
 
         if (!filteredReports.length) {
@@ -1004,79 +881,55 @@ $current_user_id = $user['id'] ?? null;
 
         const start = (currentPage - 1) * perPage;
         const pageData = filteredReports.slice(start, start + perPage);
-
         const fragment = document.createDocumentFragment();
 
         pageData.forEach((s) => {
-            const statusStr = String(s.availability_status || "operational").toLowerCase();
-            let badgeStyle = "bg-green-500/10 text-[#34FB34] border border-green-500/20";
-            if (statusStr.includes("offline") || statusStr.includes("decommissioned")) {
-                badgeStyle = "bg-red-500/10 text-[#FF2E1F] border border-red-500/20";
-            } else if (statusStr.includes("maintenance")) {
-                badgeStyle = "bg-yellow-500/10 text-[#FFBB02] border border-yellow-500/20";
-            } else if (statusStr.includes("planned")) {
-                badgeStyle = "bg-blue-500/10 text-[#00E5FF] border border-blue-500/20";
-            }
+            const badgeStyle = getStatusBadgeStyle(s.availability_status);
 
             const card = document.createElement("div");
             card.className = "card-hover flex flex-col p-4 border border-white/5 rounded-2xl bg-[#1C1D30]/30 transition-all hover:border-white/10";
 
             card.innerHTML = `
-                <div class="flex flex-col">
-                    <div class="flex justify-between items-start gap-2">
-                        <span class="font-bold text-white text-sm md:text-base tracking-tight leading-tight truncate max-w-[210px]">${escapeHTML(s.station_name)}</span>
-                        <span class="text-[9px] font-black tracking-wider uppercase px-2 py-0.5 rounded-md ${badgeStyle}">
-                            ${escapeHTML(s.availability_status)}
-                        </span>
-                    </div>
-                    <span class="font-medium text-[11px] text-[#B5B5B5] mt-1.5 flex items-center gap-1">
-                        <svg class="w-3 h-3 text-[#FFBB02]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        </svg>
-                        ${escapeHTML(s.location_name)}
-                    </span>
+                ${s.image ? `<img src="${escapeHTML(s.image)}" class="w-full h-40 object-cover rounded-xl mb-3" alt="${escapeHTML(s.station_name)}">` : '<div class="w-full h-40 bg-[#31324C]/60 rounded-xl mb-3 flex items-center justify-center text-white/30 text-xs">No Image</div>'}
+                <div class="flex justify-between items-start gap-2">
+                    <span class="font-bold text-white text-sm md:text-base tracking-tight leading-tight truncate max-w-[210px]">${escapeHTML(s.station_name)}</span>
+                    <span class="text-[9px] font-black tracking-wider uppercase px-2 py-0.5 rounded-md ${badgeStyle}">${escapeHTML(s.availability_status)}</span>
                 </div>
-
-                <div class="grid grid-cols-2 gap-2 mt-3">
+                <span class="font-medium text-[11px] text-[#B5B5B5] mt-1.5 flex items-center gap-1">
+                    <svg class="w-3 h-3 text-[#FFBB02]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
+                    ${escapeHTML(s.location_name)}
+                </span>
+                <div class="grid grid-cols-2 gap-2 mt-4">
                     <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-1.5 text-center">
-                        <span class="text-[8px] text-[#B5B5B5] font-bold tracking-wider uppercase opacity-40">System Type</span>
+                        <span class="text-[8px] text-[#B5B5B5] font-bold tracking-wider uppercase opacity-40">Type</span>
                         <span class="text-[11px] text-white font-extrabold mt-0.5 truncate">${escapeHTML(s.station_type)}</span>
                     </div>
                     <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-1.5 text-center">
-                        <span class="text-[8px] text-[#B5B5B5] font-bold tracking-wider uppercase opacity-40">Location</span>
-                        <span class="text-[11px] text-[#FFBB02] font-extrabold mt-0.5 truncate">${escapeHTML(s.location_name)}</span>
+                        <span class="text-[8px] text-[#B5B5B5] font-bold tracking-wider uppercase opacity-40">Access</span>
+                        <span class="text-[11px] text-white font-extrabold mt-0.5 truncate">${escapeHTML(s.access_type || 'free')}</span>
                     </div>
                 </div>
-
-                <p class="text-white/60 text-[11px] font-medium leading-relaxed mt-2.5 line-clamp-2">${escapeHTML(s.description || 'No system parameter logs found.')}</p>
+                <div class="mt-3 grid grid-cols-2 gap-x-6 text-xs text-white/70">
+                    <div><span class="opacity-60">Hours:</span> ${escapeHTML(s.operating_hours || 'N/A')}</div>
+                    <div><span class="opacity-60">Charging:</span> ${escapeHTML(s.charging_type || 'N/A')}</div>
+                </div>
+                <p class="text-white/60 text-[11px] font-medium leading-relaxed mt-3 line-clamp-3">${escapeHTML(s.description || 'No description provided.')}</p>
             `;
 
-            const isAuthor = (CURRENT_USER_ID && s.user_id && String(s.user_id) === String(CURRENT_USER_ID)) || (currentFilterMode === 'mine');
-            if (isAuthor) {
-                /* ================= EDIT + DELETE BUTTONS ================= */
-                const controls = document.createElement("div");
-                controls.className = "flex gap-4 justify-end pt-2 mt-3 border-t border-white/5 text-xs";
+            const isAuthor = (typeof CURRENT_USER_ID !== "undefined" && s.created_by && String(s.created_by) === String(CURRENT_USER_ID)) || (currentFilterMode === 'mine');
 
-                // EDIT BUTTON
+            if (isAuthor) {
+                const controls = document.createElement("div");
+                controls.className = "flex gap-4 justify-end pt-3 mt-3 border-t border-white/5 text-xs";
+
                 const editBtn = document.createElement("button");
                 editBtn.className = "text-[#FFBB02] hover:underline font-semibold flex items-center gap-1";
-                editBtn.innerHTML = `
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                    </svg>
-                    Edit
-                `;
+                editBtn.innerHTML = `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg> Edit`;
                 editBtn.onclick = () => editStationByObject(s);
 
-                // DELETE BUTTON
                 const deleteBtn = document.createElement("button");
                 deleteBtn.className = "text-red-400 hover:underline font-semibold flex items-center gap-1";
-                deleteBtn.innerHTML = `
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                    </svg>
-                    Delete
-                `;
+                deleteBtn.innerHTML = `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg> Delete`;
                 deleteBtn.onclick = () => deleteStation(s.id);
 
                 controls.appendChild(editBtn);
@@ -1094,26 +947,24 @@ $current_user_id = $user['id'] ?? null;
     function editStationByObject(s) {
         if (!s) return;
 
-        // Populate form inputs mapped to power station attributes
-        document.getElementById("station_id").value = s.id;
-        document.getElementById("station_name").value = s.station_name || "";
-        document.getElementById("location_name").value = s.location_name || "";
-        document.getElementById("station_type").value = s.station_type || "Substation";
-        document.getElementById("availability_status").value = s.availability_status || "Operational";
-        document.getElementById("description").value = s.description || "";
-        document.getElementById("latitude").value = s.latitude || "";
-        document.getElementById("longitude").value = s.longitude || "";
+        setValue("station_id", s.id || "");
+        setValue("station_name", s.station_name || "");
+        setValue("location_name", s.location_name || "");
+        setValue("latitude", s.latitude || "");
+        setValue("longitude", s.longitude || "");
+        setValue("station_type", s.station_type || "power_station");
+        setValue("access_type", s.access_type || "free");
+        setValue("availability_status", s.availability_status || "available");
+        setValue("operating_hours", s.operating_hours || "");
+        setValue("charging_type", s.charging_type || "");
+        setValue("description", s.description || "");
 
-        // Dynamically alter modal properties to present an update paradigm
-        document.getElementById("formTitle").innerText = "Update Station Parameters";
-        const submitBtn = document.getElementById("submitBtn") || document.querySelector('#stationForm button[type="submit"]');
-        if (submitBtn) {
-            submitBtn.textContent = "Update Station Node";
-        }
-        
+        setText("formTitle", "Update Station Parameters");
+        const submitBtn = getEl("submitBtn");
+        if (submitBtn) submitBtn.textContent = "Update Station Node";
+
         openPopup(true);
 
-        // Load correct coordinates and map markers to fit context maps
         setTimeout(() => {
             if (s.latitude && s.longitude) {
                 setModalCoordinates(parseFloat(s.latitude), parseFloat(s.longitude), true);
@@ -1132,15 +983,9 @@ $current_user_id = $user['id'] ?? null;
                 body: JSON.stringify({ station_id: id })
             });
 
-            showAlert(
-                result.success ? "Success" : "Error",
-                result.message || "Operation executed.",
-                result.success ? "success" : "error"
-            );
+            showAlert(result.success ? "Success" : "Error", result.message || "Operation executed.", result.success ? "success" : "error");
 
-            if (result.success) {
-                loadStations();
-            }
+            if (result.success) loadStations();
         } catch (err) {
             console.error("Deletion exception:", err);
             showAlert("System Error", "Failed to connect to the backend database.", "error");
@@ -1148,59 +993,56 @@ $current_user_id = $user['id'] ?? null;
     }
 
     /* ================= STATION CREATE/UPDATE SUBMISSION ================= */
-    document.getElementById("stationForm")?.addEventListener("submit", async (e) => {
-        e.preventDefault();
+    const stationForm = getEl("stationForm");
+    if (stationForm) {
+        stationForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
 
-        const id = document.getElementById("station_id")?.value;
-        const isEdit = id && id.trim() !== "";
+            const id = getEl("station_id")?.value?.trim();
+            const isEdit = !!id;
 
-        const payload = {
-            station_name: document.getElementById("station_name").value,
-            location_name: document.getElementById("location_name").value,
-            station_type: document.getElementById("station_type").value,
-            availability_status: document.getElementById("availability_status").value,
-            description: document.getElementById("description").value,
-            latitude: document.getElementById("latitude").value,
-            longitude: document.getElementById("longitude").value
-        };
+            const payload = {
+                station_name: getEl("station_name")?.value || "",
+                location_name: getEl("location_name")?.value || "",
+                latitude: getEl("latitude")?.value || "",
+                longitude: getEl("longitude")?.value || "",
+                station_type: getEl("station_type")?.value || "",
+                access_type: getEl("access_type")?.value || "free",
+                availability_status: getEl("availability_status")?.value || "available",
+                operating_hours: getEl("operating_hours")?.value || "",
+                charging_type: getEl("charging_type")?.value || "",
+                description: getEl("description")?.value || ""
+            };
 
-        if (!payload.latitude || !payload.longitude) {
-            showAlert("Missing Coordinates", "Please select a location on the map before submitting.", "error");
-            return;
-        }
-
-        if (isEdit) {
-            payload.id = id;
-            payload.station_id = id;
-        }
-
-        const endpoint = isEdit ? `${API_BASE}/update.php` : `${API_BASE}/create.php`;
-
-        try {
-            const result = await api(endpoint, {
-                method: "POST",
-                body: JSON.stringify(payload)
-            });
-
-            showAlert(
-                result.success ? "Success" : "Error",
-                result.message || "Operation completed.",
-                result.success ? "success" : "error"
-            );
-
-            if (result.success) {
-                closePopup();
-                loadStations();
+            if (!payload.latitude || !payload.longitude) {
+                showAlert("Missing Coordinates", "Please select a location on the map before submitting.", "error");
+                return;
             }
-        } catch (err) {
-            console.error("Submission exception:", err);
-            showAlert("System Error", "Failed to send request to server.", "error");
-        }
-    });
+
+            if (isEdit) payload.id = id;
+
+            const endpoint = isEdit ? `${API_BASE}/update.php` : `${API_BASE}/create.php`;
+
+            try {
+                const result = await api(endpoint, { method: "POST", body: JSON.stringify(payload) });
+
+                showAlert(result.success ? "Success" : "Error", result.message || "Operation completed.", result.success ? "success" : "error");
+
+                if (result.success) {
+                    closePopup();
+                    loadStations();
+                }
+            } catch (err) {
+                console.error("Submission exception:", err);
+                showAlert("System Error", "Failed to send request to server.", "error");
+            }
+        });
+    }
 
     /* ================= PAGINATION CONTROL INTERFACE ENGINE ================= */
     function renderPaginationControls() {
-        const paginationContainer = document.getElementById("pagination");
+        const paginationContainer = getEl("pagination");
+        if (!paginationContainer) return;
         paginationContainer.innerHTML = "";
 
         const totalPages = Math.ceil(filteredReports.length / perPage);
@@ -1211,7 +1053,6 @@ $current_user_id = $user['id'] ?? null;
         const prevBtn = document.createElement("button");
         prevBtn.textContent = "Prev";
         prevBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all ${currentPage === 1 ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40' : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'}`;
-        prevBtn.disabled = currentPage === 1;
         prevBtn.onclick = () => {
             if (currentPage > 1) {
                 currentPage--;
@@ -1236,7 +1077,6 @@ $current_user_id = $user['id'] ?? null;
         const nextBtn = document.createElement("button");
         nextBtn.textContent = "Next";
         nextBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all ${currentPage === totalPages ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40' : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'}`;
-        nextBtn.disabled = currentPage === totalPages;
         nextBtn.onclick = () => {
             if (currentPage < totalPages) {
                 currentPage++;
@@ -1254,19 +1094,16 @@ $current_user_id = $user['id'] ?? null;
         if (!navigator.getBattery) return;
         navigator.getBattery().then(battery => {
             function update() {
-                const levelSpan = document.getElementById("batteryLevel");
-                const chargingSpan = document.getElementById("batteryCharging");
-                const statusBox = document.getElementById("batteryStatus");
+                const levelSpan = getEl("batteryLevel");
+                const chargingSpan = getEl("batteryCharging");
+                const statusBox = getEl("batteryStatus");
 
                 if (levelSpan) levelSpan.innerText = Math.round(battery.level * 100) + "%";
                 if (chargingSpan) chargingSpan.innerText = battery.charging ? "Yes" : "No";
 
                 if (battery.level <= 0.20 && !battery.charging) {
-                    const toast = document.getElementById("battery-warning");
-                    if (toast) {
-                        toast.classList.remove("invisible", "opacity-0");
-                        document.getElementById("batteryBox").classList.remove("scale-95", "opacity-0");
-                    }
+                    const toast = getEl("battery-warning");
+                    if (toast) toast.classList.remove("invisible", "opacity-0");
                     if (statusBox) {
                         statusBox.innerText = "Low Battery";
                         statusBox.style.background = "#e74c3c";
@@ -1290,7 +1127,8 @@ $current_user_id = $user['id'] ?? null;
     }
 
     function closeBatteryWarning() {
-        document.getElementById("battery-warning").classList.add("invisible", "opacity-0");
+        const toast = getEl("battery-warning");
+        if (toast) toast.classList.add("invisible", "opacity-0");
     }
 
     /* ================= INITIALIZATION RENDERING RUNTIME CONTROLS ================= */
@@ -1302,9 +1140,9 @@ $current_user_id = $user['id'] ?? null;
     });
 
     /* ================= SIDEBAR VIEW MOBILE CONTROLS ================= */
-    const menuToggle = document.getElementById('menuToggle');
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
+    const menuToggle = getEl('menuToggle');
+    const sidebar = getEl('sidebar');
+    const overlay = getEl('overlay');
 
     if (menuToggle && sidebar && overlay) {
         menuToggle.addEventListener('click', () => {
@@ -1317,3 +1155,6 @@ $current_user_id = $user['id'] ?? null;
         });
     }
 </script>
+</body>
+
+</html>
