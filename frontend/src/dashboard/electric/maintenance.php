@@ -285,26 +285,31 @@ $fullName = htmlspecialchars($user['name'] ?? 'Company Admin');
 
         <!-- Profile -->
         <div class="mt-auto mb-6">
-            <div class="flex items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-white/5 border border-white/5">
+            <div
+                class="flex flex-row items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-[#31324C]/20 border border-white/5">
                 <div class="flex items-center gap-3 min-w-0">
-                    <img src="<?= htmlspecialchars($picture) ?>" alt="Avatar"
-                        class="h-9 w-9 rounded-xl object-cover border border-[#FFBB02]/30 flex-shrink-0">
-                    <div class="min-w-0">
-                        <div class="text-xs font-bold text-white truncate"><?= $fullName ?></div>
-                        <div class="text-[10px] font-semibold text-white/40 uppercase tracking-wider">Administrator
-                        </div>
+                    <div
+                        class="h-10 w-10 rounded-xl overflow-hidden border border-[#FFBB02]/30 flex-shrink-0 bg-[#1A1B3A]">
+                        <img src="<?= htmlspecialchars($picture) ?>" alt="Avatar" class="h-full w-full object-cover">
+                    </div>
+                    <div class="min-w-0 flex flex-col">
+                        <span
+                            class="text-xs font-bold text-white truncate"><?= htmlspecialchars($user['name'] ?? 'Company Admin') ?></span>
+                        <span class="text-[10px] font-medium text-[#B5B5B5] truncate uppercase">electric</span>
                     </div>
                 </div>
+
+                <!-- Logout Button -->
                 <a href="<?= BACKEND_URL ?>/public/logout.php"
-                    class="p-2 text-[#B5B5B5] hover:text-[#CB3435] hover:bg-[#CB3435]/10 rounded-xl transition-all"
+                    class="p-2 text-[#B5B5B5] hover:text-[#CB3435] hover:bg-[#CB3435]/10 rounded-xl transition-all group"
                     title="Logout">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 transform group-hover:translate-x-0.5 transition-transform" fill="none"
+                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
                 </a>
             </div>
-        </div>
     </nav>
 
     <!-- ═══════════════════════════════════════════════════════

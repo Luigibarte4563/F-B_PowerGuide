@@ -188,7 +188,7 @@ $picture = $user['picture'] ?? $defaultPicture;
                     <div class="flex flex-col truncate">
                         <span
                             class="text-xs font-bold text-white"><?= htmlspecialchars($user['name'] ?? 'Admin') ?></span>
-                        <span class="text-[10px] font-medium uppercase">Administrator</span>
+                        <span class="text-[10px] font-medium uppercase">Electric</span>
                     </div>
                 </div>
                 <a href="<?= BACKEND_URL ?>/public/logout.php"

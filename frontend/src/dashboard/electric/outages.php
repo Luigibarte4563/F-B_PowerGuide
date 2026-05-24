@@ -300,7 +300,7 @@ $picture = $user['picture'] ?? $defaultPicture;
                     <div class="min-w-0 flex flex-col">
                         <span
                             class="text-xs font-bold text-white truncate"><?= htmlspecialchars($user['name'] ?? 'Company Admin') ?></span>
-                        <span class="text-[10px] font-medium text-[#B5B5B5] truncate uppercase">Administrator</span>
+                        <span class="text-[10px] font-medium text-[#B5B5B5] truncate uppercase">electric</span>
                     </div>
                 </div>
 
