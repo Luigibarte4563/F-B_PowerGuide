@@ -98,7 +98,7 @@ $current_user_id = $user['id'] ?? null;
             transform: translateY(-2px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
         }
-        
+
         /* Select dropdown styling for better appearance */
         select option {
             background-color: #0F172A;
@@ -250,16 +250,17 @@ $current_user_id = $user['id'] ?? null;
 
             <!-- Actions and Filters -->
             <div class="flex flex-col sm:flex-row items-center gap-3 self-end sm:self-auto w-full sm:w-auto">
-                <!-- Status Dropdown Filter -->
-                <select id="statusFilter" onchange="handleFilterChange()" 
-                    class="w-full sm:w-[150px] h-11 px-4 rounded-xl bg-[#31324C]/40 border border-white/5 text-sm font-medium outline-none focus:border-[#FFBB02] transition-colors focus:bg-[#03041A] text-white cursor-pointer">
-                    <option value="all">All Statuses</option>
-                    <option value="upcoming">Upcoming</option>
-                    <option value="ongoing">Ongoing</option>
-                    <option value="cancelled">Cancelled</option>
-                </select>
+                <div class="relative w-full sm:w-auto">
+                    <select id="statusFilter" onchange="handleFilterChange()"
+                        class="w-full sm:w-[160px] h-11 pl-4 pr-10 rounded-xl bg-[#31324C]/40 border border-white/5 text-sm font-medium outline-none text-white focus:border-[#FFBB02] transition-colors focus:bg-[#03041A] cursor-pointer appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22rgba%28255%2C255%2C255%2C0.4%29%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em]">
+                        <option value="all" class="bg-[#1E293B] text-white">All Status</option>
+                        <option value="upcoming" class="bg-[#1E293B] text-white">Upcoming</option>
+                        <option value="ongoing" class="bg-[#1E293B] text-white">Ongoing</option>
+                        <option value="done" class="bg-[#1E293B] text-white">Done</option>
+                        <option value="cancelled" class="bg-[#1E293B] text-white">Cancelled</option>
+                    </select>
+                </div>
 
-                <!-- Search Filter -->
                 <div class="relative w-full sm:w-auto">
                     <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -285,18 +286,39 @@ $current_user_id = $user['id'] ?? null;
                     <div
                         class="absolute bottom-4 left-4 border border-white/10 bg-[#0F172A]/90 backdrop-blur-md rounded-2xl z-[1000] p-3 shadow-xl">
                         <div class="flex flex-col gap-2 min-w-[140px]">
-                            <span class="font-bold text-[10px] tracking-widest text-[#64748B] block">MAP LEGEND</span>
-                            <!-- Added comprehensive mapping for new statuses -->
+                            <span class="font-bold text-[10px] tracking-widest text-[#64748B] block">
+                                MAP LEGEND
+                            </span>
+
+                            <!-- Upcoming -->
                             <span class="font-semibold text-xs flex items-center text-[#E2E8F0]">
-                                <span class="w-2.5 h-2.5 rounded-full bg-[#e74c3c] mr-2.5 shadow-[0_0_8px_rgba(231,76,60,0.6)]"></span>
+                                <span
+                                    class="w-2.5 h-2.5 rounded-full bg-[#FFBB02] mr-2.5 shadow-[0_0_8px_rgba(255,187,2,0.6)]">
+                                </span>
                                 Upcoming (Future)
                             </span>
+
+                            <!-- Ongoing -->
                             <span class="font-semibold text-xs flex items-center text-[#E2E8F0]">
-                                <span class="w-2.5 h-2.5 rounded-full bg-[#3498db] mr-2.5 shadow-[0_0_8px_rgba(52,152,219,0.6)]"></span>
+                                <span
+                                    class="w-2.5 h-2.5 rounded-full bg-[#3498db] mr-2.5 shadow-[0_0_8px_rgba(52,152,219,0.6)]">
+                                </span>
                                 Ongoing (Active)
                             </span>
+
+                            <!-- Done -->
                             <span class="font-semibold text-xs flex items-center text-[#E2E8F0]">
-                                <span class="w-2.5 h-2.5 rounded-full bg-[#94A3B8] mr-2.5 shadow-[0_0_8px_rgba(148,163,184,0.6)]"></span>
+                                <span
+                                    class="w-2.5 h-2.5 rounded-full bg-[#6B7280] mr-2.5 shadow-[0_0_8px_rgba(107,114,128,0.6)]">
+                                </span>
+                                Done
+                            </span>
+
+                            <!-- Cancelled -->
+                            <span class="font-semibold text-xs flex items-center text-[#E2E8F0]">
+                                <span
+                                    class="w-2.5 h-2.5 rounded-full bg-[#CB3435] mr-2.5 shadow-[0_0_8px_rgba(203,52,53,0.6)]">
+                                </span>
                                 Cancelled
                             </span>
                         </div>
@@ -414,16 +436,24 @@ $current_user_id = $user['id'] ?? null;
                     const startTime = new Date(`${dtBase}T${item.start_time}`);
                     const endTime = new Date(`${dtBase}T${item.end_time}`);
 
-                    // Advanced computed status engine (upcoming, ongoing, cancelled, done)
+                    // Advanced computed status engine (upcoming, ongoing, done, cancelled)
+                    const dbStatus = (item.status || '').toLowerCase();
                     let computedStatus = 'done';
-                    
-                    // Respect database overrides (like explicitly marking as 'cancelled')
-                    if (item.status && item.status.toLowerCase() === 'cancelled') {
+
+                    if (dbStatus === 'cancelled') {
                         computedStatus = 'cancelled';
-                    } else if (now < startTime) {
+                    }
+                    else if (dbStatus === 'completed') {
+                        computedStatus = 'done';
+                    }
+                    else if (now < startTime) {
                         computedStatus = 'upcoming';
-                    } else if (now >= startTime && now <= endTime) {
+                    }
+                    else if (now >= startTime && now <= endTime) {
                         computedStatus = 'ongoing';
+                    }
+                    else {
+                        computedStatus = 'done';
                     }
 
                     item._computedStatus = computedStatus;
@@ -466,13 +496,36 @@ $current_user_id = $user['id'] ?? null;
                 if (searchQuery && !searchableText.includes(searchQuery)) return;
 
                 // 2. Status Selection Filtering
+                // 2. Status Selection Filtering
                 const status = item._computedStatus;
-                if (statusQuery !== 'all' && status !== statusQuery) return; // Skip unmatched states
+
+                // Default "all" only shows upcoming + ongoing
+                if (statusQuery === 'all') {
+
+                    if (status !== 'upcoming' && status !== 'ongoing') {
+                        return;
+                    }
+
+                } else if (status !== statusQuery) {
+
+                    return;
+                }
 
                 // 3. Setup styling properties directly onto the item wrapper for simple rendering
-                let hexColor = '#94A3B8'; // Default grey for Cancelled/Unknown
-                if (status === 'upcoming') hexColor = '#e74c3c';
-                else if (status === 'ongoing') hexColor = '#3498db';
+                let hexColor = '#94A3B8';
+
+                if (status === 'upcoming') {
+                    hexColor = '#FFBB02';
+                }
+                else if (status === 'ongoing') {
+                    hexColor = '#3498db';
+                }
+                else if (status === 'done') {
+                    hexColor = '#6B7280';
+                }
+                else if (status === 'cancelled') {
+                    hexColor = '#CB3435';
+                }
 
                 filteredFeedData.push({ item, bList, status, hexColor });
 
@@ -543,7 +596,7 @@ $current_user_id = $user['id'] ?? null;
                 const dispDate = item._startParsed.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                 const timeRange = `${format12Hour(item.start_time)} — ${format12Hour(item.end_time)}`;
                 const provider = item.company_name || 'Utility Provider';
-                
+
                 // Opacity style adjusted depending if it's cancelled to visually strike it out slightly
                 const containerClass = status === 'cancelled' ? 'opacity-60 grayscale-[50%]' : '';
 
@@ -645,7 +698,7 @@ $current_user_id = $user['id'] ?? null;
         }
 
         /* --- 8. EVENTS & HANDLERS --- */
-        
+
         // Handles text input changes
         function handleSearch() {
             currentPage = 1;
