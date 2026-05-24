@@ -98,6 +98,12 @@ $current_user_id = $user['id'] ?? null;
             transform: translateY(-2px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
         }
+        
+        /* Select dropdown styling for better appearance */
+        select option {
+            background-color: #0F172A;
+            color: #fff;
+        }
     </style>
 </head>
 
@@ -140,8 +146,7 @@ $current_user_id = $user['id'] ?? null;
 
         <!-- Nav Links -->
         <div class="flex flex-col gap-1.5 text-left">
-            <span class="text-[11px] font-bold tracking-widest text-white px-4 pt-2 mb-2 opacity-50">MAIN
-                MENU</span>
+            <span class="text-[11px] font-bold tracking-widest text-white px-4 pt-2 mb-2 opacity-50">MAIN MENU</span>
 
             <a href="dashboard.php"
                 class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
@@ -237,14 +242,24 @@ $current_user_id = $user['id'] ?? null;
 
         <!-- HEADER -->
         <header
-            class="mx-4 lg:mx-8 mt-14 lg:mt-8 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            class="mx-4 lg:mx-8 mt-14 lg:mt-8 mb-6 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
             <!-- Title and Status -->
             <div>
                 <h1 class="text-2xl lg:text-3xl font-black tracking-tight text-white">Scheduled Maintenance</h1>
             </div>
 
-            <!-- Actions and Search -->
-            <div class="flex items-center gap-4 self-end sm:self-auto w-full sm:w-auto">
+            <!-- Actions and Filters -->
+            <div class="flex flex-col sm:flex-row items-center gap-3 self-end sm:self-auto w-full sm:w-auto">
+                <!-- Status Dropdown Filter -->
+                <select id="statusFilter" onchange="handleFilterChange()" 
+                    class="w-full sm:w-[150px] h-11 px-4 rounded-xl bg-[#31324C]/40 border border-white/5 text-sm font-medium outline-none focus:border-[#FFBB02] transition-colors focus:bg-[#03041A] text-white cursor-pointer">
+                    <option value="all">All Statuses</option>
+                    <option value="upcoming">Upcoming</option>
+                    <option value="ongoing">Ongoing</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+
+                <!-- Search Filter -->
                 <div class="relative w-full sm:w-auto">
                     <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -252,7 +267,7 @@ $current_user_id = $user['id'] ?? null;
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                         </svg>
                     </span>
-                    <input type="search" id="mapSearch" oninput="handleSearch(this.value)"
+                    <input type="search" id="mapSearch" oninput="handleSearch()"
                         placeholder="Search barangay or provider..."
                         class="w-full sm:w-[280px] h-11 pl-10 pr-4 rounded-xl bg-[#31324C]/40 border border-white/5 text-sm font-medium outline-none placeholder:text-white/40 focus:border-[#FFBB02] transition-colors focus:bg-[#03041A] text-white">
                 </div>
@@ -260,26 +275,29 @@ $current_user_id = $user['id'] ?? null;
         </header>
 
         <!-- DASHBOARD GRID -->
-        <section class="flex flex-col lg:flex-row justify-between min-h-0 py-2 px-4 lg:px-8 gap-6 pb-8">
+        <section class="flex flex-col xl:flex-row justify-between min-h-0 py-2 px-4 lg:px-8 gap-6 pb-8">
 
             <!-- LEFT: Map Panel -->
             <div class="flex-1 min-w-0">
                 <div
-                    class="rounded-2xl border border-white/5 overflow-hidden shadow-2xl bg-[#0F172A] flex flex-col relative h-[440px] lg:h-[550px]">
+                    class="rounded-2xl border border-white/5 overflow-hidden shadow-2xl bg-[#0F172A] flex flex-col relative h-[440px] xl:h-[550px]">
                     <div id="map" class="w-full h-full bg-[#050711]"></div>
                     <div
                         class="absolute bottom-4 left-4 border border-white/10 bg-[#0F172A]/90 backdrop-blur-md rounded-2xl z-[1000] p-3 shadow-xl">
                         <div class="flex flex-col gap-2 min-w-[140px]">
                             <span class="font-bold text-[10px] tracking-widest text-[#64748B] block">MAP LEGEND</span>
+                            <!-- Added comprehensive mapping for new statuses -->
                             <span class="font-semibold text-xs flex items-center text-[#E2E8F0]">
-                                <span
-                                    class="w-2.5 h-2.5 rounded-full bg-[#e74c3c] mr-2.5 shadow-[0_0_8px_rgba(231,76,60,0.6)]"></span>
-                                Pending (Future)
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#e74c3c] mr-2.5 shadow-[0_0_8px_rgba(231,76,60,0.6)]"></span>
+                                Upcoming (Future)
                             </span>
                             <span class="font-semibold text-xs flex items-center text-[#E2E8F0]">
-                                <span
-                                    class="w-2.5 h-2.5 rounded-full bg-[#3498db] mr-2.5 shadow-[0_0_8px_rgba(52,152,219,0.6)]"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#3498db] mr-2.5 shadow-[0_0_8px_rgba(52,152,219,0.6)]"></span>
                                 Ongoing (Active)
+                            </span>
+                            <span class="font-semibold text-xs flex items-center text-[#E2E8F0]">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#94A3B8] mr-2.5 shadow-[0_0_8px_rgba(148,163,184,0.6)]"></span>
+                                Cancelled
                             </span>
                         </div>
                     </div>
@@ -287,9 +305,9 @@ $current_user_id = $user['id'] ?? null;
             </div>
 
             <!-- RIGHT: List Feed Panel with Pagination -->
-            <div class="w-full lg:w-[420px] lg:flex-shrink-0">
+            <div class="w-full xl:w-[420px] xl:flex-shrink-0">
                 <div
-                    class="bg-[#0F172A] border border-white/5 p-5 rounded-2xl h-[440px] lg:h-[550px] flex flex-col relative shadow-2xl">
+                    class="bg-[#0F172A] border border-white/5 p-5 rounded-2xl h-[440px] xl:h-[550px] flex flex-col relative shadow-2xl">
 
                     <div class="flex flex-row border-b border-white/10 pb-4 justify-between items-center shrink-0">
                         <span class="text-[13px] font-bold text-white tracking-wide">Maintenance Schedule</span>
@@ -328,132 +346,149 @@ $current_user_id = $user['id'] ?? null;
 
     <!-- JS ENGINE -->
     <script>
-    /* --- 1. BARANGAY SPATIAL DATA --- */
-    const barangayData = {
-        "Bonuan Gueset": { lat: 16.0585, lng: 120.3345 }, "Bonuan Boquig": { lat: 16.0600, lng: 120.3200 },
-        "Bonuan Binloc": { lat: 16.0620, lng: 120.3100 }, "Lucao": { lat: 16.0435, lng: 120.3310 },
-        "Tapuac": { lat: 16.0460, lng: 120.3450 }, "Tambac": { lat: 16.0520, lng: 120.3400 },
-        "Pantal": { lat: 16.0468, lng: 120.3330 }, "Bacayao Norte": { lat: 16.0300, lng: 120.3200 },
-        "Bacayao Sur": { lat: 16.0250, lng: 120.3250 }, "Malued": { lat: 16.0400, lng: 120.3200 },
-        "Mayombo": { lat: 16.0480, lng: 120.3100 }, "Mangin": { lat: 16.0550, lng: 120.3500 },
-        "Tebeng": { lat: 16.0600, lng: 120.3450 }, "Pogo Chico": { lat: 16.0510, lng: 120.3600 },
-        "Pogo Grande": { lat: 16.0550, lng: 120.3650 }, "Herrero": { lat: 16.0450, lng: 120.3350 },
-        "Poblacion Centro": { lat: 16.0430, lng: 120.3335 }, "Poblacion Oeste": { lat: 16.0410, lng: 120.3300 },
-        "Poblacion Este": { lat: 16.0440, lng: 120.3360 }
-    };
+        /* --- 1. BARANGAY SPATIAL DATA --- */
+        const barangayData = {
+            "Bonuan Gueset": { lat: 16.0585, lng: 120.3345 }, "Bonuan Boquig": { lat: 16.0600, lng: 120.3200 },
+            "Bonuan Binloc": { lat: 16.0620, lng: 120.3100 }, "Lucao": { lat: 16.0435, lng: 120.3310 },
+            "Tapuac": { lat: 16.0460, lng: 120.3450 }, "Tambac": { lat: 16.0520, lng: 120.3400 },
+            "Pantal": { lat: 16.0468, lng: 120.3330 }, "Bacayao Norte": { lat: 16.0300, lng: 120.3200 },
+            "Bacayao Sur": { lat: 16.0250, lng: 120.3250 }, "Malued": { lat: 16.0400, lng: 120.3200 },
+            "Mayombo": { lat: 16.0480, lng: 120.3100 }, "Mangin": { lat: 16.0550, lng: 120.3500 },
+            "Tebeng": { lat: 16.0600, lng: 120.3450 }, "Pogo Chico": { lat: 16.0510, lng: 120.3600 },
+            "Pogo Grande": { lat: 16.0550, lng: 120.3650 }, "Herrero": { lat: 16.0450, lng: 120.3350 },
+            "Poblacion Centro": { lat: 16.0430, lng: 120.3335 }, "Poblacion Oeste": { lat: 16.0410, lng: 120.3300 },
+            "Poblacion Este": { lat: 16.0440, lng: 120.3360 }
+        };
 
-    /* --- 2. LEAFLET MAP INITIALIZATION --- */
-    const map = L.map('map', {
-        zoomControl: false,
-        minZoom: 13,
-        maxZoom: 16,
-        maxBounds: [[15.95, 120.25], [16.15, 120.45]],
-        maxBoundsViscosity: 1.0
-    }).setView([16.0431, 120.3330], 13);
+        /* --- 2. LEAFLET MAP INITIALIZATION --- */
+        const map = L.map('map', {
+            zoomControl: false,
+            minZoom: 13,
+            maxZoom: 16,
+            maxBounds: [[15.95, 120.25], [16.15, 120.45]],
+            maxBoundsViscosity: 1.0
+        }).setView([16.0431, 120.3330], 13);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap'
-    }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
 
-    L.control.zoom({ position: 'bottomright' }).addTo(map);
-    const markerLayerGroup = L.layerGroup().addTo(map);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+        const markerLayerGroup = L.layerGroup().addTo(map);
 
-    /* --- 3. STATE MANAGEMENT & PAGINATION VARIABLES --- */
-    let activeMaintenanceData = [];
-    let filteredFeedData = []; // Array used for slicing pagination
-    let currentPage = 1;
+        /* --- 3. STATE MANAGEMENT & PAGINATION VARIABLES --- */
+        let activeMaintenanceData = [];
+        let filteredFeedData = []; // Array used for slicing pagination
+        let currentPage = 1;
 
-    const API_ENDPOINT = 'http://localhost/crowdsourcedAPI/api/maintenance_map/get.php';
+        const API_ENDPOINT = 'http://localhost/crowdsourcedAPI/api/maintenance_map/get.php';
 
-    /* --- HELPERS --- */
-    function format12Hour(timeStr) {
-        if (!timeStr) return '';
-        const [h, m] = timeStr.split(':');
-        const d = new Date();
-        d.setHours(parseInt(h, 10), parseInt(m, 10));
-        return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-    }
-
-    // Centralized responsive pagination sizes
-    function getItemsPerPage() {
-        return window.innerWidth < 768 ? 3 : 5;
-    }
-
-    /* --- 4. API FETCH & STATUS ENGINE --- */
-    async function fetchMaintenanceData() {
-        try {
-            const response = await fetch(API_ENDPOINT, { credentials: "include" });
-            if (!response.ok) throw new Error("HTTP Status " + response.status);
-
-            const json = await response.json();
-            const rawArray = Array.isArray(json) ? json : (json.data || []);
-
-            const now = new Date();
-            activeMaintenanceData = [];
-
-            rawArray.forEach(item => {
-                const dtBase = item.maintenance_date;
-                const startTime = new Date(`${dtBase}T${item.start_time}`);
-                const endTime = new Date(`${dtBase}T${item.end_time}`);
-
-                let status = 'done';
-                if (now < startTime) status = 'pending';
-                else if (now >= startTime && now <= endTime) status = 'ongoing';
-
-                if (status !== 'done') {
-                    item._computedStatus = status;
-                    item._startParsed = startTime;
-                    activeMaintenanceData.push(item);
-                }
-            });
-
-            // Sort ascending by time
-            activeMaintenanceData.sort((a, b) => a._startParsed - b._startParsed);
-
-            // Re-apply existing filter safely (maintains UI state)
-            const searchEl = document.getElementById('mapSearch');
-            applyFiltersAndRender(searchEl ? searchEl.value : '');
-
-        } catch (error) {
-            console.error("Fetch Error:", error);
+        /* --- HELPERS --- */
+        function format12Hour(timeStr) {
+            if (!timeStr) return '';
+            const [h, m] = timeStr.split(':');
+            const d = new Date();
+            d.setHours(parseInt(h, 10), parseInt(m, 10));
+            return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
         }
-    }
 
-    /* --- 5. RENDER LOGIC (MAP & FILTERING) --- */
-    function applyFiltersAndRender(searchQuery = '') {
-        // ALWAYS fully clear previous markers before drawing new ones
-        markerLayerGroup.clearLayers();
-        
-        const query = searchQuery.toLowerCase().trim();
-        filteredFeedData = []; 
+        // Centralized responsive pagination sizes
+        function getItemsPerPage() {
+            return window.innerWidth < 768 ? 3 : 5;
+        }
 
-        activeMaintenanceData.forEach(item => {
-            let bList = Array.isArray(item.affected_barangays) 
-                ? item.affected_barangays 
-                : (item.affected_barangays || "").split(',').map(s => s.trim());
-            
-            const searchableText = `${item.company_name || ''} ${item.description || ''} ${bList.join(' ')}`.toLowerCase();
+        /* --- 4. API FETCH & STATUS ENGINE --- */
+        async function fetchMaintenanceData() {
+            try {
+                const response = await fetch(API_ENDPOINT, { credentials: "include" });
+                if (!response.ok) throw new Error("HTTP Status " + response.status);
 
-            // Skip unmatched items
-            if (query && !searchableText.includes(query)) return;
+                const json = await response.json();
+                const rawArray = Array.isArray(json) ? json : (json.data || []);
 
-            filteredFeedData.push({ item, bList });
+                const now = new Date();
+                activeMaintenanceData = [];
 
-            const status = item._computedStatus;
-            const hexColor = status === 'pending' ? '#e74c3c' : '#3498db';
-            const statusLabel = status.toUpperCase();
-            const dispDate = item._startParsed.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            const timeRange = `${format12Hour(item.start_time)} — ${format12Hour(item.end_time)}`;
-            const provider = item.company_name || 'Utility Provider';
+                rawArray.forEach(item => {
+                    const dtBase = item.maintenance_date;
+                    const startTime = new Date(`${dtBase}T${item.start_time}`);
+                    const endTime = new Date(`${dtBase}T${item.end_time}`);
 
-            // ALL matched items accurately draw their map markers
-            bList.forEach(bName => {
-                const geo = barangayData[bName];
-                if (geo) {
-                    L.circle([geo.lat, geo.lng], {
-                        radius: item.radius || 2000,
-                        color: hexColor, fillColor: hexColor, fillOpacity: 0.25, weight: 2
-                    }).addTo(markerLayerGroup).bindPopup(`
+                    // Advanced computed status engine (upcoming, ongoing, cancelled, done)
+                    let computedStatus = 'done';
+                    
+                    // Respect database overrides (like explicitly marking as 'cancelled')
+                    if (item.status && item.status.toLowerCase() === 'cancelled') {
+                        computedStatus = 'cancelled';
+                    } else if (now < startTime) {
+                        computedStatus = 'upcoming';
+                    } else if (now >= startTime && now <= endTime) {
+                        computedStatus = 'ongoing';
+                    }
+
+                    item._computedStatus = computedStatus;
+                    item._startParsed = startTime;
+
+                    activeMaintenanceData.push(item);
+                });
+
+                // Sort ascending by time
+                activeMaintenanceData.sort((a, b) => a._startParsed - b._startParsed);
+
+                // Apply existing filters (search & status) securely maintaining UI state
+                applyFiltersAndRender();
+
+            } catch (error) {
+                console.error("Fetch Error:", error);
+            }
+        }
+
+        /* --- 5. RENDER LOGIC (MAP & FILTERING) --- */
+        function applyFiltersAndRender() {
+            // ALWAYS fully clear previous markers before drawing new ones
+            markerLayerGroup.clearLayers();
+
+            const searchEl = document.getElementById('mapSearch');
+            const statusEl = document.getElementById('statusFilter');
+
+            const searchQuery = searchEl ? searchEl.value.toLowerCase().trim() : '';
+            const statusQuery = statusEl ? statusEl.value : 'all';
+
+            filteredFeedData = [];
+
+            activeMaintenanceData.forEach(item => {
+                let bList = Array.isArray(item.affected_barangays)
+                    ? item.affected_barangays
+                    : (item.affected_barangays || "").split(',').map(s => s.trim());
+
+                // 1. Text Search Filtering
+                const searchableText = `${item.company_name || ''} ${item.description || ''} ${bList.join(' ')}`.toLowerCase();
+                if (searchQuery && !searchableText.includes(searchQuery)) return;
+
+                // 2. Status Selection Filtering
+                const status = item._computedStatus;
+                if (statusQuery !== 'all' && status !== statusQuery) return; // Skip unmatched states
+
+                // 3. Setup styling properties directly onto the item wrapper for simple rendering
+                let hexColor = '#94A3B8'; // Default grey for Cancelled/Unknown
+                if (status === 'upcoming') hexColor = '#e74c3c';
+                else if (status === 'ongoing') hexColor = '#3498db';
+
+                filteredFeedData.push({ item, bList, status, hexColor });
+
+                const statusLabel = status.toUpperCase();
+                const dispDate = item._startParsed.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                const timeRange = `${format12Hour(item.start_time)} — ${format12Hour(item.end_time)}`;
+                const provider = item.company_name || 'Utility Provider';
+
+                // ALL matched items accurately draw their map markers
+                bList.forEach(bName => {
+                    const geo = barangayData[bName];
+                    if (geo) {
+                        L.circle([geo.lat, geo.lng], {
+                            radius: item.radius || 2000,
+                            color: hexColor, fillColor: hexColor, fillOpacity: 0.25, weight: 2
+                        }).addTo(markerLayerGroup).bindPopup(`
                         <div class="min-w-[220px]">
                             <div class="font-bold text-lg border-b border-white/10 pb-2 mb-2 tracking-tight">${bName}</div>
                             <div class="space-y-1.5">
@@ -463,60 +498,61 @@ $current_user_id = $user['id'] ?? null;
                                 <div class="text-[11px] text-[#94A3B8] flex justify-between"><span class="uppercase tracking-wider font-semibold">Time:</span><span class="text-white font-medium">${timeRange}</span></div>
                             </div>
                             <div class="mt-3 pt-3 border-t border-white/10 text-[10px] text-[#CBD5E1] leading-relaxed">
-                                ${item.description || 'System maintenance in progress.'}
+                                ${item.description || 'System maintenance event.'}
                             </div>
                         </div>
                     `);
-                }
+                    }
+                });
             });
-        });
 
-        // Ensure pagination state respects bounds
-        const itemsPerPage = getItemsPerPage();
-        const totalPages = Math.max(1, Math.ceil(filteredFeedData.length / itemsPerPage));
-        if (currentPage > totalPages) currentPage = totalPages;
+            // Ensure pagination state respects bounds after filtering
+            const itemsPerPage = getItemsPerPage();
+            const totalPages = Math.max(1, Math.ceil(filteredFeedData.length / itemsPerPage));
+            if (currentPage > totalPages) currentPage = totalPages;
 
-        renderPaginatedFeed();
-    }
-
-    /* --- 6. PAGINATION RENDER ENGINE --- */
-    function renderPaginatedFeed() {
-        const feedContainer = document.getElementById('maintenanceFeed');
-        const paginationContainer = document.getElementById('paginationControls');
-        
-        if (!feedContainer) return;
-        feedContainer.innerHTML = '';
-
-        if (filteredFeedData.length === 0) {
-            feedContainer.innerHTML = `
-                <div class="flex flex-col items-center justify-center h-full opacity-60 py-10 text-center">
-                    <svg class="w-10 h-10 mb-3 text-[#64748B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span class="text-sm font-semibold text-[#E2E8F0]">No active schedules found</span>
-                </div>`;
-            if (paginationContainer) paginationContainer.style.display = 'none';
-            return;
+            renderPaginatedFeed();
         }
 
-        const itemsPerPage = getItemsPerPage();
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const paginatedSlice = filteredFeedData.slice(startIndex, endIndex);
+        /* --- 6. PAGINATION RENDER ENGINE --- */
+        function renderPaginatedFeed() {
+            const feedContainer = document.getElementById('maintenanceFeed');
+            const paginationContainer = document.getElementById('paginationControls');
 
-        paginatedSlice.forEach(data => {
-            const { item, bList } = data;
-            const status = item._computedStatus;
-            const hexColor = status === 'pending' ? '#e74c3c' : '#3498db';
-            const statusLabel = status.toUpperCase();
-            const dispDate = item._startParsed.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            const timeRange = `${format12Hour(item.start_time)} — ${format12Hour(item.end_time)}`;
-            const provider = item.company_name || 'Utility Provider';
+            if (!feedContainer) return;
+            feedContainer.innerHTML = '';
 
-            feedContainer.innerHTML += `
-                <div class="hover-lift bg-[#1E293B]/40 border border-white/5 rounded-2xl p-4 flex flex-col relative overflow-hidden group shrink-0">
+            if (filteredFeedData.length === 0) {
+                feedContainer.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full opacity-60 py-10 text-center">
+                    <svg class="w-10 h-10 mb-3 text-[#64748B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span class="text-sm font-semibold text-[#E2E8F0]">No scheduled events match your filters</span>
+                </div>`;
+                if (paginationContainer) paginationContainer.style.display = 'none';
+                return;
+            }
+
+            const itemsPerPage = getItemsPerPage();
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedSlice = filteredFeedData.slice(startIndex, endIndex);
+
+            paginatedSlice.forEach(data => {
+                const { item, bList, status, hexColor } = data;
+                const statusLabel = status.toUpperCase();
+                const dispDate = item._startParsed.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                const timeRange = `${format12Hour(item.start_time)} — ${format12Hour(item.end_time)}`;
+                const provider = item.company_name || 'Utility Provider';
+                
+                // Opacity style adjusted depending if it's cancelled to visually strike it out slightly
+                const containerClass = status === 'cancelled' ? 'opacity-60 grayscale-[50%]' : '';
+
+                feedContainer.innerHTML += `
+                <div class="hover-lift bg-[#1E293B]/40 border border-white/5 rounded-2xl p-4 flex flex-col relative overflow-hidden group shrink-0 ${containerClass}">
                     <div class="absolute left-0 top-0 bottom-0 w-1.5" style="background-color: ${hexColor}"></div>
                     <div class="flex justify-between items-start pl-2 mb-3">
                         <div>
-                            <h4 class="font-bold text-white text-[13px] tracking-tight">${provider}</h4>
+                            <h4 class="font-bold text-white text-[13px] tracking-tight ${status === 'cancelled' ? 'line-through' : ''}">${provider}</h4>
                             <div class="text-[10px] text-[#94A3B8] font-medium mt-1 tracking-wide uppercase flex flex-col gap-0.5">
                                 <span>🗓️ ${dispDate}</span>
                                 <span>⏱️ ${timeRange}</span>
@@ -529,123 +565,131 @@ $current_user_id = $user['id'] ?? null;
                     </div>
                     <div class="pl-2 mb-2">
                         <span class="text-[9px] text-[#475569] font-bold tracking-widest uppercase block mb-1">AFFECTED ZONES</span>
-                        <p class="text-[11px] font-semibold text-[#E2E8F0] leading-relaxed truncate">${bList.join(', ') || 'N/A'}</p>
+                        <p class="text-[11px] font-semibold text-[#E2E8F0] leading-relaxed truncate ${status === 'cancelled' ? 'line-through text-white/50' : ''}">${bList.join(', ') || 'N/A'}</p>
                     </div>
                 </div>
             `;
-        });
+            });
 
-        renderPaginationControls();
-    }
-
-    /* --- 7. MODERN PAGINATION ENGINE (Fixed stability issues) --- */
-    function renderPaginationControls() {
-        const paginationContainer = document.getElementById('paginationControls');
-        if (!paginationContainer) return;
-        paginationContainer.innerHTML = "";
-
-        const itemsPerPage = getItemsPerPage();
-        const totalPages = Math.max(1, Math.ceil(filteredFeedData.length / itemsPerPage));
-
-        if (totalPages <= 1) {
-            paginationContainer.style.display = 'none';
-            return;
+            renderPaginationControls();
         }
 
-        paginationContainer.style.display = 'flex';
-        paginationContainer.className = "flex justify-center items-center gap-2 mt-4 pb-4"; 
-        
-        const fragment = document.createDocumentFragment();
+        /* --- 7. MODERN PAGINATION ENGINE --- */
+        function renderPaginationControls() {
+            const paginationContainer = document.getElementById('paginationControls');
+            if (!paginationContainer) return;
+            paginationContainer.innerHTML = "";
 
-        // Prev Button
-        const prevBtn = document.createElement("button");
-        prevBtn.textContent = "Prev";
-        prevBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all ${currentPage === 1 ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40' : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'}`;
-        prevBtn.onclick = () => {
-            if (currentPage > 1) {
-                currentPage--;
-                renderPaginatedFeed();
-            }
-        };
-        fragment.appendChild(prevBtn);
-
-        // Dynamic Numbered Page Buttons
-        for (let i = 1; i <= totalPages; i++) {
-            const pageBtn = document.createElement("button");
-            pageBtn.textContent = i;
-            pageBtn.className = `
-                px-3 py-1.5 text-xs font-black rounded-lg transition-all border
-                ${i === currentPage
-                    ? 'bg-[#FFBB02] text-black border-[#FFBB02]'
-                    : 'bg-[#31324C]/20 text-[#B5B5B5] border-white/5 hover:text-white'
-                }
-            `;
-            pageBtn.onclick = () => {
-                currentPage = i;
-                renderPaginatedFeed();
-            };
-            fragment.appendChild(pageBtn);
-        }
-
-        // Next Button
-        const nextBtn = document.createElement("button");
-        nextBtn.textContent = "Next";
-        nextBtn.className = `
-            px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all
-            ${currentPage === totalPages
-                ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40'
-                : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'
-            }
-        `;
-        nextBtn.onclick = () => {
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderPaginatedFeed();
-            }
-        };
-        fragment.appendChild(nextBtn);
-
-        paginationContainer.appendChild(fragment);
-    }
-
-    /* --- 8. EVENTS & HANDLERS --- */
-    function handleSearch(val) {
-        currentPage = 1; // Always reset pagination on a new search
-        applyFiltersAndRender(val);
-    }
-
-    // Safely recalculate pagination when viewport shrinks/expands
-    window.addEventListener('resize', () => {
-        if (filteredFeedData && filteredFeedData.length > 0) {
             const itemsPerPage = getItemsPerPage();
             const totalPages = Math.max(1, Math.ceil(filteredFeedData.length / itemsPerPage));
-            
-            if (currentPage > totalPages) currentPage = totalPages;
-            renderPaginatedFeed();
+
+            if (totalPages <= 1) {
+                paginationContainer.style.display = 'none';
+                return;
+            }
+
+            paginationContainer.style.display = 'flex';
+            paginationContainer.className = "flex justify-center items-center gap-2 mt-4 pb-4";
+
+            const fragment = document.createDocumentFragment();
+
+            // Prev Button
+            const prevBtn = document.createElement("button");
+            prevBtn.textContent = "Prev";
+            prevBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all ${currentPage === 1 ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40' : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'}`;
+            prevBtn.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderPaginatedFeed();
+                }
+            };
+            fragment.appendChild(prevBtn);
+
+            // Dynamic Numbered Page Buttons
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement("button");
+                pageBtn.textContent = i;
+                pageBtn.className = `
+                px-3 py-1.5 text-xs font-black rounded-lg transition-all border
+                ${i === currentPage
+                        ? 'bg-[#FFBB02] text-black border-[#FFBB02]'
+                        : 'bg-[#31324C]/20 text-[#B5B5B5] border-white/5 hover:text-white'
+                    }
+            `;
+                pageBtn.onclick = () => {
+                    currentPage = i;
+                    renderPaginatedFeed();
+                };
+                fragment.appendChild(pageBtn);
+            }
+
+            // Next Button
+            const nextBtn = document.createElement("button");
+            nextBtn.textContent = "Next";
+            nextBtn.className = `
+            px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all
+            ${currentPage === totalPages
+                    ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40'
+                    : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'
+                }
+        `;
+            nextBtn.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderPaginatedFeed();
+                }
+            };
+            fragment.appendChild(nextBtn);
+
+            paginationContainer.appendChild(fragment);
         }
-    });
 
-    document.addEventListener('DOMContentLoaded', () => {
-        fetchMaintenanceData();
-        setInterval(fetchMaintenanceData, 30000); // 30 sec auto-refresh
-    });
+        /* --- 8. EVENTS & HANDLERS --- */
+        
+        // Handles text input changes
+        function handleSearch() {
+            currentPage = 1;
+            applyFiltersAndRender();
+        }
 
-    /* --- MOBILE MENU --- */
-    const menuBtn = document.getElementById('menuToggle');
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
+        // Handles dropdown filter changes
+        function handleFilterChange() {
+            currentPage = 1;
+            applyFiltersAndRender();
+        }
 
-    if (menuBtn && sidebar && overlay) {
-        menuBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
+        // Safely recalculate pagination when viewport shrinks/expands
+        window.addEventListener('resize', () => {
+            if (filteredFeedData && filteredFeedData.length > 0) {
+                const itemsPerPage = getItemsPerPage();
+                const totalPages = Math.max(1, Math.ceil(filteredFeedData.length / itemsPerPage));
+
+                if (currentPage > totalPages) currentPage = totalPages;
+                renderPaginatedFeed();
+            }
         });
-        overlay.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchMaintenanceData();
+            setInterval(fetchMaintenanceData, 30000); // 30 sec auto-refresh
         });
-    }
-</script>
+
+        /* --- MOBILE MENU --- */
+        const menuBtn = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        if (menuBtn && sidebar && overlay) {
+            menuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            });
+            overlay.addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            });
+        }
+    </script>
 </body>
 
 </html>
