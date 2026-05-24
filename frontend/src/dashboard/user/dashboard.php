@@ -238,9 +238,9 @@ $picture = $user['picture'] ?? $defaultPicture;
                     </h1>
                     <!-- <span class="text-xs lg:text-sm text-[#B5B5B5] flex items-center gap-2 mt-1">
                         Status Context: -->
-                        <span class="flex items-center gap-1.5 text-[#00BA00] font-medium" id="status">
-                            <!-- Initializing infrastructure links... -->
-                        </span>
+                    <span class="flex items-center gap-1.5 text-[#00BA00] font-medium" id="status">
+                        <!-- Initializing infrastructure links... -->
+                    </span>
                     <!-- </span> -->
                 </div>
 
@@ -491,6 +491,26 @@ $picture = $user['picture'] ?? $defaultPicture;
     </div>
 
     <!-- RESPONSIVE NAV SCRIPTS + BUSINESS DATA LAYER IMPLEMENTATION -->
+    <style>
+        /* Required for the map marker pulsing effect */
+        @keyframes markerPulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        .custom-station-marker {
+            background: transparent;
+            border: none;
+        }
+    </style>
+
     <script>
         /* MOBILE MENU MANAGEMENT NAVIGATION INTERACTIVE CONTROLS */
         const menuToggle = document.getElementById('menuToggle');
@@ -502,8 +522,10 @@ $picture = $user['picture'] ?? $defaultPicture;
             overlay.classList.toggle('hidden');
         }
 
-        menuToggle.addEventListener('click', toggleMobileSidebar);
-        overlay.addEventListener('click', toggleMobileSidebar);
+        if (menuToggle && overlay) {
+            menuToggle.addEventListener('click', toggleMobileSidebar);
+            overlay.addEventListener('click', toggleMobileSidebar);
+        }
 
         /* =========================
            GLOBAL STATES & ARRAYS
@@ -511,13 +533,68 @@ $picture = $user['picture'] ?? $defaultPicture;
         let map;
         let stationLayer;
         let userMarker = null;
-        let stationsData = [];
+        let stationsData = []; // Acts as allCachedReports for stations
         let currentPage = 1;
         const perPage = 3;
         let notifications = [];
 
         /* =========================
-           MAP INITIALIZATION
+           MARKER FACTORY & STATUS STYLES (SINGLE SOURCE OF TRUTH)
+        ========================= */
+        function getStatusColor(status) {
+            const s = String(status || 'available').toLowerCase().trim();
+            if (s.includes('available')) return '#34FB34';
+            if (s.includes('busy')) return '#FFBB02';
+            if (s.includes('offline')) return '#FF2E1F';
+            if (s.includes('maintenance')) return '#00E5FF';
+            return '#34FB34'; // Default fallback
+        }
+
+        function createStationIcon(status) {
+            const color = getStatusColor(status);
+            return L.divIcon({
+                className: 'custom-station-marker',
+                html: `
+                    <div style="
+                        background-color: ${color};
+                        width: 24px;
+                        height: 24px;
+                        border-radius: 50%;
+                        border: 2px solid white;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        box-shadow: 0 0 10px ${color}80;
+                        position: relative;
+                    ">
+                        <svg class="w-3.5 h-3.5 text-[#03041A]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                        <div style="
+                            position: absolute;
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 50%;
+                            background-color: ${color};
+                            animation: markerPulse 1.5s infinite ease-out;
+                            z-index: -1;
+                        "></div>
+                    </div>
+                `,
+                iconSize: [24, 24],
+                iconAnchor: [12, 12],
+                popupAnchor: [0, -14]
+            });
+        }
+
+        const userIcon = L.icon({
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/64/64113.png',
+            iconSize: [35, 35],
+            iconAnchor: [17, 35]
+        });
+
+        /* =========================
+           MAP INITIALIZATION (MAIN MAP)
         ========================= */
         function initMap() {
             map = L.map('map').setView([16.0431, 120.3330], 13);
@@ -531,19 +608,108 @@ $picture = $user['picture'] ?? $defaultPicture;
         }
 
         /* =========================
-           CUSTOM LEAFLET MAP ICONS
+           MODAL MAP ISOLATION & COORDINATE SYNCING
         ========================= */
-        const stationIcon = L.icon({
-            iconUrl: 'https://cdn-icons-png.flaticon.com/512/252/252025.png',
-            iconSize: [35, 35],
-            iconAnchor: [17, 35]
-        });
+        let createMapInstance = null;
+        let createMarkerInstance = null;
+        let editMapInstance = null;
+        let editMarkerInstance = null;
 
-        const userIcon = L.icon({
-            iconUrl: 'https://cdn-icons-png.flaticon.com/512/64/64113.png',
-            iconSize: [35, 35],
-            iconAnchor: [17, 35]
-        });
+        function syncCreateCoords(lat, lng) {
+            const latInput = document.getElementById('create_latitude');
+            const lngInput = document.getElementById('create_longitude');
+            if (latInput) latInput.value = lat;
+            if (lngInput) lngInput.value = lng;
+            if (createMarkerInstance) createMarkerInstance.setLatLng([lat, lng]);
+        }
+
+        function syncEditCoords(lat, lng) {
+            const latInput = document.getElementById('edit_latitude');
+            const lngInput = document.getElementById('edit_longitude');
+            if (latInput) latInput.value = lat;
+            if (lngInput) lngInput.value = lng;
+            if (editMarkerInstance) editMarkerInstance.setLatLng([lat, lng]);
+        }
+
+        function initCreateMap(lat = 16.0431, lng = 120.3330) {
+            if (!createMapInstance) {
+                createMapInstance = L.map('createMap').setView([lat, lng], 14);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(createMapInstance);
+                createMapInstance.on('click', (e) => syncCreateCoords(e.latlng.lat, e.latlng.lng));
+            }
+            if (createMarkerInstance) createMapInstance.removeLayer(createMarkerInstance);
+
+            createMarkerInstance = L.marker([lat, lng], {
+                icon: createStationIcon('available'), // Default status
+                draggable: true
+            }).addTo(createMapInstance);
+
+            createMarkerInstance.on('dragend', (e) => {
+                const pos = e.target.getLatLng();
+                syncCreateCoords(pos.lat, pos.lng);
+            });
+
+            syncCreateCoords(lat, lng);
+            setTimeout(() => createMapInstance.invalidateSize(), 200);
+        }
+
+        function initEditMap(lat, lng, status) {
+            if (!editMapInstance) {
+                editMapInstance = L.map('editMap').setView([lat, lng], 14);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(editMapInstance);
+                editMapInstance.on('click', (e) => syncEditCoords(e.latlng.lat, e.latlng.lng));
+            }
+            if (editMarkerInstance) editMapInstance.removeLayer(editMarkerInstance);
+
+            editMapInstance.setView([lat, lng], 14);
+            editMarkerInstance = L.marker([lat, lng], {
+                icon: createStationIcon(status),
+                draggable: true
+            }).addTo(editMapInstance);
+
+            editMarkerInstance.on('dragend', (e) => {
+                const pos = e.target.getLatLng();
+                syncEditCoords(pos.lat, pos.lng);
+            });
+
+            syncEditCoords(lat, lng);
+            setTimeout(() => editMapInstance.invalidateSize(), 200);
+        }
+
+        /* =========================
+           SAFE SELECT BINDING (BUG FIX)
+        ========================= */
+        function setSelectValueSafely(selectId, value) {
+            const select = document.getElementById(selectId);
+            if (!select || !value) return;
+            const target = String(value).toLowerCase().trim();
+            for (let i = 0; i < select.options.length; i++) {
+                if (select.options[i].value.toLowerCase().trim() === target) {
+                    select.selectedIndex = i;
+                    return;
+                }
+            }
+        }
+
+        /* =========================
+           LIVE UPDATE CACHE SYNC
+        ========================= */
+        function handleStationUpdateSuccess(updatedStation) {
+            // Find and replace in cache without reloading page
+            const index = stationsData.findIndex(s => s.id == updatedStation.id);
+            if (index !== -1) {
+                // Merge updated properties
+                stationsData[index] = { ...stationsData[index], ...updatedStation };
+            }
+
+            // Re-render components globally
+            renderStationsPage(); // Same as renderStatisticsFeed()
+            renderStationsPagination();
+
+            const uLat = userMarker ? userMarker.getLatLng().lat : 16.0431;
+            const uLng = userMarker ? userMarker.getLatLng().lng : 120.3330;
+            renderStationMapMarkers(uLat, uLng); // Rebuilds the map layer instantly
+        }
 
         /* =========================
            GEOLOCATION PIPELINE
@@ -575,17 +741,10 @@ $picture = $user['picture'] ?? $defaultPicture;
                     document.getElementById("status").innerText = "Failed to get your location";
                     loadStations(16.0431, 120.3330);
                 },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0
-                }
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
             );
         }
 
-        /* =========================
-           DISTANCE CALCULATOR (HAVERSINE FORMULA)
-        ========================= */
         function calculateDistance(lat1, lon1, lat2, lon2) {
             const R = 6371;
             const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -600,11 +759,10 @@ $picture = $user['picture'] ?? $defaultPicture;
         }
 
         /* =========================
-           DASHBOARD METRICS INITIALIZATION
+           DASHBOARD METRICS & STATIONS LOADING
         ========================= */
         async function loadDashboard() {
             try {
-                /* ================= ACTIVE OUTAGES ================= */
                 const active = await fetch("http://localhost/crowdsourcedapi/api/outage_report/get_active.php", { credentials: "include" });
                 const activeData = await active.json();
                 const activeEl = document.getElementById("activeOutages");
@@ -612,7 +770,6 @@ $picture = $user['picture'] ?? $defaultPicture;
                     activeEl.innerText = activeData.count ?? activeData.total ?? activeData.total_active_reports ?? (Array.isArray(activeData.data) ? activeData.data.length : 0);
                 }
 
-                /* ================= MAINTENANCE ================= */
                 const maintenance = await fetch("http://localhost/crowdsourcedapi/api/maintenance/get_upcoming.php", { credentials: "include" });
                 const mData = await maintenance.json();
                 const maintenanceEl = document.getElementById("maintenanceCount");
@@ -624,9 +781,6 @@ $picture = $user['picture'] ?? $defaultPicture;
             }
         }
 
-        /* =========================
-           STATIONS LOADING & GEOGRAPHIC MANAGEMENT
-        ========================= */
         async function loadStations(userLat, userLng) {
             try {
                 const res = await fetch("http://localhost/crowdsourcedapi/api/power_station/get.php", { credentials: "include" });
@@ -638,8 +792,6 @@ $picture = $user['picture'] ?? $defaultPicture;
                 }
 
                 let stations = result.data || [];
-
-                // Calculate distances vectors dynamically
                 stations = stations.map(station => {
                     const lat = parseFloat(station.latitude);
                     const lng = parseFloat(station.longitude);
@@ -650,13 +802,14 @@ $picture = $user['picture'] ?? $defaultPicture;
                     return { ...station, distance };
                 });
 
-                // Sort configurations nearest first
                 stations.sort((a, b) => (a.distance || 9999) - (b.distance || 9999));
                 stationsData = stations;
 
-                // Sync counter layout badges
-                document.getElementById("totalStations").innerText = stationsData.length;
-                document.getElementById("status").innerText = ``;
+                const totalEl = document.getElementById("totalStations");
+                if (totalEl) totalEl.innerText = stationsData.length;
+
+                const statusEl = document.getElementById("status");
+                if (statusEl) statusEl.innerText = ``;
 
                 renderStationsPage();
                 renderStationsPagination();
@@ -664,7 +817,8 @@ $picture = $user['picture'] ?? $defaultPicture;
 
             } catch (err) {
                 console.error("Load error:", err);
-                document.getElementById("status").innerText = "Server error";
+                const statusEl = document.getElementById("status");
+                if (statusEl) statusEl.innerText = "Server error";
             }
         }
 
@@ -680,14 +834,16 @@ $picture = $user['picture'] ?? $defaultPicture;
                 const lng = parseFloat(s.longitude);
 
                 if (!isNaN(lat) && !isNaN(lng)) {
-                    const marker = L.marker([lat, lng], { icon: stationIcon });
+                    // Injecting the new dynamic status-based factory pin
+                    const marker = L.marker([lat, lng], { icon: createStationIcon(s.availability_status) });
+
                     marker.bindPopup(`
-                        <div class="text-black text-xs p-1">
-                            <b class="text-sm border-b pb-1 mb-1 block">${s.station_name}</b>
-                            <b>Type:</b> ${s.station_type}<br>
-                            <b>Status:</b> ${s.availability_status}<br>
-                            <b>Access:</b> ${s.access_type}<br>
-                            <b>Location:</b> ${s.location_name}
+                        <div class="text-black text-xs p-1 min-w-[150px]">
+                            <b class="text-sm border-b pb-1 mb-1 block truncate">${s.station_name}</b>
+                            <b>Type:</b> <span class="capitalize">${String(s.station_type).replace('_', ' ')}</span><br>
+                            <b>Status:</b> <span style="color: ${getStatusColor(s.availability_status)}; font-weight: bold;" class="uppercase">${s.availability_status}</span><br>
+                            <b>Access:</b> <span class="capitalize">${s.access_type}</span><br>
+                            <b>Location:</b> <span class="truncate block max-w-[150px]">${s.location_name}</span>
                         </div>
                     `);
                     stationLayer.addLayer(marker);
@@ -707,6 +863,8 @@ $picture = $user['picture'] ?? $defaultPicture;
         ========================= */
         function renderStationsPage() {
             const list = document.getElementById("list");
+            if (!list) return;
+
             list.innerHTML = "";
 
             const start = (currentPage - 1) * perPage;
@@ -721,17 +879,13 @@ $picture = $user['picture'] ?? $defaultPicture;
                 const card = document.createElement("div");
                 card.className = "bg-[#0D0E2A]/70 border border-white/5 rounded-xl p-4 flex flex-col gap-2 text-left transition-all hover:border-white/10";
 
-                let statusBadgeColor = "text-[#FAB005] bg-[#FAB005]/10 border-[#FAB005]/20";
-                if (s.availability_status && s.availability_status.toLowerCase().includes('available')) {
-                    statusBadgeColor = "text-[#00BA00] bg-[#00BA00]/10 border-[#00BA00]/20";
-                } else if (s.availability_status && s.availability_status.toLowerCase().includes('offline')) {
-                    statusBadgeColor = "text-[#CB3435] bg-[#CB3435]/10 border-[#CB3435]/20";
-                }
+                const color = getStatusColor(s.availability_status);
+                let badgeHTML = `<span class="px-2 py-0.5 border text-[9px] font-bold rounded-md uppercase tracking-wide" style="color: ${color}; border-color: ${color}40; background-color: ${color}15;">${s.availability_status}</span>`;
 
                 card.innerHTML = `
                     <div class="flex justify-between items-start gap-2">
                         <span class="text-white font-bold text-sm truncate max-w-[190px]">${s.station_name}</span>
-                        <span class="px-2 py-0.5 border text-[9px] font-bold rounded-md ${statusBadgeColor} uppercase tracking-wide">${s.availability_status}</span>
+                        ${badgeHTML}
                     </div>
                     <div class="text-[#B5B5B5] text-xs flex flex-col gap-0.5">
                         <span class="text-white/80 font-medium truncate">${s.location_name}</span>
@@ -748,6 +902,7 @@ $picture = $user['picture'] ?? $defaultPicture;
         /* STATION PAGINATION CONTROLS MODULATION */
         function renderStationsPagination() {
             const p = document.getElementById("pagination");
+            if (!p) return;
             p.innerHTML = "";
 
             const pages = Math.ceil(stationsData.length / perPage);
@@ -786,58 +941,53 @@ $picture = $user['picture'] ?? $defaultPicture;
             const ringCircumference = 314.15926;
 
             if (!navigator.getBattery) {
-                pctLabel.innerText = "N/A";
-                badgeLabel.innerText = "UNSUPPORTED";
-                descLabel.innerText = "Hardware API interface missing from this browser.";
+                if (pctLabel) pctLabel.innerText = "N/A";
+                if (badgeLabel) badgeLabel.innerText = "UNSUPPORTED";
+                if (descLabel) descLabel.innerText = "Hardware API interface missing from this browser.";
                 return;
             }
 
             navigator.getBattery().then((battery) => {
                 function runSystemUpdate() {
                     const currentLevel = Math.round(battery.level * 100);
-                    pctLabel.innerText = `${currentLevel}%`;
+                    if (pctLabel) pctLabel.innerText = `${currentLevel}%`;
 
                     const offsetValue = ringCircumference - (battery.level * ringCircumference);
-                    progressCircle.style.strokeDashoffset = offsetValue;
-                    chargingLabel.innerText = battery.charging ? "Charging" : "";
+                    if (progressCircle) progressCircle.style.strokeDashoffset = offsetValue;
+                    if (chargingLabel) chargingLabel.innerText = battery.charging ? "Charging" : "";
 
-                    cardElement.style.boxShadow = "";
-                    cardElement.style.borderColor = "rgba(255,255,255,0.05)";
+                    if (cardElement) {
+                        cardElement.style.boxShadow = "";
+                        cardElement.style.borderColor = "rgba(255,255,255,0.05)";
+                    }
 
                     if (battery.charging && currentLevel >= 95) {
-                        badgeLabel.innerText = "FULLY CHARGED";
-                        badgeLabel.style.color = "#5FCB5F";
-                        descLabel.innerText = "AC wall power online. Station infrastructure holding max cell reserves.";
-                        progressCircle.style.stroke = "#5FCB5F";
-                        progressCircle.style.filter = "drop-shadow(0 0 4px rgba(95, 203, 95, 0.4))";
-                        iconWrapper.className = "p-2 rounded-lg bg-[#5FCB5F]/10 text-[#5FCB5F]";
-                        cardElement.style.boxShadow = "0 20px 25px -5px rgba(95, 203, 95, 0.03)";
-                        iconSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h14a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2zm16 4h2v2h-2v-2zM6 10h2v4H6v-4zm4 0h2v4h-2v-4zm4 0h2v4h-2v-4z" />`;
+                        if (badgeLabel) { badgeLabel.innerText = "FULLY CHARGED"; badgeLabel.style.color = "#5FCB5F"; }
+                        if (descLabel) descLabel.innerText = "AC wall power online. Station infrastructure holding max cell reserves.";
+                        if (progressCircle) { progressCircle.style.stroke = "#5FCB5F"; progressCircle.style.filter = "drop-shadow(0 0 4px rgba(95, 203, 95, 0.4))"; }
+                        if (iconWrapper) iconWrapper.className = "p-2 rounded-lg bg-[#5FCB5F]/10 text-[#5FCB5F]";
+                        if (cardElement) cardElement.style.boxShadow = "0 20px 25px -5px rgba(95, 203, 95, 0.03)";
+                        if (iconSvg) iconSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h14a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2zm16 4h2v2h-2v-2zM6 10h2v4H6v-4zm4 0h2v4h-2v-4zm4 0h2v4h-2v-4z" />`;
                     }
                     else if (currentLevel <= 20) {
-                        badgeLabel.innerText = "CRITICAL LOW";
-                        badgeLabel.style.color = "#CB3435";
-                        descLabel.innerText = battery.charging
+                        if (badgeLabel) { badgeLabel.innerText = "CRITICAL LOW"; badgeLabel.style.color = "#CB3435"; }
+                        if (descLabel) descLabel.innerText = battery.charging
                             ? "Low capacity state. Secondary energy link active, restoring levels."
                             : "Severe local power drainage. Plug in immediate system backups.";
-                        progressCircle.style.stroke = "#CB3435";
-                        progressCircle.style.filter = "drop-shadow(0 0 6px rgba(203, 52, 53, 0.6))";
-                        iconWrapper.className = "p-2 rounded-lg bg-[#CB3435]/10 text-[#CB3435]";
-                        cardElement.style.borderColor = "rgba(203, 52, 53, 0.2)";
-                        cardElement.style.boxShadow = "0 20px 25px -5px rgba(203, 52, 53, 0.08)";
-                        iconSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h14a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2zm16 4h2v2h-2v-2zM6 10h1v4H6v-4z" />`;
+                        if (progressCircle) { progressCircle.style.stroke = "#CB3435"; progressCircle.style.filter = "drop-shadow(0 0 6px rgba(203, 52, 53, 0.6))"; }
+                        if (iconWrapper) iconWrapper.className = "p-2 rounded-lg bg-[#CB3435]/10 text-[#CB3435]";
+                        if (cardElement) { cardElement.style.borderColor = "rgba(203, 52, 53, 0.2)"; cardElement.style.boxShadow = "0 20px 25px -5px rgba(203, 52, 53, 0.08)"; }
+                        if (iconSvg) iconSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h14a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2zm16 4h2v2h-2v-2zM6 10h1v4H6v-4z" />`;
                     }
                     else {
-                        badgeLabel.innerText = battery.charging ? "RECHARGING" : "BATTERY NOMINAL";
-                        badgeLabel.style.color = "#FFBB02";
-                        descLabel.innerText = battery.charging
+                        if (badgeLabel) { badgeLabel.innerText = battery.charging ? "RECHARGING" : "BATTERY NOMINAL"; badgeLabel.style.color = "#FFBB02"; }
+                        if (descLabel) descLabel.innerText = battery.charging
                             ? "DC voltage streaming steady. Rebuilding capacity distributions."
                             : "System runtime operating on stable standalone lithium architecture.";
-                        progressCircle.style.stroke = "#FFBB02";
-                        progressCircle.style.filter = "drop-shadow(0 0 4px rgba(255, 187, 2, 0.4))";
-                        iconWrapper.className = "p-2 rounded-lg bg-[#FFBB02]/10 text-[#FFBB02]";
-                        cardElement.style.boxShadow = "0 20px 25px -5px rgba(255, 187, 2, 0.03)";
-                        iconSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h14a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2zm16 4h2v2h-2v-2zM6 10h5v4H6v-4z" />`;
+                        if (progressCircle) { progressCircle.style.stroke = "#FFBB02"; progressCircle.style.filter = "drop-shadow(0 0 4px rgba(255, 187, 2, 0.4))"; }
+                        if (iconWrapper) iconWrapper.className = "p-2 rounded-lg bg-[#FFBB02]/10 text-[#FFBB02]";
+                        if (cardElement) cardElement.style.boxShadow = "0 20px 25px -5px rgba(255, 187, 2, 0.03)";
+                        if (iconSvg) iconSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h14a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2zm16 4h2v2h-2v-2zM6 10h5v4H6v-4z" />`;
                     }
                 }
                 runSystemUpdate();
@@ -862,17 +1012,19 @@ $picture = $user['picture'] ?? $defaultPicture;
 
         function renderNotif() {
             const feed = document.getElementById("notifFeed");
+            if (!feed) return;
             const badge = document.getElementById("notifCount");
+            const totalEl = document.getElementById("notifTotal");
+
             const unread = notifications.filter(n => n.is_read == 0);
 
             if (unread.length) {
-                badge.classList.remove("hidden");
-                badge.innerText = unread.length;
+                if (badge) { badge.classList.remove("hidden"); badge.innerText = unread.length; }
             } else {
-                badge.classList.add("hidden");
+                if (badge) badge.classList.add("hidden");
             }
 
-            document.getElementById("notifTotal").innerText = unread.length;
+            if (totalEl) totalEl.innerText = unread.length;
 
             if (notifications.length === 0) {
                 feed.innerHTML = `<span class="text-xs text-white/40 font-medium text-center py-6">No alerts available</span>`;
@@ -895,7 +1047,8 @@ $picture = $user['picture'] ?? $defaultPicture;
         }
 
         function toggleNotifications() {
-            document.getElementById("notifPanel").classList.toggle("hidden");
+            const panel = document.getElementById("notifPanel");
+            if (panel) panel.classList.toggle("hidden");
         }
 
         async function markAllAsRead() {

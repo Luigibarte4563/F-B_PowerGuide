@@ -516,7 +516,43 @@ $current_user_id = $user['id'] ?? null;
     </div>
 
     <!-- ================= JAVASCRIPT SYSTEM ENGINE ================= -->
-    <script>
+        <style>
+            /* ================= MAP MARKER PULSE SYSTEM ================= */
+
+@keyframes markerPulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+}
+
+/* Base marker reset (Leaflet override safety) */
+.custom-station-pin {
+    background: transparent !important;
+    border: none !important;
+}
+
+/* Pulse ring effect */
+.station-pulse-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: markerPulse 1.8s ease-out infinite;
+}
+
+/* Optional: second slower pulse for depth */
+.station-pulse-ring.delay {
+    animation-delay: 0.9s;
+}
+        </style>
+
+<script>
         /* ================= LEAFLET MAP ================= */
         /* ================= LEAFLET MAP ================= */
 const map = L.map('map', { zoomControl: false }).setView([16.04, 120.33], 12);
@@ -1233,7 +1269,36 @@ function toggleFilterMode(mode) {
     setValue("mapSearch", "");
     loadStations();
 }
+function createStationPin(color, status) {
+    const isOffline = status === "offline";
 
+    return L.divIcon({
+        className: "custom-station-pin",
+        html: `
+            <div class="relative flex items-center justify-center w-6 h-6">
+
+                <!-- Pulse Rings -->
+                <span class="station-pulse-ring"
+                      style="background:${color}; ${isOffline ? 'opacity:0.3' : ''}"></span>
+
+                <span class="station-pulse-ring delay"
+                      style="background:${color}; ${isOffline ? 'opacity:0.2' : ''}"></span>
+
+                <!-- Main Pin -->
+                <div class="relative flex items-center justify-center w-6 h-6 rounded-full border-2 border-white shadow-md z-10"
+                     style="background-color:${color}">
+
+                    <svg class="w-3.5 h-3.5 text-[#03041A]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+
+                </div>
+            </div>
+        `,
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
+    });
+}
 /* ================= MAP RENDERING ================= */
 function renderMapMarkers(stations) {
     layerGroup.clearLayers();
@@ -1246,17 +1311,7 @@ function renderMapMarkers(stations) {
         liveCount++;
 
         const markerColor = getStatusColor(s.availability_status);
-        const pulseIcon = L.divIcon({
-            className: 'custom-station-pulse-marker',
-            html: `<div class="relative flex items-center justify-center w-6 h-6 rounded-full border-2 border-white shadow-md" style="background-color:${markerColor}">
-                <svg class="w-3.5 h-3.5 text-[#03041A]" fill="currentColor" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                <span class="absolute -top-1 -right-1 flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background-color:${markerColor}"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2" style="background-color:${markerColor}"></span>
-                </span>
-            </div>`,
-            iconSize: [24, 24], iconAnchor: [12, 12]
-        });
+        const pulseIcon = createStationPin(markerColor, s.availability_status);
 
         const popupContent = `
             <div class="text-white text-xs p-1">
