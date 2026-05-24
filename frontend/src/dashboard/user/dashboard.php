@@ -398,10 +398,52 @@ $picture = $user['picture'] ?? $defaultPicture;
                                         LOOP
                                     </span>
                                 </div>
+
                             </div>
 
-                            <!-- Map Element Block -->
-                            <div id="map" class="w-full h-80 lg:h-[430px] z-10 bg-[#0E0F26]"></div>
+                            <div class="relative w-full h-80 lg:h-[430px] bg-[#0E0F26]">
+
+                                <!-- MAP -->
+                                <div id="map" class="w-full h-full z-10"></div>
+
+                                <!-- LEGEND (OVERLAY) -->
+                                <div
+                                    class="absolute bottom-4 left-4 border border-white/10 bg-[#1A1B33]/95 rounded-2xl z-[1000] p-3 shadow-xl backdrop-blur-md">
+
+                                    <div class="flex flex-col gap-1.5 min-w-[140px]">
+
+                                        <span class="font-bold text-[10px] tracking-widest text-white/40 block mb-0.5">
+                                            AVAILABILITY LEGEND
+                                        </span>
+
+                                        <span class="font-semibold text-xs flex items-center text-white/90">
+                                            <span
+                                                class="w-2.5 h-2.5 rounded-full bg-[#34FB34] mr-2 block shadow-sm"></span>
+                                            Operational
+                                        </span>
+
+                                        <span class="font-semibold text-xs flex items-center text-white/90">
+                                            <span
+                                                class="w-2.5 h-2.5 rounded-full bg-[#FFBB02] mr-2 block shadow-sm"></span>
+                                            Maintenance
+                                        </span>
+
+                                        <span class="font-semibold text-xs flex items-center text-white/90">
+                                            <span
+                                                class="w-2.5 h-2.5 rounded-full bg-[#FF2E1F] mr-2 block shadow-sm"></span>
+                                            Offline
+                                        </span>
+
+                                        <span class="font-semibold text-xs flex items-center text-white/90">
+                                            <span
+                                                class="w-2.5 h-2.5 rounded-full bg-[#00E5FF] mr-2 block shadow-sm"></span>
+                                            Planned
+                                        </span>
+
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
 
