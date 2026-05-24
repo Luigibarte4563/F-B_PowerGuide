@@ -68,47 +68,52 @@ $googleClientId = $_ENV['GOOGLE_CLIENT_ID'] ?? '';
         </div>
 
         <!-- Form Wrapper -->
-        <form id="signupForm" action="<?= BACKEND_URL ?>/src/api/auth/register.php" method="POST" class="flex flex-col justify-center mt-6 w-80">
+        <form id="signupForm" action="<?= BACKEND_URL ?>/src/api/auth/register.php" method="POST"
+            class="flex flex-col justify-center mt-6 w-80">
 
             <!-- Backend Session Status Messages -->
             <?php if (isset($_SESSION['register_error'])): ?>
-                <div class="text-red-500 text-sm mb-3 font-semibold text-center bg-red-500/10 py-2 px-3 rounded-xl border border-red-500/20">
+                <div
+                    class="text-red-500 text-sm mb-3 font-semibold text-center bg-red-500/10 py-2 px-3 rounded-xl border border-red-500/20">
                     <?= htmlspecialchars($_SESSION['register_error'], ENT_QUOTES, 'UTF-8'); ?>
                 </div>
                 <?php unset($_SESSION['register_error']); ?>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['success'])): ?>
-                <div class="text-green-500 text-sm mb-3 font-semibold text-center bg-green-500/10 py-2 px-3 rounded-xl border border-green-500/20">
+                <div
+                    class="text-green-500 text-sm mb-3 font-semibold text-center bg-green-500/10 py-2 px-3 rounded-xl border border-green-500/20">
                     <?= htmlspecialchars($_SESSION['success'], ENT_QUOTES, 'UTF-8'); ?>
                 </div>
                 <?php unset($_SESSION['success']); ?>
             <?php endif; ?>
 
-            <!-- Email Field -->
-            <div class="mb-3">
-                <span class="text-white font-semibold text-sm">Email</span>
-                <input type="email" name="email" placeholder="johndoe@gmail.com" required 
-                    class="w-full h-11 pl-4 pr-4 rounded-xl border border-white/70 bg-transparent text-sm font-medium text-white outline-none placeholder:text-white/40 focus:border-[#FFBB02] mt-1">
-            </div>
-
             <!-- Full Name Field -->
             <div class="mb-3">
                 <span class="text-white font-semibold text-sm">Full Name</span>
-                <input type="text" name="name" placeholder="John C. Doe" required 
+                <input type="text" name="name" placeholder="John C. Doe" required
+                    class="w-full h-11 pl-4 pr-4 rounded-xl border border-white/70 bg-transparent text-sm font-medium text-white outline-none placeholder:text-white/40 focus:border-[#FFBB02] mt-1">
+            </div>
+            <!-- Email Field -->
+            <div class="mb-3">
+                <span class="text-white font-semibold text-sm">Email</span>
+                <input type="email" name="email" placeholder="johndoe@gmail.com" required
                     class="w-full h-11 pl-4 pr-4 rounded-xl border border-white/70 bg-transparent text-sm font-medium text-white outline-none placeholder:text-white/40 focus:border-[#FFBB02] mt-1">
             </div>
 
             <!-- Password Field -->
+            <!-- Password Field -->
             <div class="mb-3 relative">
                 <span class="text-white font-semibold text-sm">Password</span>
+
                 <div class="w-full relative mt-1">
-                    <input type="password" name="password" placeholder="********" id="password" required 
+                    <input type="password" name="password" placeholder="********" id="password" required
                         class="w-full h-11 pl-4 pr-11 bg-transparent border border-white/70 rounded-xl text-sm font-medium text-white outline-none placeholder:text-white/40 focus:border-[#FFBB02]">
-                    <button type="button" onclick="togglePassword()" class="cursor-pointer"
-                        onmouseover="this.style.color='#FFBB02'" onmouseout="this.style.color='#9ca3af'"
-                        style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); color: #9ca3af;">
-                        <i id="eyeIcon" class="fas fa-eye text-lg"></i>
+
+                    <!-- Eye Toggle -->
+                    <button type="button" onclick="togglePassword('password', 'eyeIcon1')"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#FFBB02] transition">
+                        <i id="eyeIcon1" class="fas fa-eye text-sm"></i>
                     </button>
                 </div>
             </div>
@@ -116,16 +121,27 @@ $googleClientId = $_ENV['GOOGLE_CLIENT_ID'] ?? '';
             <!-- Confirm Password Field -->
             <div class="mb-4">
                 <span class="text-white font-semibold text-sm">Confirm Password</span>
-                <input type="password" name="confirm_password" placeholder="********" id="confirm_password" required 
-                    class="w-full h-11 pl-4 pr-4 rounded-xl border border-white/70 bg-transparent text-sm font-medium text-white outline-none placeholder:text-white/40 focus:border-[#FFBB02] mt-1">
-                <!-- Status match container text -->
+
+                <div class="w-full relative mt-1">
+                    <input type="password" name="confirm_password" placeholder="********" id="confirm_password" required
+                        class="w-full h-11 pl-4 pr-11 bg-transparent border border-white/70 rounded-xl text-sm font-medium text-white outline-none placeholder:text-white/40 focus:border-[#FFBB02]">
+
+                    <!-- Eye Toggle -->
+                    <button type="button" onclick="togglePassword('confirm_password', 'eyeIcon2')"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#FFBB02] transition">
+                        <i id="eyeIcon2" class="fas fa-eye text-sm"></i>
+                    </button>
+                </div>
+
+                <!-- Match message -->
                 <div id="match-message" class="text-xs font-semibold mt-1 h-4"></div>
             </div>
 
             <!-- Create Account Button -->
             <div class="w-full flex items-center justify-center">
                 <!-- Initialized with disabled="true" until verification passes -->
-                <button type="submit" id="submitBtn" disabled class="int-btn font-bold py-2.5 bg-[#FFBB02] text-black rounded-xl hover:bg-[#D99A00] active:bg-[#FFC833] cursor-pointer w-full text-sm hover:scale-[1.01] active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed">
+                <button type="submit" id="submitBtn" disabled
+                    class="int-btn font-bold py-2.5 bg-[#FFBB02] text-black rounded-xl hover:bg-[#D99A00] active:bg-[#FFC833] cursor-pointer w-full text-sm hover:scale-[1.01] active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed">
                     Create Account
                 </button>
             </div>
@@ -139,31 +155,27 @@ $googleClientId = $_ENV['GOOGLE_CLIENT_ID'] ?? '';
 
             <!-- Sign up with Google Container Block -->
             <div class="w-full relative h-11 group flex justify-center items-center">
-                <div id="g_id_onload" 
-                    data-client_id="<?= htmlspecialchars($googleClientId, ENT_QUOTES, 'UTF-8') ?>" 
-                    data-auto_prompt="false"
-                    data-callback="handleCredentialResponse"
-                    data-auto_select="false">
+                <div id="g_id_onload" data-client_id="<?= htmlspecialchars($googleClientId, ENT_QUOTES, 'UTF-8') ?>"
+                    data-auto_prompt="false" data-callback="handleCredentialResponse" data-auto_select="false">
                 </div>
 
                 <div class="g_id_signin absolute inset-0 z-20 opacity-0 cursor-pointer flex justify-center w-full"
-                    data-type="standard" 
-                    data-shape="rectangular" 
-                    data-theme="outline"
-                    data-text="signup_with" 
-                    data-size="large" 
-                    data-logo_alignment="left" 
-                    data-width="320">
+                    data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signup_with"
+                    data-size="large" data-logo_alignment="left" data-width="320">
                 </div>
 
-                <button type="button" tabindex="-1" 
+                <button type="button" tabindex="-1"
                     class="int-btn absolute inset-0 z-10 flex items-center justify-center gap-2 h-full bg-[#03041A] border border-[#FFBB02] rounded-xl text-sm font-semibold text-white group-hover:bg-[#FFBB02] group-active:bg-[#FFC833] group-hover:text-black group-hover:scale-[1.01] group-active:scale-[0.99] transition duration-300 w-full pointer-events-none">
 
                     <svg width="16" height="16" viewBox="0 0 48 48">
-                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6 l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
-                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
-                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14 .76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
-                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-4.22-13.47-9.91l-7.98-6.19C6.51 42.62 14.62 48 24 48z" />
+                        <path fill="#EA4335"
+                            d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6 l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                        <path fill="#4285F4"
+                            d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                        <path fill="#FBBC05"
+                            d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14 .76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                        <path fill="#34A853"
+                            d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-4.22-13.47-9.91l-7.98-6.19C6.51 42.62 14.62 48 24 48z" />
                     </svg>
 
                     Sign up with Google
@@ -174,7 +186,7 @@ $googleClientId = $_ENV['GOOGLE_CLIENT_ID'] ?? '';
             <div class="flex justify-center mt-3">
                 <span class="text-white text-sm mb-4">
                     Already have an account?
-                    <a href="loginq.php"
+                    <a href="login.php"
                         style="color: #FFBB02; font-weight: bold; font-size: 0.9rem; text-decoration: none;"
                         onmouseover="this.style.color='#D99A00'" onmouseout="this.style.color='#FFBB02'"
                         onmousedown="this.style.color='#FFC833'" onmouseup="this.style.color='#D99A00'">
@@ -191,21 +203,18 @@ $googleClientId = $_ENV['GOOGLE_CLIENT_ID'] ?? '';
             console.error("PowerGuide Error: GOOGLE_CLIENT_ID environment variable is missing or empty.");
         }
 
-        function togglePassword() {
-            const passwordField = document.getElementById("password");
-            const eyeIcon = document.getElementById("eyeIcon");
-            if (passwordField.type === "password") {
-                passwordField.type = "text";
-                eyeIcon.classList.remove("fa-eye");
-                eyeIcon.classList.add("fa-eye-slash");
-            } else {
-                passwordField.type = "password";
-                eyeIcon.classList.remove("fa-eye-slash");
-                eyeIcon.classList.add("fa-eye");
-            }
+        function togglePassword(fieldId, iconId) {
+            const field = document.getElementById(fieldId);
+            const icon = document.getElementById(iconId);
+
+            const isHidden = field.type === "password";
+            field.type = isHidden ? "text" : "password";
+
+            icon.classList.toggle("fa-eye", !isHidden);
+            icon.classList.toggle("fa-eye-slash", isHidden);
         }
 
-        document.getElementById('signupForm').addEventListener('submit', function(event) {
+        document.getElementById('signupForm').addEventListener('submit', function (event) {
             console.log("Form ready to submit.");
         });
 
@@ -218,23 +227,40 @@ $googleClientId = $_ENV['GOOGLE_CLIENT_ID'] ?? '';
         function checkMatch() {
             if (!confirmPassword) return;
 
-            // Block empty inputs from triggering positive validation
-            if (password.value === "" && confirmPassword.value === "") {
+            const pass = password.value;
+            const confirm = confirmPassword.value;
+
+            // reset when empty
+            if (pass === "" && confirm === "") {
                 matchMessage.innerHTML = "";
                 submitBtn.disabled = true;
                 return;
             }
 
-            if (password.value === confirmPassword.value) {
-                matchMessage.innerHTML = "Passwords match";
-                matchMessage.style.color = "#22c55e"; 
-                submitBtn.disabled = false;
-            } else {
-                matchMessage.innerHTML = "Passwords do not match";
-                matchMessage.style.color = "#ef4444"; 
+            // ❌ check minimum length first
+            if (pass.length < 8) {
+                matchMessage.innerHTML = "Password must be at least 8 characters";
+                matchMessage.style.color = "#f59e0b"; // yellow warning
                 submitBtn.disabled = true;
+                return;
             }
+
+            // ❌ check match
+            if (pass !== confirm) {
+                matchMessage.innerHTML = "Passwords do not match";
+                matchMessage.style.color = "#ef4444";
+                submitBtn.disabled = true;
+                return;
+            }
+
+            // ✅ valid
+            matchMessage.innerHTML = "Password is valid";
+            matchMessage.style.color = "#22c55e";
+            submitBtn.disabled = false;
         }
+
+        password.addEventListener("input", checkMatch);
+        confirmPassword.addEventListener("input", checkMatch);
 
         if (confirmPassword) {
             confirmPassword.addEventListener("input", checkMatch);
@@ -255,7 +281,7 @@ $googleClientId = $_ENV['GOOGLE_CLIENT_ID'] ?? '';
             );
         }
 
-        window.handleCredentialResponse = function(response) {
+        window.handleCredentialResponse = function (response) {
             const data = decodeJWT(response.credential);
 
             const formData = new FormData();
@@ -268,21 +294,21 @@ $googleClientId = $_ENV['GOOGLE_CLIENT_ID'] ?? '';
                 method: "POST",
                 body: formData
             })
-            .then(res => res.json())
-            .then(res => {
-                if (!res.success) {
-                    alert(res.message || "Login failed");
-                    return;
-                }
+                .then(res => res.json())
+                .then(res => {
+                    if (!res.success) {
+                        alert(res.message || "Login failed");
+                        return;
+                    }
 
-                if (res.role === "electric_company") {
-                    window.location.href = "<?= BACKEND_URL ?>/public/dashboard/electric/dashboard.php";
-                }
-                else {
-                    window.location.href = "<?= FRONTEND_URL ?>/src/dashboard/user/dashboard.php";
-                }
-            })
-            .catch(err => console.error(err));
+                    if (res.role === "electric_company") {
+                        window.location.href = "<?= BACKEND_URL ?>/public/dashboard/electric/dashboard.php";
+                    }
+                    else {
+                        window.location.href = "<?= FRONTEND_URL ?>/src/dashboard/user/dashboard.php";
+                    }
+                })
+                .catch(err => console.error(err));
         }
     </script>
 </body>

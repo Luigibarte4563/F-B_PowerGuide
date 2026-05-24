@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POWERGUIDE</title>
 
-    <!-- Tailwind CSS Play CDN (Removes node_modules dependency) -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Tailwind Engine Custom Configurations -->
     <script>
         tailwind.config = {
             theme: {
@@ -18,99 +14,70 @@
                         '4xl': '2rem',
                     },
                     spacing: {
-                        '25': '6.25rem',
                         '17': '4.25rem',
+                        '25': '6.25rem',
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#03041A',
+                            card: '#0C0D2A',
+                            footer: '#0B0C22',
+                            yellow: '#FFBB02'
+                        }
                     }
                 }
             }
         }
     </script>
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght=100;300;400;600;700;900&display=swap"
-        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght=100;300;400;500;600;700;900&display=swap" rel="stylesheet">
 
-    <!-- Internal CSS Fallbacks & Tweaks -->
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
-            transition: opacity 0.4s ease;
-        }
-
-        /* Handles the fade-out page transition requested by onclick="fadeOut(event)" */
-        body.fading-out {
-            opacity: 0;
-        }
-
-        /* Custom glow drop shadows that Tailwind classes parse cleanly */
-        .shadow-glow-blue {
-            box-shadow: 0 0 20px #0F63CE;
-        }
-
-        .shadow-glow-yellow {
-            box-shadow: 0 0 20px #FFBB02;
-        }
-
-        .shadow-glow-red {
-            box-shadow: 0 0 20px #FE0000;
-        }
-
-        .shadow-glow-green {
-            box-shadow: 0 0 20px #00E48D;
         }
     </style>
 </head>
 
-<body class="bg-black opacity-100">
+<body class="bg-black text-white opacity-100">
 
-    <!-- Header -->
-    <header id="mainHeader"
-        class="flex flex-row sticky top-0 z-50 h-16 md:h-25 text-2xl items-center justify-between px-6 md:px-12 bg-black/50 backdrop-blur-2xl border-b border-white/10">
-
-        <!-- Logo & Brand Section -->
+    <!-- Header Navigation -->
+    <header id="mainHeader" class="flex flex-row sticky top-0 z-50 h-16 md:h-20 items-center justify-between px-6 md:px-12 bg-black/80 backdrop-blur-md border-b border-white/5">
         <div class="flex items-center">
             <a href="#" class="flex items-center gap-3">
-                <img class="w-10 md:w-14 object-contain" src="../img/logo.png" alt="Logo">
+                <img class="w-10 object-contain" src="../img/logo.png" alt="Logo">
                 <div class="flex flex-col justify-center items-start">
-                    <span class="text-white font-bold text-base md:text-xl leading-tight tracking-wide">
-                        POWER<span class="text-[#FFBB02]">GUIDE</span>
+                    <span class="text-white font-bold text-base md:text-lg leading-tight tracking-widest">
+                        POWER<span class="text-brand-yellow">GUIDE</span>
                     </span>
-                    <span class="text-white font-medium text-[10px] md:text-xs tracking-widest opacity-70 leading-none">
-                        SECURITY AND RELIABILITY
+                    <span class="text-white/50 font-semibold text-[9px] tracking-widest leading-none mt-0.5">
+                        SECURITY & RELIABILITY
                     </span>
                 </div>
             </a>
         </div>
 
-        <!-- Centered Nav Links (hidden on mobile) -->
-        <ul class="hidden md:flex flex-row items-center font-bold gap-8 text-gray-400 text-xs md:text-sm">
-            <li class="hover:text-white active:text-gray-300 transition-colors">
+        <ul class="hidden md:flex flex-row items-center font-medium gap-8 text-white/60 text-xs md:text-sm">
+            <li class="hover:text-white transition-colors">
                 <a href="#about" class="py-2 block">About</a>
             </li>
-            <li class="hover:text-white active:text-gray-300 transition-colors">
+            <li class="hover:text-white transition-colors">
                 <a href="#features" class="py-2 block">Features</a>
             </li>
         </ul>
 
-        <!-- CTAs and Controls Section -->
-        <div class="flex items-center gap-4 md:gap-6 text-xs md:text-sm font-bold">
-            <a href="./auth/login.php" onclick="fadeOut(event)" class="inline-block">
-                <button
-                    class="int-btn cursor-pointer px-4 py-2 bg-[#FFBB02] text-black rounded-full hover:bg-[#D99A00] active:bg-[#FFC833] transition-colors">
-                    Login
+        <div class="flex items-center gap-4 text-xs md:text-sm font-semibold">
+            <a href="./auth/login.php">
+                Login
+            </a>
+            <a href="./auth/signup.php">
+                <button class="cursor-pointer px-5 py-2 bg-brand-yellow text-black rounded-full hover:bg-[#e0a400] transition-colors">
+                    Sign Up
                 </button>
             </a>
-
-            <a href="./auth/signup.php" onclick="fadeOut(event)" class="inline-block">
-                <button
-                    class="int-btn cursor-pointer px-4 py-2 bg-[#BCBCBC]/25 rounded-full hover:bg-white/30 hover:text-white transition-colors">
-                    <span class="text-white/85">Sign Up</span>
-                </button>
-            </a>
-
-            <!-- Hamburger button (mobile only) -->
-            <button id="menuBtn"
-                class="md:hidden text-white p-2 focus:outline-none hover:text-[#FFBB02] transition-colors">
+            <button id="menuBtn" class="md:hidden text-white p-2 focus:outline-none hover:text-brand-yellow transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
@@ -118,140 +85,112 @@
         </div>
     </header>
 
-    <!-- Mobile Navigation Drawer Menu -->
-    <div id="mobileMenu"
-        class="hidden md:hidden bg-black/90 backdrop-blur-2xl text-gray-300 flex flex-col items-center gap-6 py-6 text-base border-b border-white/10 sticky top-16 z-40">
-        <a href="#about" class="mobile-link">About</a>
-        <a href="#features" class="mobile-link">Features</a>
+    <!-- Mobile Drawer -->
+    <div id="mobileMenu" class="hidden md:hidden bg-brand-dark border-b border-white/5 text-gray-300 flex flex-col items-center gap-6 py-6 text-sm sticky top-16 md:top-20 z-40">
+        <a href="#about" class="mobile-link hover:text-white transition-colors">About</a>
+        <a href="#features" class="mobile-link hover:text-white transition-colors">Features</a>
+        <a href="./auth/login.php" class="mobile-link hover:text-white transition-colors">Login</a>
     </div>
 
     <!-- Hero Section -->
-    <section id="hero-section">
-        <div class="relative min-h-screen">
-            <img src="../img/landingbg.png" alt="Background" class="absolute inset-0 w-full h-full object-cover">
-            <div
-                class="flex flex-col text-white h-full min-h-screen text-center justify-start pt-20 md:pt-17 relative z-10 px-4 py-20">
-                <div class="flex m-5 justify-center">
-                    <p
-                        class="flex items-center px-5 py-2.5 border-2 rounded-full border-[#FFBB02] text-[#FFBB02] text-xs md:text-sm font-bold">
+    <section id="hero-section" class="bg-brand-dark flex flex-col justify-center min-h-[90vh] px-6 relative overflow-hidden">
+        <!-- Minimal radial gradient for depth -->
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,187,2,0.05)_0%,transparent_60%)] pointer-events-none"></div>
 
-                        <!-- Pulse circle -->
-                        <span class="relative flex h-3 w-3 mr-2">
-                            <span
-                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FFBB02] opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-3 w-3 bg-[#FFBB02]"></span>
-                        </span>
-
-                        ACTIVE MONITORING IN DAGUPAN
-                    </p>
-                </div><br>
-                <div>
-                    <span class="text-3xl sm:text-4xl font-black md:text-6xl lg:text-6xl leading-tight">
-                        When Power Fails,<br>Power<span class="text-[#FFBB02]">Guide</span> Prevails
-                    </span><br><br>
-                    <p class="text-white text-sm md:text-lg font-medium px-4 md:px-0">
-                        Stay informed with real-time outage tracking and smart
-                        <br class="hidden md:block"> battery management for the modern Dagupeño lifestyle.
-                    </p><br><br>
-                </div>
-                <div class="flex justify-center gap-4 md:gap-20 flex-wrap">
-                    <a href="login.html" onclick="fadeOut(event)">
-                        <button
-                            class="int-btn cursor-pointer px-4 py-3 rounded-lg bg-[#FFBB02] text-black text-sm md:text-base hover:bg-[#D99A00] active:bg-[#FFC833] transition-colors font-bold">
-                            Get Started for Free
-                        </button>
-                    </a>
-
-                    <a href="dashboard.html" onclick="fadeOut(event)">
-                        <button
-                            class="int-btn group cursor-pointer px-6 md:px-10 py-3 rounded-lg bg-[#BCBCBC]/25 text-sm md:text-base hover:bg-white/50 active:bg-white/60 transition-colors font-bold">
-                            <span
-                                class="text-white/75 group-hover:text-black group-active:text-black transition-colors">
-                                Report Outages
-                            </span>
-                        </button>
-                    </a>
-                </div>
+        <div class="max-w-4xl mx-auto text-center relative z-10 py-20">
+            
+            <div class="flex justify-center mb-8">
+                <p class="flex items-center px-4 py-2 border border-brand-yellow/30 rounded-full text-brand-yellow text-xs font-semibold tracking-wide">
+                    <span class="relative flex h-2 w-2 mr-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-yellow opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-yellow"></span>
+                    </span>
+                    ACTIVE MONITORING IN DAGUPAN
+                </p>
+            </div>
+            
+            <h1 class="text-4xl sm:text-5xl md:text-7xl font-black leading-tight tracking-tight mb-8">
+                When Power Fails,<br>
+                Power<span class="text-brand-yellow">Guide</span> Prevails
+            </h1>
+            
+            <p class="text-white/60 text-base md:text-xl font-medium max-w-2xl mx-auto mb-12 leading-relaxed">
+                Stay informed with real-time outage tracking and smart battery management for the modern Dagupeño lifestyle.
+            </p>
+            
+            <div class="flex justify-center gap-4 sm:gap-6 flex-col sm:flex-row items-center">
+                <a href="login.html" onclick="fadeOut(event)" class="w-full sm:w-auto">
+                    <button class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-brand-yellow text-black text-sm md:text-base font-bold hover:bg-[#e0a400] transition-colors tracking-wide">
+                        Get Started for Free
+                    </button>
+                </a>
+                <a href="dashboard.html" onclick="fadeOut(event)" class="w-full sm:w-auto">
+                    <button class="w-full sm:w-auto px-8 py-3.5 rounded-full border border-white/20 text-white text-sm md:text-base font-bold hover:bg-white/10 transition-colors tracking-wide">
+                        Report Outages
+                    </button>
+                </a>
             </div>
         </div>
     </section>
 
     <!-- About Section -->
-    <!-- FIX: Added ID directly to the container and set precise dynamic scroll margins matching header heights -->
-    <section id="about"
-        class="min-h-screen bg-[#03041A] flex flex-col lg:flex-row items-center border-t border-[#03041A] py-16 lg:py-0 scroll-mt-16 md:scroll-mt-25">
-        <!-- Left: Cards -->
-        <div class="w-full lg:w-1/2 flex justify-center items-center">
-            <div class="flex text-white flex-col sm:flex-row gap-8 px-6 lg:px-10 w-full">
-
-                <!-- Column 1 -->
-                <div class="flex flex-col gap-8 flex-1">
-                    <div
-                        class="flex flex-col items-center justify-center p-6 h-56 w-full bg-[#0C0D2A] rounded-4xl shadow-glow-blue text-sm text-center">
-                        <img class="h-16 object-contain" src="../img/nointernet.png" alt="No Internet">
-                        <span class="mt-3 font-bold text-base">No Internet</span>
-                        <span class="font-medium mt-1 text-white/70 leading-tight">
-                            Loss of connectivity during<br> brownouts
-                        </span>
-                    </div>
-
-                    <div
-                        class="flex flex-col items-center justify-center p-6 h-56 w-full bg-[#0C0D2A] rounded-4xl shadow-glow-yellow text-sm text-center">
-                        <span class="text-5xl font-black text-[#FFBA00] mb-1">85%</span>
-                        <span class="font-bold text-base">Unprepared Rate</span>
-                        <span class="mt-1 font-medium text-white/70 leading-tight">
-                            Unpreparedness rate in local <br> communities
-                        </span>
-                    </div>
+    <section id="about" class="min-h-screen bg-black flex flex-col lg:flex-row items-center py-20 lg:py-0 px-6 md:px-12 scroll-mt-20 gap-16 lg:gap-8 border-t border-white/5">
+        
+        <!-- Typography-driven Stats Cards -->
+        <div class="w-full lg:w-1/2 flex justify-center">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
+                
+                <div class="flex flex-col items-start justify-center p-8 w-full bg-brand-card rounded-3xl border border-white/5 hover:border-white/10 transition-colors">
+                    <h3 class="font-bold text-xl md:text-2xl text-white mb-3">No Internet</h3>
+                    <p class="font-medium text-white/50 text-sm leading-relaxed">
+                        Loss of connectivity during brownouts
+                    </p>
                 </div>
 
-                <!-- Column 2 -->
-                <div class="flex flex-col gap-8 flex-1">
-                    <div
-                        class="flex flex-col items-center justify-center p-6 h-56 w-full bg-[#0C0D2A] rounded-4xl shadow-glow-red text-sm text-center">
-                        <img class="h-16 object-contain" src="../img/deadbattery.png" alt="Dead Battery">
-                        <span class="font-bold text-base mt-3">Dead Battery</span>
-                        <span class="font-medium mt-1 text-white/70 leading-tight">
-                            Unexpected drain on<br> vital devices
-                        </span>
-                    </div>
+                <div class="flex flex-col items-start justify-center p-8 w-full bg-brand-card rounded-3xl border border-white/5 hover:border-white/10 transition-colors">
+                    <span class="text-4xl md:text-5xl font-black text-brand-yellow mb-2">85%</span>
+                    <h3 class="font-bold text-base text-white mb-2">Unprepared Rate</h3>
+                    <p class="font-medium text-white/50 text-sm leading-relaxed">
+                        Unpreparedness rate in local communities
+                    </p>
+                </div>
 
-                    <div
-                        class="flex flex-col items-center justify-center p-6 h-56 w-full bg-[#0C0D2A] rounded-4xl shadow-glow-green text-sm text-center">
-                        <img class="h-16 object-contain" src="../img/data.png" alt="Lack of Data">
-                        <span class="font-bold text-base mt-3">Lack of Data</span>
-                        <span class="font-medium mt-1 text-white/70 leading-tight">
-                            Unawareness of city updates<br> and schedules
-                        </span>
-                    </div>
+                <div class="flex flex-col items-start justify-center p-8 w-full bg-brand-card rounded-3xl border border-white/5 hover:border-white/10 transition-colors">
+                    <h3 class="font-bold text-xl md:text-2xl text-white mb-3">Dead Battery</h3>
+                    <p class="font-medium text-white/50 text-sm leading-relaxed">
+                        Unexpected drain on vital devices
+                    </p>
+                </div>
+
+                <div class="flex flex-col items-start justify-center p-8 w-full bg-brand-card rounded-3xl border border-white/5 hover:border-white/10 transition-colors">
+                    <h3 class="font-bold text-xl md:text-2xl text-white mb-3">Lack of Data</h3>
+                    <p class="font-medium text-white/50 text-sm leading-relaxed">
+                        Unawareness of city updates and schedules
+                    </p>
                 </div>
 
             </div>
         </div>
 
-        <!-- Right: Text -->
-        <div class="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 md:px-12 py-10 lg:py-0 text-center">
-            <span class="text-white w-full">
-                <span class="text-lg md:text-xl font-extrabold text-[#FFBB02] tracking-wider block mb-2">
-                    THE CONTEXT
-                </span>
-
-                <h2 class="text-3xl sm:text-4xl font-black md:text-5xl lg:text-6xl text-white leading-tight mb-6">
-                    Why PowerGuide?
-                </h2>
-
-                <p class="font-medium text-base md:text-lg text-white/80 mb-8 max-w-xl mx-auto"
-                    style="line-height: 2rem;">
-                    In Dagupan City, power stability remains a challenge.
-                    From maintenance interruptions to weather-related
-                    brownouts, users find themselves in the dark without
-                    a clear plan.
-                </p>
+        <!-- About Copy -->
+        <div class="w-full lg:w-1/2 flex flex-col justify-center items-start lg:pl-10 max-w-2xl mx-auto">
+            <span class="text-sm font-bold text-brand-yellow tracking-[0.2em] uppercase mb-4">
+                The Context
             </span>
 
-            <div
-                class="border-2 border-[#FFBB03]/30 rounded-4xl italic shadow-glow-yellow bg-[#0C0D2A] p-6 md:p-8 w-full max-w-xl mx-auto">
-                <p class="text-white font-medium text-base md:text-lg" style="line-height: 1.8rem;">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-8">
+                Why PowerGuide?
+            </h2>
+
+            <p class="font-medium text-base md:text-lg text-white/60 mb-10 leading-relaxed">
+                In Dagupan City, power stability remains a challenge.
+                From maintenance interruptions to weather-related
+                brownouts, users find themselves in the dark without
+                a clear plan.
+            </p>
+
+            <div class="border-l-2 border-brand-yellow pl-6 py-2">
+                <p class="text-white font-medium text-lg md:text-xl leading-relaxed italic">
                     "Our mission is to provide the data you need
                     to bridge the gap between power failure and
                     grid restoration, keeping you connected when it
@@ -262,230 +201,207 @@
     </section>
 
     <!-- Features Section -->
-    <hr class="border-t border-[#03041A]">
-
-    <!-- FIX: Configured precise dynamic scroll margins to account for header dimensions -->
-    <section id="features" class="min-h-screen bg-[#03041A] flex flex-col justify-center items-center px-4 py-16 scroll-mt-16 md:scroll-mt-25">
-        <div class="text-white text-center">
-            <h1 class="text-3xl font-bold sm:text-4xl md:text-6xl">
-                <span class="text-[#FFBB02]">Powerful </span><span>Tools for </span>
-                <span class="text-[#FFBB02]">Power </span><span>Failures</span>
-            </h1><br>
-            <span class="flex font-medium justify-center text-center text-sm md:text-base flex-col items-center">
-                A unified suite designed to help you navigate <br> through every outage efficiently.
-                <br><br>                <span class="border-t border-[#FFBB02] flex justify-center items-center w-24 md:w-48"></span>
-            </span><br><br>
+    <section id="features" class="bg-brand-dark flex flex-col justify-center items-center px-6 py-24 scroll-mt-20 border-t border-white/5">
+        
+        <div class="text-center mb-16 max-w-3xl mx-auto">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-black mb-6">
+                <span class="text-brand-yellow">Powerful</span> Tools for <br/>
+                <span class="text-brand-yellow">Power</span> Failures
+            </h2>
+            <p class="font-medium text-white/60 text-base md:text-lg leading-relaxed">
+                A unified suite designed to help you navigate through every outage efficiently.
+            </p>
         </div>
 
-        <div class="flex flex-col gap-6 md:gap-10 w-full max-w-6xl">
-            <!-- Row 1 -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
-                <span class="shadow-glow-yellow text-white px-6 md:px-10 py-8 md:py-10 rounded-4xl bg-[#0C0D2A]">
-                    <span class="flex justify-start items-center gap-4">
-                        <span class="bg-[#16184E] rounded-[10px] flex-shrink-0 p-1">
-                            <img class="h-8 w-8 m-1" src="../img/location.png" alt="Icon">
-                        </span>
-                        <span class="font-bold">Outage Reporting</span>
-                    </span><br>
-                    <span class="font-medium text-sm md:text-base block">
-                        Crowdsourced reporting that allows
-                        you to pinpoint locations, specify times,
-                        and provide descriptions to help the
-                        community stay informed.
-                    </span>
-                </span>
+        <div class="flex flex-col gap-6 md:gap-8 w-full max-w-6xl">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                
+                <!-- Feature 1 -->
+                <div class="bg-brand-card p-8 rounded-3xl border border-white/5 hover:border-white/10 transition-colors">
+                    <div class="mb-6 text-brand-yellow">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-xl text-white mb-3">Outage Reporting</h3>
+                    <p class="font-medium text-sm text-white/50 leading-relaxed">
+                        Users can report power issues in their area with location, description, severity, and optional image proof.
+                    </p>
+                </div>
 
-                <span class="shadow-glow-yellow text-white px-6 md:px-10 py-8 md:py-10 rounded-4xl bg-[#0C0D2A]">
-                    <span class="flex justify-start items-center gap-4">
-                        <span class="bg-[#16184E] rounded-[10px] flex-shrink-0">
-                            <img class="h-[37px] w-[37px] m-1" src="../img/realtime.png" alt="Icon">
-                        </span>
-                        <span class="font-bold">Real-Time Monitoring</span>
-                    </span><br>
-                    <span class="font-medium text-sm md:text-base block">
-                        View a dynamic map of nearby
-                        outages. Check verification status to
-                        distinguish between planned
-                        maintenance and emergency faults.
-                    </span>
-                </span>
+                <!-- Feature 2 -->
+                <div class="bg-brand-card p-8 rounded-3xl border border-white/5 hover:border-white/10 transition-colors">
+                    <div class="mb-6 text-brand-yellow">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-xl text-white mb-3">Real-Time Monitoring</h3>
+                    <p class="font-medium text-sm text-white/50 leading-relaxed">
+                        The system shows live outage and maintenance statuses on a map to help users distinguish real problems from planned work.
+                    </p>
+                </div>
 
-                <span class="shadow-glow-yellow text-white px-6 md:px-10 py-8 md:py-10 rounded-4xl bg-[#0C0D2A]">
-                    <span class="flex justify-start items-center gap-4">
-                        <span class="bg-[#16184E] rounded-[10px] flex-shrink-0">
-                            <img class="h-[37px] w-[37px] m-1" src="../img/battery.png" alt="Icon">
-                        </span>
-                        <span class="font-bold">Smart Battery Tracking</span>
-                    </span><br>
-                    <span class="font-medium text-sm md:text-base block">
-                        Automatic and manual battery
-                        monitoring alerts you when it's time to
-                        find a charging station before your
-                        device powers down.
-                    </span>
-                </span>
+                <!-- Feature 3 -->
+                <div class="bg-brand-card p-8 rounded-3xl border border-white/5 hover:border-white/10 transition-colors">
+                    <div class="mb-6 text-brand-yellow">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-xl text-white mb-3">Maintenance Scheduling</h3>
+                    <p class="font-medium text-sm text-white/50 leading-relaxed">
+                        Electric companies can publish scheduled power interruptions with time, date, affected areas, and status updates.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-brand-card p-8 rounded-3xl border border-white/5 hover:border-white/10 transition-colors">
+                    <div class="mb-6 text-brand-yellow">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-xl text-white mb-3">Maintenance Mapping</h3>
+                    <p class="font-medium text-sm text-white/50 leading-relaxed">
+                        The system stores and displays exact affected barangay locations for maintenance activities clearly on the map.
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="bg-brand-card p-8 rounded-3xl border border-white/5 hover:border-white/10 transition-colors">
+                    <div class="mb-6 text-brand-yellow">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-xl text-white mb-3">Charging Finder</h3>
+                    <p class="font-medium text-sm text-white/50 leading-relaxed">
+                        Users can locate nearby charging stations, solar hubs, and power access points with real-time availability.
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="bg-brand-card p-8 rounded-3xl border border-white/5 hover:border-white/10 transition-colors">
+                    <div class="mb-6 text-brand-yellow">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-xl text-white mb-3">Notification Alerts</h3>
+                    <p class="font-medium text-sm text-white/50 leading-relaxed">
+                        The system sends real-time alerts about outages, maintenance, and emergencies to keep users informed instantly.
+                    </p>
+                </div>
             </div>
 
-            <!-- Row 2 -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
-                <span class="shadow-glow-yellow text-white px-6 md:px-10 py-8 md:py-10 rounded-4xl bg-[#0C0D2A]">
-                    <span class="flex justify-start items-center gap-4">
-                        <span class="bg-[#16184E] rounded-[10px] flex-shrink-0 p-1">
-                            <img class="h-8 w-8 m-1" src="../img/lightbulb.png" alt="Icon">
+            <!-- Smart System Overview -->
+            <div class="w-full mt-4">
+                <div class="flex flex-col md:flex-row items-center justify-between px-8 md:px-12 py-10 rounded-3xl bg-brand-card border border-brand-yellow/20">
+                    <div class="flex-1 md:pr-10 text-center md:text-left">
+                        <div class="flex justify-center md:justify-start items-center gap-4 mb-4">
+                            <div class="text-brand-yellow">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                                </svg>
+                            </div>
+                            <span class="font-bold text-2xl md:text-3xl text-white">Smart System Overview</span>
+                        </div>
+                        <span class="font-medium text-sm md:text-base text-white/60 block leading-relaxed">
+                            PowerGuide connects reporting, scheduling, mapping, charging access, and notifications into one <strong class="text-white font-semibold">unified, real-time power awareness platform</strong>.
                         </span>
-                        <span class="font-bold">Proactive Advice</span>
-                    </span><br>
-                    <span class="font-medium text-sm md:text-base block">
-                        AI-driven power-saving tips tailored to
-                        your specific battery level and the
-                        expected duration of local outages.
-                    </span>
-                </span>
-
-                <span class="shadow-glow-yellow text-white px-6 md:px-10 py-8 md:py-10 rounded-4xl bg-[#0C0D2A]">
-                    <span class="flex justify-start items-center gap-4">
-                        <span class="bg-[#16184E] rounded-[10px] flex-shrink-0 p-1">
-                            <img class="h-8 w-8 m-1" src="../img/plug.png" alt="Icon">
-                        </span>
-                        <span class="font-bold">Charging Finder</span>
-                    </span><br>
-                    <span class="font-medium text-sm md:text-base block">
-                        Find public charging stations, solar
-                        hubs, or local business partners that
-                        offer device charging during extended
-                        outages.
-                    </span>
-                </span>
-
-                <span class="shadow-glow-yellow text-white px-6 md:px-10 py-8 md:py-10 rounded-4xl bg-[#0C0D2A]">
-                    <span class="flex justify-start items-center gap-4">
-                        <span class="bg-[#16184E] rounded-[10px] flex-shrink-0 p-1">
-                            <img class="h-8 w-8 m-1" src="../img/bell-gradient.png" alt="Icon">
-                        </span>
-                        <span class="font-bold">Notification Alerts</span>
-                    </span><br>
-                    <span class="font-medium text-sm md:text-base block">
-                        Get instant notifications whether
-                        online or offline to serve the purpose of
-                        retaining awareness under any
-                        condition.
-                    </span>
-                </span>
+                    </div>
+                </div>
             </div>
+            
         </div>
     </section>
 
     <!-- Footer -->
-    <footer id="footer" class="flex flex-col bg-[#0B0C22] px-6 md:px-10 py-10 gap-10 border-t border-white/20">
-        <div class="flex flex-col lg:flex-row justify-evenly gap-10 border-b border-white/20 pb-10">
+    <footer id="footer" class="bg-brand-footer px-6 md:px-12 py-16 border-t border-white/5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 border-b border-white/5 pb-16 max-w-7xl mx-auto">
 
-            <!-- Brand -->
-            <div class="flex flex-col gap-4">
-                <div class="flex">
-                    <a href="#" class="flex items-center gap-2">
-                        <img class="w-10 md:w-16" src="../img/logo.png" alt="Logo">
-                        <div class="flex flex-col justify-center items-start">
-                            <span class="text-white font-bold text-lg md:text-xl leading-tight">
-                                POWER<span class="text-[#FFBB02]">GUIDE</span>
-                            </span>
-                            <span
-                                class="text-white font-medium text-sm md:text-xs tracking-widest opacity-70 leading-none">
-                                SECURITY AND RELIABILITY
-                            </span>
-                        </div>
+            <div class="flex flex-col gap-6 lg:col-span-4">
+                <a href="#" class="flex items-center gap-3">
+                    <img class="w-10 object-contain" src="../img/logo.png" alt="Logo">
+                    <div class="flex flex-col justify-center items-start">
+                        <span class="text-white font-bold text-lg md:text-xl leading-tight tracking-widest">
+                            POWER<span class="text-brand-yellow">GUIDE</span>
+                        </span>
+                        <span class="text-white/50 font-semibold text-[9px] tracking-widest leading-none mt-0.5">
+                            SECURITY & RELIABILITY
+                        </span>
+                    </div>
+                </a>
+
+                <p class="text-white/40 font-medium text-sm leading-relaxed pr-4">
+                    The ultimate companion for managing power outages and device longevity. Dedicated to keeping communities connected during unexpected blackouts.
+                </p>
+
+                <div class="flex flex-row gap-4 mt-2">
+                    <a href="https://www.facebook.com/" class="w-10 h-10 border border-white/10 hover:border-brand-yellow hover:text-brand-yellow transition-colors rounded-full flex justify-center items-center text-white/60">
+                        <span class="font-bold text-sm">F</span>
                     </a>
-                </div>
-
-                <span class="text-white/50 font-medium text-sm md:text-base block">
-                    The ultimate companion for managing <br>
-                    power outages and device longevity. <br>
-                    Dedicated to keeping communities <br>
-                    connected during unexpected <br>
-                    blackouts.
-                </span>
-
-                <div class="flex flex-row gap-3">
-                    <!-- Facebook -->
-                    <a href="https://www.facebook.com/"
-                        class="group w-8 h-8 md:w-10 md:h-10 bg-[#1E1F3B] hover:bg-[#FFBB02] transition-all duration-300 rounded-full flex justify-center items-center">
-                        <span class="text-white group-hover:text-black font-bold text-sm">F</span>
+                    <a href="https://www.twitter.com/" class="w-10 h-10 border border-white/10 hover:border-brand-yellow hover:text-brand-yellow transition-colors rounded-full flex justify-center items-center text-white/60">
+                        <span class="font-bold text-sm">T</span>
                     </a>
-
-                    <!-- Twitter -->
-                    <a href="https://www.twitter.com/"
-                        class="group w-8 h-8 md:w-10 md:h-10 bg-[#1E1F3B] hover:bg-[#FFBB02] transition-all duration-300 rounded-full flex justify-center items-center">
-                        <span class="text-white group-hover:text-black font-bold text-sm">T</span>
-                    </a>
-
-                    <!-- Github -->
-                    <a href="https://www.github.com/"
-                        class="group w-8 h-8 md:w-10 md:h-10 bg-[#1E1F3B] hover:bg-[#FFBB02] transition-all duration-300 rounded-full flex justify-center items-center">
-                        <span class="text-white group-hover:text-black font-bold text-sm">G</span>
+                    <a href="https://www.github.com/" class="w-10 h-10 border border-white/10 hover:border-brand-yellow hover:text-brand-yellow transition-colors rounded-full flex justify-center items-center text-white/60">
+                        <span class="font-bold text-sm">G</span>
                     </a>
                 </div>
             </div>
 
-            <!-- Product -->
-            <div class="text-white text-lg md:text-2xl">
-                <span class="font-bold">Product</span><br><br>
-                <ul class="font-medium text-white/50 text-sm md:text-base flex flex-col gap-3">
-                    <li><a class="transition-colors duration-200 hover:text-white" href="features.html">Features</a>
-                    </li>
-                    <li><a class="transition-colors duration-200 hover:text-white" href="reporting-map.html">Reporting
-                            Map</a></li>
-                    <li><a class="transition-colors duration-200 hover:text-white" href="battery-tracker.html">Battery
-                            Tracker</a></li>
+            <div class="lg:col-span-2">
+                <h3 class="font-bold text-base text-white mb-6 tracking-wide">Product</h3>
+                <ul class="font-medium text-white/50 text-sm flex flex-col gap-4">
+                    <li><a class="hover:text-white transition-colors" href="features.html">Features</a></li>
+                    <li><a class="hover:text-white transition-colors" href="reporting-map.html">Reporting Map</a></li>
+                    <li><a class="hover:text-white transition-colors" href="battery-tracker.html">Battery Tracker</a></li>
                 </ul>
             </div>
 
-            <!-- Support -->
-            <div class="text-white text-lg md:text-2xl">
-                <span class="font-bold">Support</span><br><br>
-                <ul class="font-medium text-white/50 text-sm md:text-base flex flex-col gap-3">
-                    <li><a class="transition-colors duration-200 hover:text-white" href="helpcenter.html">Help
-                            Center</a></li>
-                    <li><a class="transition-colors duration-200 hover:text-white" href="report-issue.html">Report an
-                            issue</a></li>
-                    <li><a class="transition-colors duration-200 hover:text-white" href="privacy.html">Privacy
-                            Policy</a></li>
-                    <li><a class="transition-colors duration-200 hover:text-white" href="terms.html">Terms of
-                            Service</a></li>
+            <div class="lg:col-span-2">
+                <h3 class="font-bold text-base text-white mb-6 tracking-wide">Support</h3>
+                <ul class="font-medium text-white/50 text-sm flex flex-col gap-4">
+                    <li><a class="hover:text-white transition-colors" href="helpcenter.html">Help Center</a></li>
+                    <li><a class="hover:text-white transition-colors" href="report-issue.html">Report an issue</a></li>
+                    <li><a class="hover:text-white transition-colors" href="privacy.html">Privacy Policy</a></li>
+                    <li><a class="hover:text-white transition-colors" href="terms.html">Terms of Service</a></li>
                 </ul>
             </div>
 
-            <!-- Team Name -->
-            <div class="text-white text-lg md:text-2xl">
-                <span class="font-bold">Our Team</span><br><br>
+            <div class="lg:col-span-2">
+                <h3 class="font-bold text-base text-white mb-6 tracking-wide">Our Team</h3>
                 <div class="flex items-center gap-3">
-                    <img src="../img/logo.png" alt="Team Logo" class="w-6 h-6 md:w-8 md:h-8">
-                    <span class="font-medium text-white/50 text-sm md:text-base">
+                    <img src="../img/logo.png" alt="Team Logo" class="w-6 h-6 object-contain grayscale opacity-70">
+                    <span class="font-medium text-white/50 text-sm">
                         Voltes Six
                     </span>
                 </div>
             </div>
 
-            <!-- Members -->
-            <div class="text-white text-lg md:text-2xl">
-                <span class="font-bold">The Builders</span><br><br>
-                <ul class="font-medium text-white/50 text-sm md:text-base flex flex-col gap-3">
-                    <li>Luigi Barte</li>
-                    <li>Walter Ballesteros</li>
-                    <li>Don Rudyrick Barberan</li>
-                    <li>Christian Blanco</li>
-                    <li>Noerly Yvonne Mae Idos</li>
-                    <li>Angela Martin</li>
+            <div class="lg:col-span-2">
+                <h3 class="font-bold text-base text-white mb-6 tracking-wide">The Builders</h3>
+                <ul class="font-medium text-white/50 text-sm flex flex-col gap-3">
+                    <li class="cursor-default">Luigi Barte</li>
+                    <li class="cursor-default">Walter Ballesteros</li>
+                    <li class="cursor-default">Don Rudyrick Barberan</li>
+                    <li class="cursor-default">Christian Blanco</li>
+                    <li class="cursor-default">Noerly Yvonne Mae Idos</li>
+                    <li class="cursor-default">Angela Martin</li>
                 </ul>
             </div>
+
         </div>
 
-        <div class="w-full flex justify-center">
-            <span class="text-white/50 text-xs tracking-widest uppercase text-center">
-                V6 @ 2026 POWERGUIDE. BUILT FOR THE COMMUNITY.
+        <div class="w-full flex justify-center pt-8">
+            <span class="text-white/30 text-xs tracking-widest uppercase text-center font-medium">
+                V6 &copy; 2026 POWERGUIDE. BUILT FOR THE COMMUNITY.
             </span>
         </div>
     </footer>
 
-    <!-- Internal JS Logic Operations -->
     <script>
         // Toggle mobile drawer navigation menu
         const menuBtn = document.getElementById('menuBtn');
@@ -517,5 +433,4 @@
         }
     </script>
 </body>
-
 </html>
