@@ -235,18 +235,19 @@ $picture = $user['picture'] ?? $defaultPicture;
             -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex-shrink-0">
 
         <!-- Logo -->
-        <div class="flex items-center gap-3 ml-2 mb-10">
+        <div class="flex items-center gap-3 ml-4 mb-8">
             <div
-                class="w-10 h-10 bg-gradient-to-br from-[#FFBB02] to-[#E39A00] rounded-xl flex items-center justify-center shadow-lg shadow-[#FFBB02]/10">
+                class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#FFBB02] to-[#E39A00] rounded-xl flex items-center justify-center shadow-lg shadow-[#FFBB02]/10">
                 <svg class="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
                 </svg>
             </div>
             <div class="flex flex-col justify-center items-start">
-                <span class="text-white font-bold text-lg tracking-tight leading-tight">
+                <span class="text-white font-bold text-lg md:text-xl tracking-tight leading-tight">
                     POWER<span class="text-[#FFBB02]">GUIDE</span>
                 </span>
-                <span class="text-white font-semibold text-[9px] tracking-widest opacity-60 leading-none mt-0.5">
+                <span
+                    class="text-white font-semibold text-[9px] md:text-[10px] tracking-widest opacity-60 leading-none mt-0.5">
                     ELECTRIC COMPANY
                 </span>
             </div>
@@ -254,11 +255,12 @@ $picture = $user['picture'] ?? $defaultPicture;
 
         <!-- Nav Links -->
         <div class="flex flex-col gap-2">
-            <span class="text-[11px] font-bold tracking-widest text-white px-4 mb-1 opacity-50">MANAGEMENT</span>
+            <span class="text-[11px] font-bold tracking-widest text-white px-4 pt-2 mb-2 opacity-50">MANAGEMENT</span>
 
             <a href="dashboard.php"
-                class="group flex flex-row items-center gap-3.5 px-4 h-12 rounded-xl font-semibold text-sm transition-all shadow-lg shadow-[#FEBB02]/10">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                class="group flex items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black transition-all font-semibold text-sm">
+                <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-black" fill="none" stroke="currentColor"
+                    stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
                 </svg>
@@ -266,9 +268,9 @@ $picture = $user['picture'] ?? $defaultPicture;
             </a>
 
             <a href="outages.php"
-                class="group flex flex-row items-center gap-3.5 px-4 h-12 rounded-xl bg-[#FEBB02] text-black hover:bg-[#31324C]/40 hover:text-white transition-all font-semibold text-sm">
-                <svg class="w-5 h-5 text-[#B5B5B5] text-black group-hover:text-white transition-colors" fill="none"
-                    stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                class="group flex items-center gap-3.5 px-4 h-11 rounded-xl bg-[#FEBB02] text-black hover:bg-[#FEBB02] hover:text-black transition-all font-semibold text-sm">
+                <svg class="w-5 h-5 text-[#B5B5B5] text-black group-hover:text-black" fill="none" stroke="currentColor"
+                    stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
@@ -276,9 +278,8 @@ $picture = $user['picture'] ?? $defaultPicture;
             </a>
 
             <a href="maintenance.php"
-                class="group flex flex-row items-center gap-3.5 px-4 h-12 rounded-xl hover:bg-[#31324C]/40 hover:text-white transition-all font-semibold text-sm">
-                <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-white transition-colors" fill="none"
-                    stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                class="flex items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black font-bold text-sm shadow-lg shadow-[#FEBB02]/10">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
