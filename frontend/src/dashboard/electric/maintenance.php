@@ -329,27 +329,51 @@ $fullName       = htmlspecialchars($user['name'] ?? 'Company Admin');
             </div>
         </section>
 
-        <!-- ── Active / Scheduled List ────────────────── -->
-        <section>
-            <div class="flex items-center gap-2.5 mb-4">
-                <span class="w-2 h-2 rounded-full bg-[#FEBB02] animate-pulse"></span>
-                <h3 class="text-xs font-black uppercase tracking-widest text-[#B5B5B5]">Active &amp; Scheduled</h3>
-                <span id="badge-active" class="text-[10px] font-black px-2 py-0.5 bg-[#FEBB02]/12 text-[#FEBB02] border border-[#FEBB02]/20 rounded-full">0</span>
-            </div>
-            <div id="list-active" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                <div class="col-span-full text-xs text-white/25 font-semibold text-center py-12 loading-pulse">Loading maintenance data…</div>
-            </div>
-        </section>
-
-        <!-- ── Completed List ─────────────────────────── -->
+        <!-- ── Maintenance Schedule List + Pagination ───── -->
         <section class="mb-8">
-            <div class="flex items-center gap-2.5 mb-4">
-                <span class="w-2 h-2 rounded-full bg-[#5FCB5F]"></span>
-                <h3 class="text-xs font-black uppercase tracking-widest text-[#B5B5B5]">Completed</h3>
-                <span id="badge-completed" class="text-[10px] font-black px-2 py-0.5 bg-[#5FCB5F]/12 text-[#5FCB5F] border border-[#5FCB5F]/20 rounded-full">0</span>
-            </div>
-            <div id="list-completed" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                <div class="col-span-full text-xs text-white/25 font-semibold text-center py-10">No completed maintenance yet.</div>
+            <div class="w-full">
+                <div class="rounded-2xl border border-white/5 bg-[#31324C]/20 flex flex-col p-6 shadow-xl min-h-[300px]">
+
+                    <!-- Header row with label + filter tabs -->
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-white text-xs font-bold uppercase tracking-widest opacity-60">
+                            Maintenance Schedule
+                        </span>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="setFilter('all')" id="tab-all"
+                                    class="tab-btn text-[10px] font-black px-3 py-1 rounded-lg border transition-all uppercase tracking-widest
+                                           bg-[#FFBB02] text-black border-[#FFBB02]/30">
+                                All
+                            </button>
+                            <button onclick="setFilter('active')" id="tab-active"
+                                    class="tab-btn text-[10px] font-black px-3 py-1 rounded-lg border transition-all uppercase tracking-widest
+                                           bg-[#31324C]/40 text-[#B5B5B5] border-white/8 hover:bg-[#31324C]/80 hover:text-white">
+                                Active
+                                <span id="badge-active" class="ml-1 text-[#FEBB02]">0</span>
+                            </button>
+                            <button onclick="setFilter('completed')" id="tab-completed"
+                                    class="tab-btn text-[10px] font-black px-3 py-1 rounded-lg border transition-all uppercase tracking-widest
+                                           bg-[#31324C]/40 text-[#B5B5B5] border-white/8 hover:bg-[#31324C]/80 hover:text-white">
+                                Completed
+                                <span id="badge-completed" class="ml-1 text-[#5FCB5F]">0</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic card grid -->
+                    <div id="list"
+                         class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 flex-1 overflow-y-auto custom-scrollbar pr-1 max-h-[400px]">
+                        <div class="col-span-full text-xs text-white/25 font-semibold text-center py-12 loading-pulse">
+                            Loading maintenance data…
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div id="pagination"
+                         class="flex flex-row gap-1 justify-center items-center mt-5 pt-4 border-t border-white/5">
+                    </div>
+
+                </div>
             </div>
         </section>
 
@@ -694,15 +718,20 @@ async function loadMaintenance() {
         // ── Map — from DB coordinates ────────────────────
         renderMap(allData);
 
-        // ── Separate active vs completed ─────────────────
-        const active    = allData.filter(m => ['ongoing','scheduled'].includes(m.status));
-        const completed = allData.filter(m => m.status === 'completed');
+        // ── Badge counts ─────────────────────────────────
+        const activeCount    = allData.filter(m => ['ongoing','scheduled'].includes(m.status)).length;
+        const completedCount = allData.filter(m => m.status === 'completed').length;
 
-        document.getElementById('badge-active').innerText    = active.length;
-        document.getElementById('badge-completed').innerText = completed.length;
+        // Update filter tab badges
+        const badgeActive = document.getElementById('badge-active');
+        if (badgeActive) badgeActive.innerText = activeCount;
+        const badgeCompleted = document.getElementById('badge-completed');
+        if (badgeCompleted) badgeCompleted.innerText = completedCount;
 
-        renderList('list-active',    active,    'No active or scheduled maintenance.');
-        renderList('list-completed', completed, 'No completed maintenance yet.');
+        // Apply current filter and re-render paginated list
+        applyFilter();
+        renderMaintenancePage();
+        renderPagination();
 
     } catch (err) {
         console.error('loadMaintenance:', err);
@@ -710,64 +739,108 @@ async function loadMaintenance() {
 }
 
 /* ╔═══════════════════════════════════════════════════════════╗
-   ║  CARD RENDERER                                            ║
+   ║  PAGINATION STATE                                         ║
    ╚═══════════════════════════════════════════════════════════╝ */
-function renderList(containerId, items, emptyMsg) {
-    const el = document.getElementById(containerId);
-    if (!el) return;
-    el.innerHTML = '';
+let filteredData = [];
+let currentPage  = 1;
+const perPage    = 6;
+let activeFilter = 'all'; // 'all' | 'active' | 'completed'
 
-    if (!items.length) {
-        el.innerHTML = `<div class="col-span-full text-xs text-white/25 font-semibold text-center py-10">${emptyMsg}</div>`;
+/* ── Filter tab switcher ─────────────────────────────────── */
+function setFilter(filter) {
+    activeFilter = filter;
+    currentPage  = 1;
+
+    // Update tab button styles
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.className = btn.className
+            .replace('bg-[#FFBB02] text-black border-[#FFBB02]/30', '')
+            .replace('bg-[#31324C]/40 text-[#B5B5B5] border-white/8', '')
+            .trim();
+        btn.classList.add('bg-[#31324C]/40', 'text-[#B5B5B5]', 'border-white/8');
+    });
+    const active = document.getElementById(`tab-${filter}`);
+    if (active) {
+        active.classList.remove('bg-[#31324C]/40', 'text-[#B5B5B5]', 'border-white/8');
+        active.classList.add('bg-[#FFBB02]', 'text-black', 'border-[#FFBB02]/30');
+    }
+
+    // Re-slice filteredData from allData
+    applyFilter();
+    renderMaintenancePage();
+    renderPagination();
+}
+
+function applyFilter() {
+    if (activeFilter === 'active') {
+        filteredData = allData.filter(m => ['ongoing','scheduled'].includes(m.status));
+    } else if (activeFilter === 'completed') {
+        filteredData = allData.filter(m => m.status === 'completed');
+    } else {
+        filteredData = [...allData];
+    }
+}
+
+/* ╔═══════════════════════════════════════════════════════════╗
+   ║  PAGE RENDERER — slices filteredData by currentPage       ║
+   ╚═══════════════════════════════════════════════════════════╝ */
+function renderMaintenancePage() {
+    const list = document.getElementById('list');
+    if (!list) return;
+    list.innerHTML = '';
+
+    const start    = (currentPage - 1) * perPage;
+    const pageData = filteredData.slice(start, start + perPage);
+
+    if (!pageData.length) {
+        list.innerHTML = `<div class="col-span-full text-xs text-white/25 font-semibold text-center py-10">No maintenance records found.</div>`;
         return;
     }
 
-    items.forEach(m => {
-        const locs       = m.locations || [];
-        const badge      = statusBadge(m.status);
-        const color      = statusColor(m.status);
+    pageData.forEach(m => {
+        const locs  = m.locations || [];
+        const badge = statusBadge(m.status);
+        const color = statusColor(m.status);
 
-        // show up to 3 tags + "+N more"
+        // Barangay tags — up to 3 + overflow count
         const tagHTML = locs.slice(0,3).map(l => `<span class="btag">${esc(l.barangay_name)}</span>`).join(' ')
             + (locs.length > 3 ? ` <span class="btag" style="color:rgba(255,255,255,.3)">+${locs.length-3}</span>` : '');
 
         const card = document.createElement('div');
-        card.className = 'card-hover bg-[#0D0E2A]/80 border border-white/5 hover:border-white/10 rounded-2xl p-5 flex flex-col gap-3.5 cursor-pointer transition-all';
+        card.className = 'bg-[#0D0E2A]/70 border border-white/5 rounded-xl p-4 flex flex-col gap-2 text-left transition-all hover:border-white/10 cursor-pointer card-hover';
         card.onclick = () => openViewModal(m.id);
         card.innerHTML = `
-            <!-- Top row -->
-            <div class="flex items-start justify-between gap-2">
+            <!-- Header: company + status badge -->
+            <div class="flex justify-between items-start gap-2">
                 <div class="min-w-0">
-                    <div class="font-black text-white text-sm truncate">${esc(m.company_name)}</div>
-                    <div class="text-[#B5B5B5] text-[11px] font-semibold mt-0.5">
-                        📅 ${esc(m.maintenance_date)}
-                        &nbsp;·&nbsp;
-                        ${esc(m.start_time)} – ${esc(m.end_time)}
-                    </div>
+                    <span class="text-white font-bold text-sm truncate block max-w-[180px]">${esc(m.company_name)}</span>
+                    <span class="text-[#B5B5B5] text-[10px] font-semibold mt-0.5 block">
+                        📅 ${esc(m.maintenance_date)} &nbsp;·&nbsp; ${esc(m.start_time)} – ${esc(m.end_time)}
+                    </span>
                 </div>
-                <span class="px-2.5 py-1 border text-[9px] font-black rounded-lg ${badge} uppercase tracking-widest whitespace-nowrap flex-shrink-0">
+                <span class="px-2 py-0.5 border text-[9px] font-bold rounded-md ${badge} uppercase tracking-wide whitespace-nowrap flex-shrink-0">
                     ${esc(statusLabel(m.status))}
                 </span>
             </div>
 
-            <!-- Description -->
-            ${m.description ? `<p class="text-[#B5B5B5]/65 text-[11px] line-clamp-2 border-t border-white/5 pt-2.5 leading-relaxed">${esc(m.description)}</p>` : ''}
-
-            <!-- Barangay tags -->
+            <!-- Barangay count + tags -->
             <div>
-                <div class="text-[10px] font-black text-[#B5B5B5]/60 uppercase tracking-widest mb-1.5">
-                    📍 ${locs.length} Affected Barangay${locs.length !== 1 ? 's' : ''}
-                </div>
+                <span class="text-[#B5B5B5]/60 text-[10px] font-black uppercase tracking-widest block mb-1">
+                    📍 ${locs.length} Barangay${locs.length !== 1 ? 's' : ''}
+                </span>
                 <div class="flex flex-wrap gap-1">${tagHTML}</div>
             </div>
 
-            <!-- Footer -->
-            <div class="flex items-center justify-between border-t border-white/5 pt-3">
+            <!-- Description -->
+            ${m.description ? `<p class="text-[#B5B5B5]/70 text-[11px] line-clamp-2 border-t border-white/5 pt-1.5 mt-0.5">${esc(m.description)}</p>` : ''}
+
+            <!-- Footer: radius + action buttons -->
+            <div class="flex items-center justify-between border-t border-white/5 pt-2 mt-0.5">
                 <div class="flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full" style="background:${color}"></span>
+                    <span class="w-2 h-2 rounded-full flex-shrink-0" style="background:${color}"></span>
                     <span class="text-[10px] text-[#B5B5B5] font-semibold">Radius: <span class="text-white font-bold">${esc(String(m.radius))}m</span></span>
                 </div>
-                <div class="flex items-center gap-1.5">
+                <div class="flex items-center gap-1">
                     <button onclick="event.stopPropagation();openViewModal(${parseInt(m.id)})"
                             class="text-[10px] font-bold text-[#4FC3F7] hover:text-white hover:bg-[#4FC3F7]/10 px-2.5 py-1.5 rounded-lg transition-all border border-transparent hover:border-[#4FC3F7]/20">
                         View
@@ -779,8 +852,36 @@ function renderList(containerId, items, emptyMsg) {
                 </div>
             </div>
         `;
-        el.appendChild(card);
+        list.appendChild(card);
     });
+}
+
+/* ╔═══════════════════════════════════════════════════════════╗
+   ║  PAGINATION — exact dashboard style                       ║
+   ╚═══════════════════════════════════════════════════════════╝ */
+function renderPagination() {
+    const p = document.getElementById('pagination');
+    if (!p) return;
+    p.innerHTML = '';
+
+    const pages = Math.ceil(filteredData.length / perPage);
+    if (pages <= 1) return;
+
+    for (let i = 1; i <= pages; i++) {
+        const btn = document.createElement('button');
+        btn.innerText = i;
+        btn.className = `h-7 w-7 flex items-center justify-center rounded-lg font-bold text-[11px] transition-all duration-150 ${
+            i === currentPage
+                ? 'bg-[#FFBB02] text-black shadow-md shadow-[#FFBB02]/10'
+                : 'bg-[#31324C]/40 text-[#B5B5B5] hover:bg-[#31324C]/80 hover:text-white'
+        }`;
+        btn.onclick = () => {
+            currentPage = i;
+            renderMaintenancePage();
+            renderPagination();
+        };
+        p.appendChild(btn);
+    }
 }
 
 /* ╔═══════════════════════════════════════════════════════════╗

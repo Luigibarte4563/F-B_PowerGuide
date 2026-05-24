@@ -85,10 +85,14 @@ $current_user_id = $user['id'] ?? null;
         }
 
         .leaflet-layer,
-        .leaflet-control-zoom-in,
-        .leaflet-control-zoom-out,
         .leaflet-container {
             filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+        }
+
+        /* ❗ KEEP markers unaffected */
+        .leaflet-pane .leaflet-marker-pane,
+        .leaflet-pane .leaflet-overlay-pane {
+            filter: none !important;
         }
     </style>
 </head>
@@ -884,42 +888,136 @@ $current_user_id = $user['id'] ?? null;
             let activeAlertsCount = 0;
 
             reports.forEach(r => {
-                if (!r.latitude || !r.longitude) return;
-                activeAlertsCount++;
 
-                const severity = (r.severity || "moderate").toLowerCase();
-                let markerColor; // Scoped variable fix
+                // =========================================
+                // HIDE RESOLVED + REJECTED MARKERS
+                // =========================================
+                const status = String(r.status || "")
+                    .toLowerCase()
+                    .trim();
 
-                if (severity.includes("critical") || severity.includes("high")) {
-                    markerColor = "#FF2E1F"; // Critical Severity
-                } else if (severity.includes("moderate") || severity.includes("medium")) {
-                    markerColor = "#FFBB02"; // Moderate Severity
-                } else {
-                    markerColor = "#34FB34"; // Minor Severity
+                if (status === "resolved" || status === "rejected") {
+                    return;
                 }
 
-                const formattedCategory = (r.category ?? 'power_outage').replace(/_/g, ' ');
+                // =========================================
+                // VALIDATE COORDINATES
+                // =========================================
+                const lat = parseFloat(r.latitude);
+                const lng = parseFloat(r.longitude);
 
-                L.circleMarker([r.latitude, r.longitude], {
-                    radius: 9, fillColor: markerColor, color: "#fff", weight: 2, opacity: 1, fillOpacity: 0.9
+                if (isNaN(lat) || isNaN(lng)) {
+                    return;
+                }
+
+                activeAlertsCount++;
+
+                // =========================================
+                // MARKER COLOR BY SEVERITY
+                // =========================================
+                const severity = String(r.severity ?? "")
+    .toLowerCase()
+    .trim();
+
+let markerColor = "#FFD400"; // default = moderate (clean yellow)
+
+/* =========================================
+   SEVERITY COLOR MAPPING (STRICT)
+========================================= */
+
+// Critical
+if (
+    severity === "critical" ||
+    severity.includes("critical") ||
+    severity === "high"
+) {
+    markerColor = "#FF2E1F"; // red
+}
+
+// Moderate
+else if (
+    severity === "moderate" ||
+    severity.includes("moderate") ||
+    severity === "medium"
+) {
+    markerColor = "#FFD400"; // bright yellow (FIXED)
+}
+
+// Minor
+else if (
+    severity === "minor" ||
+    severity.includes("minor") ||
+    severity === "low"
+) {
+    markerColor = "#34FB34"; // green
+}
+
+// Fallback (important for debugging bad data)
+else {
+    markerColor = "#9CA3AF"; // gray (unknown severity)
+}
+
+                // =========================================
+                // FORMAT CATEGORY
+                // =========================================
+                const formattedCategory = (
+                    r.category ?? "power_outage"
+                ).replace(/_/g, " ");
+
+                // =========================================
+                // CREATE MAP PIN
+                // =========================================
+                L.circleMarker([lat, lng], {
+                    radius: 9,
+                    fillColor: markerColor,
+                    color: "#ffffff",   // always white border for clarity
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.9
                 })
+
                     .bindPopup(`
-                    <div class="text-white text-xs">
-                        <strong class="text-sm block border-b border-white/10 pb-1 mb-1">${escapeHTML(r.location_name)}</strong>
-                        <p class="mb-1 text-white/50 uppercase tracking-widest text-[9px] font-bold">${escapeHTML(formattedCategory)}</p>
-                        <p class="mb-1 text-white/80">${escapeHTML(r.description || 'No system notes noted.')}</p>
-                        <div class="flex items-center justify-between mt-2 pt-1 border-t border-white/5">
-                            <span class="inline-block px-1.5 py-0.5 rounded font-black text-[9px] uppercase" style="background:${markerColor}; color:#000;">${escapeHTML(r.severity)}</span>
-                            <span class="text-[10px] text-white/60 font-semibold">Status: ${escapeHTML(r.status || 'active')}</span>
-                        </div>
-                    </div>
-                `)
+
+        <div class="text-white text-xs">
+
+            <strong class="text-sm block border-b border-white/10 pb-1 mb-1">
+                ${escapeHTML(r.location_name)}
+            </strong>
+
+            <p class="mb-1 text-white/50 uppercase tracking-widest text-[9px] font-bold">
+                ${escapeHTML(formattedCategory)}
+            </p>
+
+            <p class="mb-1 text-white/80">
+                ${escapeHTML(r.description || 'No system notes noted.')}
+            </p>
+
+            <div class="flex items-center justify-between mt-2 pt-1 border-t border-white/5">
+
+                <span
+                    class="inline-block px-1.5 py-0.5 rounded font-black text-[9px] uppercase"
+                    style="background:${markerColor}; color:#000;"
+                >
+                    ${escapeHTML(r.severity || "moderate")}
+                </span>
+
+                <span class="text-[10px] text-white/60 font-semibold">
+                    Status: ${escapeHTML(r.status || 'active')}
+                </span>
+
+            </div>
+
+        </div>
+
+    `)
+
                     .addTo(layerGroup);
+
             });
 
             // Defensive Check: Ensure the element exists before accessing .innerHTML
             const counterElement = document.getElementById("activeOutageCounter");
-            
+
             if (counterElement) {
                 counterElement.innerHTML = `
                     <svg class="w-4 h-4 inline-block mr-1 fill-current text-[#00BA00]" viewBox="0 0 20 20">

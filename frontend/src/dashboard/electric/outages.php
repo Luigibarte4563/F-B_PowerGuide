@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../../../backend/src/config/app.php';
 $user = requireAuth();
 
 if ($user['role'] !== 'electric_company') {
-    header("Location: " . BASE_URL . "/dashboard/user/user.php");
+    header("Location: " . FRONTEND_URL . "/src/dashboard/user/user.php");
     exit;
 }
 
@@ -233,10 +233,11 @@ $picture = $user['picture'] ?? $defaultPicture;
     <nav id="sidebar" class="flex flex-col fixed lg:sticky top-0 h-screen w-[280px] lg:w-[320px] 
             text-[#B5B5B5] pt-8 px-5 border-r-2 border-white/5 bg-[#03041A] z-40
             -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex-shrink-0">
-        
+
         <!-- Logo -->
         <div class="flex items-center gap-3 ml-2 mb-10">
-            <div class="w-10 h-10 bg-gradient-to-br from-[#FFBB02] to-[#E39A00] rounded-xl flex items-center justify-center shadow-lg shadow-[#FFBB02]/10">
+            <div
+                class="w-10 h-10 bg-gradient-to-br from-[#FFBB02] to-[#E39A00] rounded-xl flex items-center justify-center shadow-lg shadow-[#FFBB02]/10">
                 <svg class="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
                 </svg>
@@ -255,23 +256,31 @@ $picture = $user['picture'] ?? $defaultPicture;
         <div class="flex flex-col gap-2">
             <span class="text-[11px] font-bold tracking-widest text-white px-4 mb-1 opacity-50">MANAGEMENT</span>
 
-            <a href="dashboard.php" class="group flex flex-row items-center gap-3.5 px-4 h-12 rounded-xl font-semibold text-sm transition-all shadow-lg shadow-[#FEBB02]/10">
+            <a href="dashboard.php"
+                class="group flex flex-row items-center gap-3.5 px-4 h-12 rounded-xl font-semibold text-sm transition-all shadow-lg shadow-[#FEBB02]/10">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
                 </svg>
                 <span>Dashboard</span>
             </a>
 
-            <a href="outages.php" class="group flex flex-row items-center gap-3.5 px-4 h-12 rounded-xl bg-[#FEBB02] text-black hover:bg-[#31324C]/40 hover:text-white transition-all font-semibold text-sm">
-                <svg class="w-5 h-5 text-[#B5B5B5] text-black group-hover:text-white transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            <a href="outages.php"
+                class="group flex flex-row items-center gap-3.5 px-4 h-12 rounded-xl bg-[#FEBB02] text-black hover:bg-[#31324C]/40 hover:text-white transition-all font-semibold text-sm">
+                <svg class="w-5 h-5 text-[#B5B5B5] text-black group-hover:text-white transition-colors" fill="none"
+                    stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
                 <span>Manage Outages</span>
             </a>
 
-            <a href="maintenance.php" class="group flex flex-row items-center gap-3.5 px-4 h-12 rounded-xl hover:bg-[#31324C]/40 hover:text-white transition-all font-semibold text-sm">
-                <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-white transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <a href="maintenance.php"
+                class="group flex flex-row items-center gap-3.5 px-4 h-12 rounded-xl hover:bg-[#31324C]/40 hover:text-white transition-all font-semibold text-sm">
+                <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-white transition-colors" fill="none"
+                    stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 <span>Maintenance</span>
@@ -280,21 +289,28 @@ $picture = $user['picture'] ?? $defaultPicture;
 
         <!-- Profile Info Panel -->
         <div class="mt-auto mb-6">
-            <div class="flex flex-row items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-[#31324C]/20 border border-white/5">
+            <div
+                class="flex flex-row items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-[#31324C]/20 border border-white/5">
                 <div class="flex items-center gap-3 min-w-0">
-                    <div class="h-10 w-10 rounded-xl overflow-hidden border border-[#FFBB02]/30 flex-shrink-0 bg-[#1A1B3A]">
+                    <div
+                        class="h-10 w-10 rounded-xl overflow-hidden border border-[#FFBB02]/30 flex-shrink-0 bg-[#1A1B3A]">
                         <img src="<?= htmlspecialchars($picture) ?>" alt="Avatar" class="h-full w-full object-cover">
                     </div>
                     <div class="min-w-0 flex flex-col">
-                        <span class="text-xs font-bold text-white truncate"><?= htmlspecialchars($user['name'] ?? 'Company Admin') ?></span>
+                        <span
+                            class="text-xs font-bold text-white truncate"><?= htmlspecialchars($user['name'] ?? 'Company Admin') ?></span>
                         <span class="text-[10px] font-medium text-[#B5B5B5] truncate uppercase">Administrator</span>
                     </div>
                 </div>
 
                 <!-- Logout Button -->
-                <a href="<?= BACKEND_URL ?>/public/logout.php" class="p-2 text-[#B5B5B5] hover:text-[#CB3435] hover:bg-[#CB3435]/10 rounded-xl transition-all group" title="Logout">
-                    <svg class="w-5 h-5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                <a href="<?= BACKEND_URL ?>/public/logout.php"
+                    class="p-2 text-[#B5B5B5] hover:text-[#CB3435] hover:bg-[#CB3435]/10 rounded-xl transition-all group"
+                    title="Logout">
+                    <svg class="w-5 h-5 transform group-hover:translate-x-0.5 transition-transform" fill="none"
+                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
                 </a>
             </div>
@@ -487,7 +503,41 @@ $picture = $user['picture'] ?? $defaultPicture;
                         <span class="w-1.5 h-1.5 bg-[#00BA00] rounded-full animate-pulse"></span> LIVE
                     </span>
                 </div>
-                <div id="map" class="w-full h-72 lg:h-[360px] z-10 bg-[#0E0F26]"></div>
+                <!-- MAP CONTAINER -->
+                <div class="relative">
+
+                    <!-- LEAFLET MAP -->
+                    <div id="map" class="w-full h-72 lg:h-[360px] z-10 bg-[#0E0F26]"></div>
+
+                    <!-- MAP LEGEND -->
+                    <div
+                        class="absolute bottom-4 left-4 border border-white/10 bg-[#1A1B33]/95 rounded-2xl z-[1000] p-3 shadow-xl backdrop-blur-md">
+
+                        <div class="flex flex-col gap-1.5 min-w-[130px]">
+
+                            <span class="font-bold text-[10px] tracking-widest text-white/40 block mb-0.5">
+                                MAP LEGEND
+                            </span>
+
+                            <span class="font-semibold text-xs flex items-center text-white/90">
+                                <span class="w-2.5 h-2.5 rounded-md bg-[#FF2E1F] mr-2 block shadow-sm"></span>
+                                Critical Severity
+                            </span>
+
+                            <span class="font-semibold text-xs flex items-center text-white/90">
+                                <span class="w-2.5 h-2.5 rounded-md bg-[#FFBB02] mr-2 block shadow-sm"></span>
+                                Moderate Severity
+                            </span>
+
+                            <span class="font-semibold text-xs flex items-center text-white/90">
+                                <span class="w-2.5 h-2.5 rounded-md bg-[#34FB34] mr-2 block shadow-sm"></span>
+                                Minor Severity
+                            </span>
+
+                        </div>
+                    </div>
+
+                </div>
             </section>
 
             <!-- REPORTS LIST + DETAIL PANEL -->
@@ -647,18 +697,29 @@ $picture = $user['picture'] ?? $defaultPicture;
         /* =========================================
            LOAD DATA (from EC endpoint)
         ========================================= */
+        /* =========================================
+   LOAD DATA
+========================================= */
         async function loadOutages() {
             try {
+
                 // Sync time
                 const syncEl = document.getElementById('sync-time');
+
                 if (syncEl) {
                     syncEl.innerText = new Date().toLocaleTimeString([], {
-                        hour: '2-digit', minute: '2-digit', second: '2-digit'
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
                     });
+
                     syncEl.classList.remove("text-[#CB3435]");
                 }
 
-                const res = await fetch(`${EC_API}/get.php`, { credentials: "include" });
+                const res = await fetch(`${EC_API}/get.php`, {
+                    credentials: "include"
+                });
+
                 const result = await res.json();
 
                 if (!result.success) {
@@ -666,22 +727,34 @@ $picture = $user['picture'] ?? $defaultPicture;
                     return;
                 }
 
+                /* =========================================
+                   KEEP ALL REPORTS/CARDS
+                ========================================= */
                 allReports = result.data || [];
 
-                // Count stats from data
+                /* =========================================
+                   COUNTERS
+                ========================================= */
                 const activeCount = allReports.filter(r =>
-                    !['resolved', 'rejected'].includes((r.status || "").toLowerCase())
+                    !['resolved', 'rejected'].includes(
+                        String(r.status || "").toLowerCase().trim()
+                    )
                 ).length;
+
                 const resolvedCount = allReports.filter(r =>
-                    (r.status || "").toLowerCase() === "resolved"
+                    String(r.status || "").toLowerCase().trim() === "resolved"
                 ).length;
 
                 setCard("activeOutages", activeCount);
                 setCard("resolvedOutages", resolvedCount);
 
+                /* =========================================
+                   APPLY FILTER
+                ========================================= */
                 applyFilter();
 
             } catch (err) {
+
                 console.error("Load failed:", err);
                 setErrorState();
             }
@@ -735,33 +808,94 @@ $picture = $user['picture'] ?? $defaultPicture;
            MAP MARKERS
         ========================================= */
         function renderMapMarkers(reports) {
+
             layerGroup.clearLayers();
-            const bounds = [];
 
             reports.forEach(r => {
-                const lat = parseFloat(r.latitude), lng = parseFloat(r.longitude);
-                if (isNaN(lat) || isNaN(lng)) return;
 
-                const marker = L.marker([lat, lng]);
+                /* =========================================
+                   🔥 HIDE RESOLVED + REJECTED MAP PINS
+                ========================================= */
+                const status = String(r.status || "")
+                    .toLowerCase()
+                    .trim();
+
+                // Skip resolved/rejected outages on map
+                if (status === "resolved" || status === "rejected") {
+                    return;
+                }
+
+                /* =========================================
+                   VALIDATE COORDINATES
+                ========================================= */
+                const lat = parseFloat(r.latitude);
+                const lng = parseFloat(r.longitude);
+
+                if (isNaN(lat) || isNaN(lng)) {
+                    return;
+                }
+
+                /* =========================================
+                   MARKER COLOR BY STATUS
+                ========================================= */
+                /* =========================================
+               MARKER COLOR BY SEVERITY
+            ========================================= */
+                const severity = String(r.severity || "")
+                    .toLowerCase()
+                    .trim();
+
+                let markerColor = "#FFBB02";
+
+                /* Critical = Red */
+                if (severity.includes("critical") || severity.includes("high")) {
+
+                    markerColor = "#FF2E1F";
+
+                }
+                /* Moderate = Yellow */
+                else if (severity.includes("moderate") || severity.includes("medium")) {
+
+                    markerColor = "#FFBB02";
+
+                }
+                /* Minor = Green */
+                else {
+
+                    markerColor = "#34FB34";
+
+                }
+
+                /* =========================================
+                   CREATE LEAFLET MARKER
+                ========================================= */
+                const marker = L.circleMarker([lat, lng], {
+                    radius: 8,
+                    fillColor: markerColor,
+                    color: "#ffffff",
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.9
+                });
+
+                /* =========================================
+                   POPUP CONTENT
+                ========================================= */
                 marker.bindPopup(`
-                <div style="min-width:180px;font-size:12px;line-height:1.6">
-                    <b style="display:block;border-bottom:1px solid #eee;padding-bottom:4px;margin-bottom:6px">
-                        ${escapeHTML(formatCategory(r.category))}
-                    </b>
-                    <b>Status:</b> ${escapeHTML(formatStatus(r.status))}<br>
-                    <b>Severity:</b> ${escapeHTML(formatSeverity(r.severity))}<br>
-                    <b>Location:</b> ${escapeHTML(r.location_name)}<br>
-                    <b>Affected Houses:</b> ${escapeHTML(r.affected_houses ?? 1)}<br>
-                    ${r.hazard_type && r.hazard_type !== 'none'
-                        ? `<b>Hazard:</b> ${escapeHTML(formatHazard(r.hazard_type))}<br>` : ''}
-                    ${r.description ? `<p style="margin-top:4px;border-top:1px solid #eee;padding-top:4px">${escapeHTML(r.description)}</p>` : ''}
-                </div>
-            `);
-                layerGroup.addLayer(marker);
-                bounds.push([lat, lng]);
-            });
+        <div class="text-xs">
+            <b>${escapeHTML(r.full_name || "Unknown User")}</b><br>
 
-            if (bounds.length > 0 && map) map.fitBounds(bounds, { padding: [30, 30], maxZoom: 15 });
+            ${escapeHTML(formatCategory(r.outage_category))}<br>
+
+            <span>
+                Status:
+                ${escapeHTML(formatStatus(r.status))}
+            </span>
+        </div>
+    `);
+
+                layerGroup.addLayer(marker);
+            });
         }
 
         /* =========================================
