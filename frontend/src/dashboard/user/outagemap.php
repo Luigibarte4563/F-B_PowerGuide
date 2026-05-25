@@ -554,6 +554,101 @@ $current_user_id = $user['id'] ?? null;
 
     <!-- ================= JAVASCRIPT SYSTEM ENGINE ================= -->
     <script>
+        /* ================= STREAMING_CHUNK: CUSTOM ALERTS & CONFIRMS ================= */
+        function injectCustomModals() {
+            const modalContainer = document.createElement('div');
+            modalContainer.innerHTML = `
+                <div id="custom-alert-modal" class="fixed inset-0 z-[9999] hidden flex items-center justify-center bg-[#1C1D30]/80 backdrop-blur-sm transition-opacity opacity-0 duration-200">
+                    <div class="bg-[#31324C] border border-white/10 rounded-2xl p-6 shadow-2xl max-w-sm w-full mx-4 transform scale-95 transition-transform duration-200 text-center">
+                        <div class="w-12 h-12 rounded-full bg-[#FFBB02]/20 text-[#FFBB02] flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Notice</h3>
+                        <p id="custom-alert-message" class="text-[#B5B5B5] text-sm mb-6"></p>
+                        <button onclick="closeCustomAlert()" class="w-full bg-[#FFBB02] text-black font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors">
+                            Acknowledge
+                        </button>
+                    </div>
+                </div>
+
+                <div id="custom-confirm-modal" class="fixed inset-0 z-[9999] hidden flex items-center justify-center bg-[#1C1D30]/80 backdrop-blur-sm transition-opacity opacity-0 duration-200">
+                    <div class="bg-[#31324C] border border-white/10 rounded-2xl p-6 shadow-2xl max-w-sm w-full mx-4 transform scale-95 transition-transform duration-200 text-center">
+                         <div class="w-12 h-12 rounded-full bg-red-500/20 text-red-500 flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Confirm Action</h3>
+                        <p id="custom-confirm-message" class="text-[#B5B5B5] text-sm mb-6"></p>
+                        <div class="flex gap-3">
+                            <button id="custom-confirm-no" class="flex-1 bg-transparent border border-white/10 text-white font-bold py-2 rounded-lg hover:bg-white/5 transition-colors">
+                                Cancel
+                            </button>
+                            <button id="custom-confirm-yes" class="flex-1 bg-red-500 text-white font-bold py-2 rounded-lg hover:bg-red-600 transition-colors">
+                                Proceed
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modalContainer);
+        }
+
+        function showCustomAlert(message) {
+            const modal = document.getElementById('custom-alert-modal');
+            const msgEl = document.getElementById('custom-alert-message');
+            const innerBox = modal.children[0];
+            msgEl.innerText = message;
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                innerBox.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeCustomAlert() {
+            const modal = document.getElementById('custom-alert-modal');
+            const innerBox = modal.children[0];
+            modal.classList.add('opacity-0');
+            innerBox.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        function showCustomConfirm(message) {
+            return new Promise((resolve) => {
+                const modal = document.getElementById('custom-confirm-modal');
+                const msgEl = document.getElementById('custom-confirm-message');
+                const innerBox = modal.children[0];
+                const btnYes = document.getElementById('custom-confirm-yes');
+                const btnNo = document.getElementById('custom-confirm-no');
+
+                msgEl.innerText = message;
+
+                const cleanup = () => {
+                    modal.classList.add('opacity-0');
+                    if (innerBox) innerBox.classList.add('scale-95');
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        btnYes.onclick = null;
+                        btnNo.onclick = null;
+                    }, 200);
+                };
+
+                btnYes.onclick = () => { cleanup(); resolve(true); };
+                btnNo.onclick = () => { cleanup(); resolve(false); };
+
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    if (innerBox) innerBox.classList.remove('scale-95');
+                }, 10);
+            });
+        }
+
         /* ================= STREAMING_CHUNK:Configuring the Leaflet mapping layers... ================= */
         const map = L.map('map', { zoomControl: false }).setView([16.04, 120.33], 12);
         L.control.zoom({ position: 'bottomright' }).addTo(map);
@@ -638,7 +733,7 @@ $current_user_id = $user['id'] ?? null;
         /* ================= STREAMING_CHUNK:Implementing high-accuracy geolocation utilities... ================= */
         function useCurrentLocation() {
             if (!navigator.geolocation) {
-                alert("Geolocation is not supported by your browser.");
+                showCustomAlert("Geolocation is not supported by your browser.");
                 return;
             }
 
@@ -688,7 +783,7 @@ $current_user_id = $user['id'] ?? null;
                             break;
                     }
 
-                    alert(msg);
+                    showCustomAlert(msg);
                 },
                 {
                     enableHighAccuracy: true,
@@ -759,7 +854,7 @@ $current_user_id = $user['id'] ?? null;
                     body: JSON.stringify(payload)
                 });
                 const result = await res.json();
-                alert(result.message || "Updated");
+                showCustomAlert(result.message || "Updated");
 
                 if (result.success) {
                     closeForm();
@@ -767,12 +862,14 @@ $current_user_id = $user['id'] ?? null;
                 }
             } catch (err) {
                 console.error(err);
-                alert("Update failed");
+                showCustomAlert("Update failed");
             }
         }
 
         async function deleteReport(id) {
-            if (!confirm("Delete this report?")) return;
+            const isConfirmed = await showCustomConfirm("Delete this report?");
+            if (!isConfirmed) return;
+            
             try {
                 const res = await fetch(`http://localhost/crowdsourcedAPI/api/outage_report/delete.php`, {
                     method: "POST",
@@ -781,14 +878,14 @@ $current_user_id = $user['id'] ?? null;
                     body: JSON.stringify({ id })
                 });
                 const result = await res.json();
-                alert(result.message || "Done");
+                showCustomAlert(result.message || "Done");
 
                 if (result.success) {
                     initGridSynchronization();
                 }
             } catch (err) {
                 console.error(err);
-                alert("Delete failed");
+                showCustomAlert("Delete failed");
             }
         }
 
@@ -814,12 +911,12 @@ $current_user_id = $user['id'] ?? null;
 
             try {
                 const result = await createReport(payload);
-                alert(result.message || "Operation Completed successfully");
+                showCustomAlert(result.message || "Operation Completed successfully");
                 closePopup();
                 initGridSynchronization();
             } catch (err) {
                 console.error(err);
-                alert("API Submission encountered an error.");
+                showCustomAlert("API Submission encountered an error.");
             }
         }
 
@@ -1258,6 +1355,7 @@ else {
 
         /* ================= INITIALIZATION RENDERING RUNTIME CONTROLS ================= */
         document.addEventListener("DOMContentLoaded", () => {
+            injectCustomModals(); // Inject the UI blocks for customized alerts
             initGridSynchronization();
             batteryDetection();
             setInterval(initGridSynchronization, 10000);
@@ -1278,7 +1376,7 @@ else {
                 overlay.classList.add('hidden');
             });
         }
-    </script>
+</script>
 </body>
 
 </html>
