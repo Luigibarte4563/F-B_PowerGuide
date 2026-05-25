@@ -516,326 +516,425 @@ $current_user_id = $user['id'] ?? null;
     </div>
 
     <!-- ================= JAVASCRIPT SYSTEM ENGINE ================= -->
-        <style>
-            /* ================= MAP MARKER PULSE SYSTEM ================= */
+    <style>
+        /* ================= MAP MARKER PULSE SYSTEM ================= */
 
-@keyframes markerPulse {
-    0% {
-        transform: scale(1);
-        opacity: 0.8;
-    }
-    100% {
-        transform: scale(2.5);
-        opacity: 0;
-    }
-}
+        @keyframes markerPulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
 
-/* Base marker reset (Leaflet override safety) */
-.custom-station-pin {
-    background: transparent !important;
-    border: none !important;
-}
-
-/* Pulse ring effect */
-.station-pulse-ring {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    opacity: 0.6;
-    animation: markerPulse 1.8s ease-out infinite;
-}
-
-/* Optional: second slower pulse for depth */
-.station-pulse-ring.delay {
-    animation-delay: 0.9s;
-}
-        </style>
-
-<script>
-        /* ================= LEAFLET MAP ================= */
-        /* ================= LEAFLET MAP ================= */
-const map = L.map('map', { zoomControl: false }).setView([16.04, 120.33], 12);
-L.control.zoom({ position: 'bottomright' }).addTo(map);
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© OpenStreetMap contributors'
-}).addTo(map);
-
-let layerGroup = L.layerGroup().addTo(map);
-
-let allCachedReports  = [];
-let filteredReports   = [];
-let currentFilterMode = 'all';
-let currentPage       = 1;
-const perPage         = 3;
-
-/* ================= DOM HELPERS ================= */
-function getEl(id) { return document.getElementById(id); }
-
-function setValue(id, value) {
-    const el = getEl(id);
-    if (el) el.value = value ?? "";
-}
-
-/**
- * Force-sets a <select> by iterating options (case-insensitive).
- * el.value = x silently fails when value casing doesn't match an option.
- */
-function setSelectValue(id, value) {
-    const el = getEl(id);
-    if (!el) return;
-
-    if (value === null || value === undefined || String(value).trim() === "") {
-        el.selectedIndex = 0;
-        return;
-    }
-
-    const normalized = String(value).toLowerCase().trim();
-    let matched = false;
-
-    for (let i = 0; i < el.options.length; i++) {
-        if (el.options[i].value.toLowerCase().trim() === normalized) {
-            el.selectedIndex = i;
-            matched = true;
-            break;
+            100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
         }
-    }
 
-    if (!matched) {
-        console.warn(`setSelectValue: no option matching "${value}" in #${id}`);
-        el.selectedIndex = 0;
-    }
-}
+        /* Base marker reset (Leaflet override safety) */
+        .custom-station-pin {
+            background: transparent !important;
+            border: none !important;
+        }
 
-function setText(id, value) {
-    const el = getEl(id);
-    if (el) el.textContent = value ?? "";
-}
+        /* Pulse ring effect */
+        .station-pulse-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: markerPulse 1.8s ease-out infinite;
+        }
 
-function setHTML(id, value) {
-    const el = getEl(id);
-    if (el) el.innerHTML = value ?? "";
-}
+        /* Optional: second slower pulse for depth */
+        .station-pulse-ring.delay {
+            animation-delay: 0.9s;
+        }
+    </style>
 
-function escapeHTML(str) {
-    return String(str ?? "")
-        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-}
+    <script>
+        /* ================= LEAFLET MAP ================= */
+        /* ================= LEAFLET MAP ================= */
+        const map = L.map('map', { zoomControl: false }).setView([16.04, 120.33], 12);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-/* ================= STATUS HELPERS ================= */
-function getStatusColor(status) {
-    switch (String(status || "").toLowerCase().trim()) {
-        case "available":   return "#34FB34";
-        case "busy":        return "#FFBB02";
-        case "offline":     return "#FF2E1F";
-        case "maintenance": return "#00E5FF";
-        default:            return "#34FB34";
-    }
-}
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
 
-function getStatusBadgeStyle(status) {
-    switch (String(status || "").toLowerCase().trim()) {
-        case "available":   return "bg-green-500/10 text-[#34FB34] border border-green-500/20";
-        case "busy":        return "bg-yellow-500/10 text-[#FFBB02] border border-yellow-500/20";
-        case "offline":     return "bg-red-500/10 text-[#FF2E1F] border border-red-500/20";
-        case "maintenance": return "bg-blue-500/10 text-[#00E5FF] border border-blue-500/20";
-        default:            return "bg-green-500/10 text-[#34FB34] border border-green-500/20";
-    }
-}
+        let layerGroup = L.layerGroup().addTo(map);
 
-/* ================= ALERT HELPERS ================= */
-function showAlert(title, message, type = "info") {
-    alert((title ? title.toUpperCase() + ": " : "") + message);
-}
-function showConfirm(message) { return Promise.resolve(confirm(message)); }
+        let allCachedReports = [];
+        let filteredReports = [];
+        let currentFilterMode = 'all';
+        let currentPage = 1;
+        const perPage = 3;
 
-/* ================= MODAL MAP STATE ================= */
-// Two separate Leaflet map instances — one for create, one for edit.
-// They must never share state or interfere with each other.
-let createMap;
-let createMarker;
+        /* ================= DOM HELPERS ================= */
+        function getEl(id) { return document.getElementById(id); }
 
-let editMap;
-let editMarker;
+        function setValue(id, value) {
+            const el = getEl(id);
+            if (el) el.value = value ?? "";
+        }
 
-/* ================= MODAL MAP: CREATE ================= */
-function initCreateMap(lat = 16.043, lng = 120.333) {
-    if (!createMap) {
-        createMap = L.map('createModalMap', { zoomControl: false }).setView([lat, lng], 13);
-        L.control.zoom({ position: 'bottomright' }).addTo(createMap);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(createMap);
+        /**
+         * Force-sets a <select> by iterating options (case-insensitive).
+         * el.value = x silently fails when value casing doesn't match an option.
+         */
+        function setSelectValue(id, value) {
+            const el = getEl(id);
+            if (!el) return;
 
-        createMap.on('click', function (e) {
-            syncCreateCoords(e.latlng.lat, e.latlng.lng, false);
-        });
-    }
+            if (value === null || value === undefined || String(value).trim() === "") {
+                el.selectedIndex = 0;
+                return;
+            }
 
-    createMap.setView([lat, lng], 13);
-    createMap.invalidateSize();
+            const normalized = String(value).toLowerCase().trim();
+            let matched = false;
 
-    if (createMarker) {
-        createMarker.setLatLng([lat, lng]);
-    } else {
-        createMarker = L.marker([lat, lng], { draggable: true }).addTo(createMap);
-        createMarker.on('dragend', function (e) {
-            const pos = e.target.getLatLng();
-            syncCreateCoords(pos.lat, pos.lng, false);
-        });
-    }
+            for (let i = 0; i < el.options.length; i++) {
+                if (el.options[i].value.toLowerCase().trim() === normalized) {
+                    el.selectedIndex = i;
+                    matched = true;
+                    break;
+                }
+            }
 
-    setValue("create_latitude",  lat.toFixed(8));
-    setValue("create_longitude", lng.toFixed(8));
-}
+            if (!matched) {
+                console.warn(`setSelectValue: no option matching "${value}" in #${id}`);
+                el.selectedIndex = 0;
+            }
+        }
 
-/**
- * Updates the create form's lat/lng inputs and optionally reverse-geocodes.
- * Called on map click and marker dragend.
- */
-function syncCreateCoords(lat, lng, skipGeocode = false) {
-    setValue("create_latitude",  Number(lat).toFixed(8));
-    setValue("create_longitude", Number(lng).toFixed(8));
+        function setText(id, value) {
+            const el = getEl(id);
+            if (el) el.textContent = value ?? "";
+        }
 
-    if (createMarker) {
-        createMarker.setLatLng([lat, lng]);
-    }
-    if (createMap) createMap.panTo([lat, lng]);
+        function setHTML(id, value) {
+            const el = getEl(id);
+            if (el) el.innerHTML = value ?? "";
+        }
 
-    if (!skipGeocode) {
-        const locationInput = getEl("create_location_name");
-        if (locationInput) {
-            locationInput.value = "Fetching address...";
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-                .then(r => r.json())
-                .then(data => {
-                    if (locationInput)
-                        locationInput.value = data.display_name || `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
-                })
-                .catch(() => {
-                    if (locationInput)
-                        locationInput.value = `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
+        function escapeHTML(str) {
+            return String(str ?? "")
+                .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        /* ================= STATUS HELPERS ================= */
+        function getStatusColor(status) {
+            switch (String(status || "").toLowerCase().trim()) {
+                case "available": return "#34FB34";
+                case "busy": return "#FFBB02";
+                case "offline": return "#FF2E1F";
+                case "maintenance": return "#00E5FF";
+                default: return "#34FB34";
+            }
+        }
+
+        function getStatusBadgeStyle(status) {
+            switch (String(status || "").toLowerCase().trim()) {
+                case "available": return "bg-green-500/10 text-[#34FB34] border border-green-500/20";
+                case "busy": return "bg-yellow-500/10 text-[#FFBB02] border border-yellow-500/20";
+                case "offline": return "bg-red-500/10 text-[#FF2E1F] border border-red-500/20";
+                case "maintenance": return "bg-blue-500/10 text-[#00E5FF] border border-blue-500/20";
+                default: return "bg-green-500/10 text-[#34FB34] border border-green-500/20";
+            }
+        }
+
+        /* ================= CUSTOM MODAL POPUPS ================= */
+        function createModalContainer() {
+            let container = getEl('custom-modal-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'custom-modal-container';
+                // z-[9999], pointer-events-none ensures only the overlays capture clicks
+                container.className = 'fixed inset-0 z-[9999] pointer-events-none flex flex-col items-center justify-center p-4';
+                document.body.appendChild(container);
+            }
+            return container;
+        }
+
+        function showAlert(title, message, type = "info") {
+            const types = {
+                success: { color: 'text-[#34FB34]', bg: 'bg-[#34FB34]/10', shadow: 'shadow-[0_0_15px_rgba(52,251,52,0.4)]', icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>' },
+                error: { color: 'text-[#FF2E1F]', bg: 'bg-[#FF2E1F]/10', shadow: 'shadow-[0_0_15px_rgba(255,46,31,0.4)]', icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>' },
+                warning: { color: 'text-[#FFBB02]', bg: 'bg-[#FFBB02]/10', shadow: 'shadow-[0_0_15px_rgba(255,187,2,0.4)]', icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>' },
+                info: { color: 'text-[#00E5FF]', bg: 'bg-[#00E5FF]/10', shadow: 'shadow-[0_0_15px_rgba(0,229,255,0.4)]', icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' }
+            };
+
+            const style = types[type] || types.info;
+            const overlay = document.createElement('div');
+            overlay.className = 'absolute inset-0 pointer-events-auto flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300 opacity-0';
+
+            const modal = document.createElement('div');
+            modal.className = `bg-[#13142A] border border-white/10 rounded-2xl p-6 max-w-sm w-full transform scale-95 transition-all duration-300 flex flex-col items-center text-center shadow-2xl`;
+
+            modal.innerHTML = `
+        <div class="w-14 h-14 rounded-full mb-4 flex items-center justify-center ${style.bg} ${style.color} ${style.shadow}">
+            ${style.icon}
+        </div>
+        <h3 class="text-white font-bold text-lg mb-2">${title}</h3>
+        <p class="text-[#B5B5B5] text-sm mb-6">${message}</p>
+        <button class="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold transition-colors">Acknowledge</button>
+    `;
+
+            overlay.appendChild(modal);
+            createModalContainer().appendChild(overlay);
+
+            const btn = modal.querySelector('button');
+            btn.onclick = () => {
+                overlay.classList.remove('opacity-100');
+                overlay.classList.add('opacity-0');
+                modal.classList.remove('scale-100');
+                modal.classList.add('scale-95');
+                setTimeout(() => overlay.remove(), 300);
+            };
+
+            // Trigger animations
+            requestAnimationFrame(() => {
+                overlay.classList.remove('opacity-0');
+                overlay.classList.add('opacity-100');
+                modal.classList.remove('scale-95');
+                modal.classList.add('scale-100');
+            });
+        }
+
+        function showConfirm(message) {
+            return new Promise((resolve) => {
+                const overlay = document.createElement('div');
+                overlay.className = 'absolute inset-0 pointer-events-auto flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300 opacity-0';
+
+                const modal = document.createElement('div');
+                modal.className = `bg-[#13142A] border border-white/10 rounded-2xl p-6 max-w-sm w-full transform scale-95 transition-all duration-300 flex flex-col items-center text-center shadow-2xl`;
+
+                modal.innerHTML = `
+            <div class="w-14 h-14 rounded-full mb-4 flex items-center justify-center bg-[#FF2E1F]/10 text-[#FF2E1F] shadow-[0_0_15px_rgba(255,46,31,0.4)]">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <p class="text-[#B5B5B5] text-sm mb-6">${message}</p>
+            <div class="flex gap-3 w-full">
+                <button id="btn-cancel" class="flex-1 py-3 rounded-xl border border-white/10 text-white/60 hover:text-white hover:bg-white/5 transition-colors">Cancel</button>
+                <button id="btn-confirm" class="flex-1 py-3 rounded-xl bg-[#FF2E1F] hover:bg-[#FF2E1F]/90 text-white font-bold transition-colors shadow-lg">Confirm</button>
+            </div>
+        `;
+
+                overlay.appendChild(modal);
+                createModalContainer().appendChild(overlay);
+
+                const close = (result) => {
+                    overlay.classList.remove('opacity-100');
+                    overlay.classList.add('opacity-0');
+                    modal.classList.remove('scale-100');
+                    modal.classList.add('scale-95');
+                    setTimeout(() => {
+                        overlay.remove();
+                        resolve(result);
+                    }, 300);
+                };
+
+                modal.querySelector('#btn-cancel').onclick = () => close(false);
+                modal.querySelector('#btn-confirm').onclick = () => close(true);
+
+                // Trigger animations
+                requestAnimationFrame(() => {
+                    overlay.classList.remove('opacity-0');
+                    overlay.classList.add('opacity-100');
+                    modal.classList.remove('scale-95');
+                    modal.classList.add('scale-100');
                 });
+            });
         }
-    }
-}
 
-/* ================= MODAL MAP: EDIT ================= */
-/**
- * initEditMap — always called with the station's saved coordinates.
- * Creates the edit map once; subsequent calls reposition it.
- * Marker drag and map click BOTH immediately update the hidden lat/lng inputs.
- */
-function initEditMap(lat, lng) {
-    if (!editMap) {
-        editMap = L.map('editModalMap', { zoomControl: false }).setView([lat, lng], 15);
-        L.control.zoom({ position: 'bottomright' }).addTo(editMap);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(editMap);
+        /* ================= MODAL MAP STATE ================= */
+        // Two separate Leaflet map instances — one for create, one for edit.
+        // They must never share state or interfere with each other.
+        let createMap;
+        let createMarker;
 
-        // ✅ Map click repositions marker AND syncs inputs immediately
-        editMap.on('click', function (e) {
-            syncEditCoords(e.latlng.lat, e.latlng.lng);
-        });
-    } else {
-        editMap.setView([lat, lng], 15);
-    }
+        let editMap;
+        let editMarker;
 
-    editMap.invalidateSize();
+        /* ================= MODAL MAP: CREATE ================= */
+        function initCreateMap(lat = 16.043, lng = 120.333) {
+            if (!createMap) {
+                createMap = L.map('createModalMap', { zoomControl: false }).setView([lat, lng], 13);
+                L.control.zoom({ position: 'bottomright' }).addTo(createMap);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(createMap);
 
-    if (editMarker) {
-        editMarker.setLatLng([lat, lng]);
-    } else {
-        editMarker = L.marker([lat, lng], { draggable: true }).addTo(editMap);
-
-        // ✅ Marker drag syncs inputs immediately — no stale coordinates on submit
-        editMarker.on('dragend', function (e) {
-            const pos = e.target.getLatLng();
-            syncEditCoords(pos.lat, pos.lng);
-        });
-    }
-
-    // Sync inputs to current position
-    syncEditCoords(lat, lng);
-}
-
-/**
- * Single source of truth for edit modal coordinate state.
- * Always called instead of writing lat/lng inputs directly.
- */
-function syncEditCoords(lat, lng) {
-    setValue("edit_latitude",  Number(lat).toFixed(8));
-    setValue("edit_longitude", Number(lng).toFixed(8));
-
-    if (editMarker) editMarker.setLatLng([lat, lng]);
-    if (editMap)    editMap.panTo([lat, lng]);
-}
-
-/* ================= GPS LOCATION (CREATE MODAL) ================= */
-function useCreateLocation() {
-    if (!navigator.geolocation) {
-        showAlert("System Error", "Geolocation not supported.", "error");
-        return;
-    }
-    const locationInput = getEl("create_location_name");
-    if (locationInput) locationInput.value = "Acquiring GPS position...";
-
-    navigator.geolocation.getCurrentPosition(
-        (position) => {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            syncCreateCoords(lat, lng, false);
-            if (createMap) {
-                createMap.invalidateSize();
-                createMap.setView([lat, lng], 16);
+                createMap.on('click', function (e) {
+                    syncCreateCoords(e.latlng.lat, e.latlng.lng, false);
+                });
             }
-        },
-        (error) => {
+
+            createMap.setView([lat, lng], 13);
+            createMap.invalidateSize();
+
+            if (createMarker) {
+                createMarker.setLatLng([lat, lng]);
+            } else {
+                createMarker = L.marker([lat, lng], { draggable: true }).addTo(createMap);
+                createMarker.on('dragend', function (e) {
+                    const pos = e.target.getLatLng();
+                    syncCreateCoords(pos.lat, pos.lng, false);
+                });
+            }
+
+            setValue("create_latitude", lat.toFixed(8));
+            setValue("create_longitude", lng.toFixed(8));
+        }
+
+        /**
+         * Updates the create form's lat/lng inputs and optionally reverse-geocodes.
+         * Called on map click and marker dragend.
+         */
+        function syncCreateCoords(lat, lng, skipGeocode = false) {
+            setValue("create_latitude", Number(lat).toFixed(8));
+            setValue("create_longitude", Number(lng).toFixed(8));
+
+            if (createMarker) {
+                createMarker.setLatLng([lat, lng]);
+            }
+            if (createMap) createMap.panTo([lat, lng]);
+
+            if (!skipGeocode) {
+                const locationInput = getEl("create_location_name");
+                if (locationInput) {
+                    locationInput.value = "Fetching address...";
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                        .then(r => r.json())
+                        .then(data => {
+                            if (locationInput)
+                                locationInput.value = data.display_name || `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
+                        })
+                        .catch(() => {
+                            if (locationInput)
+                                locationInput.value = `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
+                        });
+                }
+            }
+        }
+
+        /* ================= MODAL MAP: EDIT ================= */
+        /**
+         * initEditMap — always called with the station's saved coordinates.
+         * Creates the edit map once; subsequent calls reposition it.
+         * Marker drag and map click BOTH immediately update the hidden lat/lng inputs.
+         */
+        function initEditMap(lat, lng) {
+            if (!editMap) {
+                editMap = L.map('editModalMap', { zoomControl: false }).setView([lat, lng], 15);
+                L.control.zoom({ position: 'bottomright' }).addTo(editMap);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(editMap);
+
+                // ✅ Map click repositions marker AND syncs inputs immediately
+                editMap.on('click', function (e) {
+                    syncEditCoords(e.latlng.lat, e.latlng.lng);
+                });
+            } else {
+                editMap.setView([lat, lng], 15);
+            }
+
+            editMap.invalidateSize();
+
+            if (editMarker) {
+                editMarker.setLatLng([lat, lng]);
+            } else {
+                editMarker = L.marker([lat, lng], { draggable: true }).addTo(editMap);
+
+                // ✅ Marker drag syncs inputs immediately — no stale coordinates on submit
+                editMarker.on('dragend', function (e) {
+                    const pos = e.target.getLatLng();
+                    syncEditCoords(pos.lat, pos.lng);
+                });
+            }
+
+            // Sync inputs to current position
+            syncEditCoords(lat, lng);
+        }
+
+        /**
+         * Single source of truth for edit modal coordinate state.
+         * Always called instead of writing lat/lng inputs directly.
+         */
+        function syncEditCoords(lat, lng) {
+            setValue("edit_latitude", Number(lat).toFixed(8));
+            setValue("edit_longitude", Number(lng).toFixed(8));
+
+            if (editMarker) editMarker.setLatLng([lat, lng]);
+            if (editMap) editMap.panTo([lat, lng]);
+        }
+
+        /* ================= GPS LOCATION (CREATE MODAL) ================= */
+        function useCreateLocation() {
+            if (!navigator.geolocation) {
+                showAlert("System Error", "Geolocation not supported.", "error");
+                return;
+            }
             const locationInput = getEl("create_location_name");
-            if (locationInput && locationInput.value.includes("GPS")) locationInput.value = "";
-            let msg = "Unable to fetch location.";
-            switch (error.code) {
-                case error.PERMISSION_DENIED:    msg = "Permission denied."; break;
-                case error.POSITION_UNAVAILABLE: msg = "Location unavailable."; break;
-                case error.TIMEOUT:              msg = "Request timed out."; break;
-            }
-            showAlert("GPS Error", msg, "error");
-        },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
-}
+            if (locationInput) locationInput.value = "Acquiring GPS position...";
 
-/* ================= MODAL HTML BUILDER ================= */
-/**
- * Builds both modals (create + edit) and injects them into #modalContainer or body.
- * All <select> elements have a blank first option — no "selected" attribute anywhere.
- * This prevents form.reset() from snapping selects back to a hardcoded default.
- */
-function buildModalHTML() {
-    const target = getEl("modalContainer") || document.body;
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    syncCreateCoords(lat, lng, false);
+                    if (createMap) {
+                        createMap.invalidateSize();
+                        createMap.setView([lat, lng], 16);
+                    }
+                },
+                (error) => {
+                    const locationInput = getEl("create_location_name");
+                    if (locationInput && locationInput.value.includes("GPS")) locationInput.value = "";
+                    let msg = "Unable to fetch location.";
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED: msg = "Permission denied."; break;
+                        case error.POSITION_UNAVAILABLE: msg = "Location unavailable."; break;
+                        case error.TIMEOUT: msg = "Request timed out."; break;
+                    }
+                    showAlert("GPS Error", msg, "error");
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
+        }
 
-    // Shared select option HTML — defined once, reused in both modals
-    const stationTypeOptions = `
+        /* ================= MODAL HTML BUILDER ================= */
+        /**
+         * Builds both modals (create + edit) and injects them into #modalContainer or body.
+         * All <select> elements have a blank first option — no "selected" attribute anywhere.
+         * This prevents form.reset() from snapping selects back to a hardcoded default.
+         */
+        function buildModalHTML() {
+            const target = getEl("modalContainer") || document.body;
+
+            // Shared select option HTML — defined once, reused in both modals
+            const stationTypeOptions = `
         <option value="">— Select Type —</option>
         <option value="power_station">Power Station</option>
         <option value="solar_station">Solar Station</option>
         <option value="charging_station">Charging Station</option>
         <option value="generator_station">Generator Station</option>`;
 
-    const accessTypeOptions = `
+            const accessTypeOptions = `
         <option value="">— Select Access —</option>
         <option value="free">Free</option>
         <option value="paid">Paid</option>`;
 
-    // ✅ CRITICAL: blank first option, NO "selected" attribute on any option
-    const statusOptions = `
+            // ✅ CRITICAL: blank first option, NO "selected" attribute on any option
+            const statusOptions = `
         <option value="">— Select Status —</option>
         <option value="available">Available</option>
         <option value="busy">Busy</option>
         <option value="offline">Offline</option>
         <option value="maintenance">Maintenance</option>`;
 
-    const chargingTypeOptions = `
+            const chargingTypeOptions = `
         <option value="">— Select Charging —</option>
         <option value="AC Level 1">AC Level 1</option>
         <option value="AC Level 2">AC Level 2</option>
@@ -844,11 +943,10 @@ function buildModalHTML() {
         <option value="Generator">Generator</option>
         <option value="Standard Outlet">Standard Outlet</option>`;
 
-    target.insertAdjacentHTML("beforeend", `
+            target.insertAdjacentHTML("beforeend", `
 
-    <!-- ==================== CREATE MODAL ==================== -->
     <div id="createPopup"
-         class="invisible opacity-0 fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm transition-all duration-200 p-4">
+         class="invisible opacity-0 fixed inset-0 z-[9998] flex items-center justify-center bg-black/70 backdrop-blur-sm transition-all duration-200 p-4">
         <div class="relative w-full max-w-2xl max-h-[95vh] overflow-y-auto rounded-2xl bg-[#13142A] border border-white/10 shadow-2xl">
 
             <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 bg-[#13142A] border-b border-white/10">
@@ -967,9 +1065,8 @@ function buildModalHTML() {
         </div>
     </div>
 
-    <!-- ==================== EDIT MODAL ==================== -->
     <div id="editPopup"
-         class="invisible opacity-0 fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm transition-all duration-200 p-4">
+         class="invisible opacity-0 fixed inset-0 z-[9998] flex items-center justify-center bg-black/70 backdrop-blur-sm transition-all duration-200 p-4">
         <div class="relative w-full max-w-2xl max-h-[95vh] overflow-y-auto rounded-2xl bg-[#13142A] border border-white/10 shadow-2xl">
 
             <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 bg-[#13142A] border-b border-white/10">
@@ -989,7 +1086,6 @@ function buildModalHTML() {
 
             <form id="editForm" class="px-6 py-5 space-y-5">
 
-                <!-- Hidden ID — the single source of truth for which record to update -->
                 <input type="hidden" id="edit_id">
 
                 <div class="space-y-1.5">
@@ -1083,208 +1179,207 @@ function buildModalHTML() {
         </div>
     </div>
     `);
-}
-
-/* ================= POPUP CONTROLS: CREATE ================= */
-function openCreatePopup() {
-    const popup = getEl("createPopup");
-    if (popup) popup.classList.remove("invisible", "opacity-0");
-
-    // Reset the create form fully — safe because this is always a new record
-    const form = getEl("createForm");
-    if (form) form.reset();
-
-    // Reset all selects to blank placeholder explicitly
-    ["create_station_type", "create_access_type", "create_availability_status", "create_charging_type"].forEach(id => {
-        const el = getEl(id);
-        if (el) el.selectedIndex = 0;
-    });
-
-    // Init map after DOM is visible so Leaflet can read container dimensions
-    setTimeout(() => {
-        initCreateMap(16.043, 120.333);
-    }, 50);
-}
-
-function closeCreatePopup() {
-    const popup = getEl("createPopup");
-    if (popup) popup.classList.add("invisible", "opacity-0");
-}
-
-/* ================= POPUP CONTROLS: EDIT ================= */
-/**
- * openEdit — the reference entry point for editing a station.
- * Follows the exact pattern: populate fields → init map → open popup.
- * NO form.reset() is called here — that would wipe the values we just set.
- */
-function openEdit(s) {
-    if (!s || !s.id) {
-        showAlert("Error", "Invalid station data.");
-        return;
-    }
-
-    // ── Step 1: Populate all fields from the station object ──────────────────
-    // Hidden ID — single source of truth, never changes until form submits
-    setValue("edit_id", s.id);
-
-    // Text inputs — use ?? "" so null/undefined become empty string, not "null"
-    setValue("edit_station_name",    s.station_name    ?? "");
-    setValue("edit_location_name",   s.location_name   ?? "");
-    setValue("edit_operating_hours", s.operating_hours ?? "");
-    setValue("edit_description",     s.description     ?? "");
-
-    // ✅ Selects — setSelectValue iterates options for exact match.
-    //    This is the fix for availability_status always being "available":
-    //    el.value = "offline" silently fails if the browser hasn't matched it;
-    //    selectedIndex assignment on a confirmed match never fails.
-    setSelectValue("edit_station_type",        s.station_type);
-    setSelectValue("edit_access_type",         s.access_type);
-    setSelectValue("edit_availability_status", s.availability_status);
-    setSelectValue("edit_charging_type",       s.charging_type);
-
-    // ── Step 2: Show the popup ────────────────────────────────────────────────
-    const popup = getEl("editPopup");
-    if (popup) popup.classList.remove("invisible", "opacity-0");
-
-    // ── Step 3: Init edit map after popup is visible ──────────────────────────
-    // Delay ensures the #editModalMap container has rendered dimensions before
-    // Leaflet tries to measure it. Coordinates come from the station object.
-    setTimeout(() => {
-        const lat = parseFloat(s.latitude);
-        const lng = parseFloat(s.longitude);
-        const safeLat = isNaN(lat) ? 16.043 : lat;
-        const safeLng = isNaN(lng) ? 120.333 : lng;
-        initEditMap(safeLat, safeLng);
-    }, 50);
-}
-
-function closeEditPopup() {
-    const popup = getEl("editPopup");
-    if (popup) popup.classList.add("invisible", "opacity-0");
-    // Wipe ID so a stale edit can't accidentally re-submit
-    setValue("edit_id", "");
-}
-
-// Legacy alias — keeps any existing onclick="openPopup()" calls working
-function openPopup(editMode = false) {
-    if (editMode) return; // edit path now uses openEdit()
-    openCreatePopup();
-}
-function closePopup() { closeCreatePopup(); }
-
-/* ================= API HELPER ================= */
-const API_BASE = "http://localhost/crowdsourcedapi/api/power_station";
-
-async function api(url, options = {}) {
-    try {
-        const res = await fetch(url, {
-            method:      options.method || "GET",
-            headers:     { "Content-Type": "application/json" },
-            credentials: "include",
-            body:        options.body || null
-        });
-
-        if (!res.ok) {
-            const errText = await res.text();
-            console.error(`API ${res.status} from ${url}:`, errText);
-            return { success: false, message: `Server error ${res.status}: ${errText}` };
         }
 
-        return await res.json();
-    } catch (err) {
-        console.error("API Error:", err);
-        return { success: false, message: "Network error occurred" };
-    }
-}
+        /* ================= POPUP CONTROLS: CREATE ================= */
+        function openCreatePopup() {
+            const popup = getEl("createPopup");
+            if (popup) popup.classList.remove("invisible", "opacity-0");
 
-/* ================= LOAD FUNCTIONS ================= */
-async function loadUserLocation() {
-    try {
-        const result = await api(`${API_BASE}/get_near_location.php`);
-        if (!result.success) return;
-        const lat = parseFloat(result.data.latitude);
-        const lng = parseFloat(result.data.longitude);
-        if (!isNaN(lat) && !isNaN(lng)) {
-            map.setView([lat, lng], 14);
-            const userLocIcon = L.divIcon({
-                className: 'custom-user-location-marker',
-                html: `<div class="relative flex items-center justify-center w-8 h-8 rounded-full border-2 border-white shadow-xl bg-[#007AFF]">
+            // Reset the create form fully — safe because this is always a new record
+            const form = getEl("createForm");
+            if (form) form.reset();
+
+            // Reset all selects to blank placeholder explicitly
+            ["create_station_type", "create_access_type", "create_availability_status", "create_charging_type"].forEach(id => {
+                const el = getEl(id);
+                if (el) el.selectedIndex = 0;
+            });
+
+            // Init map after DOM is visible so Leaflet can read container dimensions
+            setTimeout(() => {
+                initCreateMap(16.043, 120.333);
+            }, 50);
+        }
+
+        function closeCreatePopup() {
+            const popup = getEl("createPopup");
+            if (popup) popup.classList.add("invisible", "opacity-0");
+        }
+
+        /* ================= POPUP CONTROLS: EDIT ================= */
+        /**
+         * openEdit — the reference entry point for editing a station.
+         * Follows the exact pattern: populate fields → init map → open popup.
+         * NO form.reset() is called here — that would wipe the values we just set.
+         */
+        function openEdit(s) {
+            if (!s || !s.id) {
+                showAlert("Error", "Invalid station data.", "error");
+                return;
+            }
+
+            // ── Step 1: Populate all fields from the station object ──────────────────
+            // Hidden ID — single source of truth, never changes until form submits
+            setValue("edit_id", s.id);
+
+            // Text inputs — use ?? "" so null/undefined become empty string, not "null"
+            setValue("edit_station_name", s.station_name ?? "");
+            setValue("edit_location_name", s.location_name ?? "");
+            setValue("edit_operating_hours", s.operating_hours ?? "");
+            setValue("edit_description", s.description ?? "");
+
+            // ✅ Selects — setSelectValue iterates options for exact match.
+            //    This is the fix for availability_status always being "available":
+            //    el.value = "offline" silently fails if the browser hasn't matched it;
+            //    selectedIndex assignment on a confirmed match never fails.
+            setSelectValue("edit_station_type", s.station_type);
+            setSelectValue("edit_access_type", s.access_type);
+            setSelectValue("edit_availability_status", s.availability_status);
+            setSelectValue("edit_charging_type", s.charging_type);
+
+            // ── Step 2: Show the popup ────────────────────────────────────────────────
+            const popup = getEl("editPopup");
+            if (popup) popup.classList.remove("invisible", "opacity-0");
+
+            // ── Step 3: Init edit map after popup is visible ──────────────────────────
+            // Delay ensures the #editModalMap container has rendered dimensions before
+            // Leaflet tries to measure it. Coordinates come from the station object.
+            setTimeout(() => {
+                const lat = parseFloat(s.latitude);
+                const lng = parseFloat(s.longitude);
+                const safeLat = isNaN(lat) ? 16.043 : lat;
+                const safeLng = isNaN(lng) ? 120.333 : lng;
+                initEditMap(safeLat, safeLng);
+            }, 50);
+        }
+
+        function closeEditPopup() {
+            const popup = getEl("editPopup");
+            if (popup) popup.classList.add("invisible", "opacity-0");
+            // Wipe ID so a stale edit can't accidentally re-submit
+            setValue("edit_id", "");
+        }
+
+        // Legacy alias — keeps any existing onclick="openPopup()" calls working
+        function openPopup(editMode = false) {
+            if (editMode) return; // edit path now uses openEdit()
+            openCreatePopup();
+        }
+        function closePopup() { closeCreatePopup(); }
+
+        /* ================= API HELPER ================= */
+        const API_BASE = "http://localhost/crowdsourcedapi/api/power_station";
+
+        async function api(url, options = {}) {
+            try {
+                const res = await fetch(url, {
+                    method: options.method || "GET",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: options.body || null
+                });
+
+                if (!res.ok) {
+                    const errText = await res.text();
+                    console.error(`API ${res.status} from ${url}:`, errText);
+                    return { success: false, message: `Server error ${res.status}: ${errText}` };
+                }
+
+                return await res.json();
+            } catch (err) {
+                console.error("API Error:", err);
+                return { success: false, message: "Network error occurred" };
+            }
+        }
+
+        /* ================= LOAD FUNCTIONS ================= */
+        async function loadUserLocation() {
+            try {
+                const result = await api(`${API_BASE}/get_near_location.php`);
+                if (!result.success) return;
+                const lat = parseFloat(result.data.latitude);
+                const lng = parseFloat(result.data.longitude);
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    map.setView([lat, lng], 14);
+                    const userLocIcon = L.divIcon({
+                        className: 'custom-user-location-marker',
+                        html: `<div class="relative flex items-center justify-center w-8 h-8 rounded-full border-2 border-white shadow-xl bg-[#007AFF]">
                     <svg class="w-4 h-4 text-white animate-pulse" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>
                     </svg>
                     <span class="absolute inset-0 rounded-full bg-[#007AFF] opacity-30 animate-ping"></span>
                 </div>`,
-                iconSize: [32, 32], iconAnchor: [16, 16]
-            });
-            L.marker([lat, lng], { icon: userLocIcon }).addTo(map)
-                .bindPopup("<strong class='text-xs text-white block text-center'>Registered Home Location</strong>");
-        }
-    } catch (err) {
-        console.error("loadUserLocation error:", err);
-    }
-}
-
-async function loadStations() {
-    try {
-        const endpoint = currentFilterMode === 'mine'
-            ? `${API_BASE}/get_my_posts.php`
-            : `${API_BASE}/get.php`;
-        const result = await api(endpoint);
-
-        if (!result.success) {
-            showAlert("Sync Issue", result.message || "Failed to load stations", "error");
-            return;
+                        iconSize: [32, 32], iconAnchor: [16, 16]
+                    });
+                    L.marker([lat, lng], { icon: userLocIcon }).addTo(map)
+                        .bindPopup("<strong class='text-xs text-white block text-center'>Registered Home Location</strong>");
+                }
+            } catch (err) {
+                console.error("loadUserLocation error:", err);
+            }
         }
 
-        allCachedReports = result.data || [];
-        const keyword = getEl("mapSearch")?.value?.trim() || "";
+        async function loadStations() {
+            try {
+                const endpoint = currentFilterMode === 'mine'
+                    ? `${API_BASE}/get_my_posts.php`
+                    : `${API_BASE}/get.php`;
+                const result = await api(endpoint);
 
-        if (keyword) {
-            filterStations(keyword);
-        } else {
-            filteredReports = [...allCachedReports];
-            renderMapMarkers(filteredReports);
-            renderStatisticsFeed();
-            renderPaginationControls();
+                if (!result.success) {
+                    showAlert("Sync Issue", result.message || "Failed to load stations", "error");
+                    return;
+                }
+
+                allCachedReports = result.data || [];
+                const keyword = getEl("mapSearch")?.value?.trim() || "";
+
+                if (keyword) {
+                    filterStations(keyword);
+                } else {
+                    filteredReports = [...allCachedReports];
+                    renderMapMarkers(filteredReports);
+                    renderStatisticsFeed();
+                    renderPaginationControls();
+                }
+            } catch (err) {
+                console.error("loadStations error:", err);
+                showAlert("Network Error", "Failed to load stations.", "error");
+            }
         }
-    } catch (err) {
-        console.error("loadStations error:", err);
-        showAlert("Network Error", "Failed to load stations.", "error");
-    }
-}
 
-function toggleFilterMode(mode) {
-    currentFilterMode = mode;
-    currentPage = 1;
-    const btnAll  = getEl("filterBtnAll");
-    const btnMine = getEl("filterBtnMine");
+        function toggleFilterMode(mode) {
+            currentFilterMode = mode;
+            currentPage = 1;
+            const btnAll = getEl("filterBtnAll");
+            const btnMine = getEl("filterBtnMine");
 
-    if (mode === 'mine') {
-        if (btnMine) btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
-        if (btnAll)  btnAll.className  = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
-    } else {
-        if (btnAll)  btnAll.className  = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
-        if (btnMine) btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
-    }
-    setValue("mapSearch", "");
-    loadStations();
-}
-function createStationPin(color, status) {
-    const isOffline = status === "offline";
+            if (mode === 'mine') {
+                if (btnMine) btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
+                if (btnAll) btnAll.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
+            } else {
+                if (btnAll) btnAll.className = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
+                if (btnMine) btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
+            }
+            setValue("mapSearch", "");
+            loadStations();
+        }
 
-    return L.divIcon({
-        className: "custom-station-pin",
-        html: `
+        function createStationPin(color, status) {
+            const isOffline = status === "offline";
+
+            return L.divIcon({
+                className: "custom-station-pin",
+                html: `
             <div class="relative flex items-center justify-center w-6 h-6">
 
-                <!-- Pulse Rings -->
                 <span class="station-pulse-ring"
                       style="background:${color}; ${isOffline ? 'opacity:0.3' : ''}"></span>
 
                 <span class="station-pulse-ring delay"
                       style="background:${color}; ${isOffline ? 'opacity:0.2' : ''}"></span>
 
-                <!-- Main Pin -->
                 <div class="relative flex items-center justify-center w-6 h-6 rounded-full border-2 border-white shadow-md z-10"
                      style="background-color:${color}">
 
@@ -1295,25 +1390,25 @@ function createStationPin(color, status) {
                 </div>
             </div>
         `,
-        iconSize: [30, 30],
-        iconAnchor: [15, 15]
-    });
-}
-/* ================= MAP RENDERING ================= */
-function renderMapMarkers(stations) {
-    layerGroup.clearLayers();
-    let liveCount = 0;
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+        }
+        /* ================= MAP RENDERING ================= */
+        function renderMapMarkers(stations) {
+            layerGroup.clearLayers();
+            let liveCount = 0;
 
-    stations.forEach(s => {
-        const lat = parseFloat(s.latitude);
-        const lng = parseFloat(s.longitude);
-        if (isNaN(lat) || isNaN(lng) || (lat === 0 && lng === 0)) return;
-        liveCount++;
+            stations.forEach(s => {
+                const lat = parseFloat(s.latitude);
+                const lng = parseFloat(s.longitude);
+                if (isNaN(lat) || isNaN(lng) || (lat === 0 && lng === 0)) return;
+                liveCount++;
 
-        const markerColor = getStatusColor(s.availability_status);
-        const pulseIcon = createStationPin(markerColor, s.availability_status);
+                const markerColor = getStatusColor(s.availability_status);
+                const pulseIcon = createStationPin(markerColor, s.availability_status);
 
-        const popupContent = `
+                const popupContent = `
             <div class="text-white text-xs p-1">
                 <strong class="text-sm block border-b border-white/10 pb-1 mb-1 text-[#FFBB02]">${escapeHTML(s.station_name)}</strong>
                 <p class="mb-1 text-white/50 uppercase tracking-widest text-[9px] font-bold">${escapeHTML(s.station_type)}</p>
@@ -1327,53 +1422,53 @@ function renderMapMarkers(stations) {
                 </div>
             </div>`;
 
-        L.marker([lat, lng], { icon: pulseIcon }).bindPopup(popupContent).addTo(layerGroup);
-    });
+                L.marker([lat, lng], { icon: pulseIcon }).bindPopup(popupContent).addTo(layerGroup);
+            });
 
-    setHTML("activeOutageCounter", `
+            setHTML("activeOutageCounter", `
         <svg class="w-4 h-4 inline-block mr-1 fill-current text-[#00BA00]" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
         </svg>
         Active Nodes: ${liveCount}`);
-}
+        }
 
-function filterStations(keyword) {
-    const term = (keyword || "").toLowerCase().trim();
-    filteredReports = allCachedReports.filter(r =>
-        String(r.station_name        || "").toLowerCase().includes(term) ||
-        String(r.location_name       || "").toLowerCase().includes(term) ||
-        String(r.station_type        || "").toLowerCase().includes(term) ||
-        String(r.availability_status || "").toLowerCase().includes(term)
-    );
-    currentPage = 1;
-    renderStatisticsFeed();
-    renderPaginationControls();
-}
+        function filterStations(keyword) {
+            const term = (keyword || "").toLowerCase().trim();
+            filteredReports = allCachedReports.filter(r =>
+                String(r.station_name || "").toLowerCase().includes(term) ||
+                String(r.location_name || "").toLowerCase().includes(term) ||
+                String(r.station_type || "").toLowerCase().includes(term) ||
+                String(r.availability_status || "").toLowerCase().includes(term)
+            );
+            currentPage = 1;
+            renderStatisticsFeed();
+            renderPaginationControls();
+        }
 
-function renderStatisticsFeed() {
-    const feedContainer = getEl("recentReports");
-    if (!feedContainer) return;
-    feedContainer.innerHTML = "";
+        function renderStatisticsFeed() {
+            const feedContainer = getEl("recentReports");
+            if (!feedContainer) return;
+            feedContainer.innerHTML = "";
 
-    if (!filteredReports.length) {
-        feedContainer.innerHTML = `<p class="text-xs text-white/40 text-center py-12">No registered stations found.</p>`;
-        return;
-    }
-
-    const start    = (currentPage - 1) * perPage;
-    const pageData = filteredReports.slice(start, start + perPage);
-    const fragment = document.createDocumentFragment();
-
-    pageData.forEach((s) => {
-        const badgeStyle = getStatusBadgeStyle(s.availability_status);
-        const card = document.createElement("div");
-        card.className = "card-hover flex flex-col p-4 border border-white/5 rounded-2xl bg-[#1C1D30]/30 transition-all hover:border-white/10";
-
-        card.innerHTML = `
-            ${s.image
-                ? `<img src="${escapeHTML(s.image)}" class="w-full h-40 object-cover rounded-xl mb-3" alt="${escapeHTML(s.station_name)}">`
-                : '<div class="w-full h-40 bg-[#31324C]/60 rounded-xl mb-3 flex items-center justify-center text-white/30 text-xs">No Image</div>'
+            if (!filteredReports.length) {
+                feedContainer.innerHTML = `<p class="text-xs text-white/40 text-center py-12">No registered stations found.</p>`;
+                return;
             }
+
+            const start = (currentPage - 1) * perPage;
+            const pageData = filteredReports.slice(start, start + perPage);
+            const fragment = document.createDocumentFragment();
+
+            pageData.forEach((s) => {
+                const badgeStyle = getStatusBadgeStyle(s.availability_status);
+                const card = document.createElement("div");
+                card.className = "card-hover flex flex-col p-4 border border-white/5 rounded-2xl bg-[#1C1D30]/30 transition-all hover:border-white/10";
+
+                card.innerHTML = `
+            ${s.image
+                        ? `<img src="${escapeHTML(s.image)}" class="w-full h-40 object-cover rounded-xl mb-3" alt="${escapeHTML(s.station_name)}">`
+                        : '<div class="w-full h-40 bg-[#31324C]/60 rounded-xl mb-3 flex items-center justify-center text-white/30 text-xs">No Image</div>'
+                    }
             <div class="flex justify-between items-start gap-2">
                 <span class="font-bold text-white text-sm tracking-tight leading-tight truncate max-w-[210px]">${escapeHTML(s.station_name)}</span>
                 <span class="text-[9px] font-black tracking-wider uppercase px-2 py-0.5 rounded-md ${badgeStyle}">${escapeHTML(s.availability_status)}</span>
@@ -1400,257 +1495,265 @@ function renderStatisticsFeed() {
             </div>
             <p class="text-white/60 text-[11px] font-medium leading-relaxed mt-3 line-clamp-3">${escapeHTML(s.description || 'No description provided.')}</p>`;
 
-        const isAuthor = (typeof CURRENT_USER_ID !== "undefined" &&
-                          s.created_by && String(s.created_by) === String(CURRENT_USER_ID))
-                         || (currentFilterMode === 'mine');
+                const isAuthor = (typeof CURRENT_USER_ID !== "undefined" &&
+                    s.created_by && String(s.created_by) === String(CURRENT_USER_ID))
+                    || (currentFilterMode === 'mine');
 
-        if (isAuthor) {
-            const controls = document.createElement("div");
-            controls.className = "flex gap-4 justify-end pt-3 mt-3 border-t border-white/5 text-xs";
+                if (isAuthor) {
+                    const controls = document.createElement("div");
+                    controls.className = "flex gap-4 justify-end pt-3 mt-3 border-t border-white/5 text-xs";
 
-            const editBtn = document.createElement("button");
-            editBtn.className = "text-[#FFBB02] hover:underline font-semibold flex items-center gap-1";
-            editBtn.innerHTML = `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    const editBtn = document.createElement("button");
+                    editBtn.className = "text-[#FFBB02] hover:underline font-semibold flex items-center gap-1";
+                    editBtn.innerHTML = `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
             </svg> Edit`;
-            editBtn.onclick = () => openEdit(s);   // ← uses the new openEdit()
+                    editBtn.onclick = () => openEdit(s);   // ← uses the new openEdit()
 
-            const deleteBtn = document.createElement("button");
-            deleteBtn.className = "text-red-400 hover:underline font-semibold flex items-center gap-1";
-            deleteBtn.innerHTML = `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    const deleteBtn = document.createElement("button");
+                    deleteBtn.className = "text-red-400 hover:underline font-semibold flex items-center gap-1";
+                    deleteBtn.innerHTML = `<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
             </svg> Delete`;
-            deleteBtn.onclick = () => deleteStation(s.id);
+                    deleteBtn.onclick = () => deleteStation(s.id);
 
-            controls.appendChild(editBtn);
-            controls.appendChild(deleteBtn);
-            card.appendChild(controls);
+                    controls.appendChild(editBtn);
+                    controls.appendChild(deleteBtn);
+                    card.appendChild(controls);
+                }
+
+                fragment.appendChild(card);
+            });
+
+            feedContainer.appendChild(fragment);
         }
 
-        fragment.appendChild(card);
-    });
-
-    feedContainer.appendChild(fragment);
-}
-
-/* ================= DELETE ================= */
-async function deleteStation(id) {
-    const confirmed = await showConfirm("Permanently delete this station? This cannot be undone.");
-    if (!confirmed) return;
-
-    try {
-        const result = await api(`${API_BASE}/delete.php`, {
-            method: "POST",
-            body: JSON.stringify({ station_id: id })
-        });
-        showAlert(result.success ? "Success" : "Error", result.message || "Operation complete.", result.success ? "success" : "error");
-        if (result.success) loadStations();
-    } catch (err) {
-        console.error("deleteStation error:", err);
-        showAlert("System Error", "Failed to connect to server.", "error");
-    }
-}
-
-/* ================= SUBMIT: CREATE ================= */
-document.addEventListener("DOMContentLoaded", () => {
-
-    buildModalHTML();
-
-    /* ── Create form ── */
-    const createForm = getEl("createForm");
-    if (createForm) {
-        createForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            // ✅ Read every value fresh from the DOM at submit time
-            const payload = {
-                station_name:        (getEl("create_station_name")?.value        ?? "").trim(),
-                location_name:       (getEl("create_location_name")?.value       ?? "").trim(),
-                latitude:            (getEl("create_latitude")?.value            ?? "").trim(),
-                longitude:           (getEl("create_longitude")?.value           ?? "").trim(),
-                station_type:         getEl("create_station_type")?.value        ?? "",
-                access_type:          getEl("create_access_type")?.value         ?? "",
-                availability_status:  getEl("create_availability_status")?.value ?? "",
-                charging_type:        getEl("create_charging_type")?.value       ?? "",
-                operating_hours:     (getEl("create_operating_hours")?.value     ?? "").trim(),
-                description:         (getEl("create_description")?.value         ?? "").trim(),
-            };
-
-            if (!payload.station_name)  { showAlert("Validation Error", "Station name is required.", "error"); return; }
-            if (!payload.location_name) { showAlert("Validation Error", "Location name is required.", "error"); return; }
-            if (!payload.latitude || !payload.longitude) { showAlert("Missing Coordinates", "Pin a location on the map.", "error"); return; }
-            if (!payload.station_type)  { showAlert("Validation Error", "Select a station type.", "error"); return; }
-            if (!payload.availability_status) { showAlert("Validation Error", "Select an availability status.", "error"); return; }
-
-            console.log("🚀 CREATE payload:", payload);
+        /* ================= DELETE ================= */
+        async function deleteStation(id) {
+            const confirmed = await showConfirm("Permanently delete this station? This cannot be undone.");
+            if (!confirmed) return;
 
             try {
-                const result = await api(`${API_BASE}/create.php`, {
+                const result = await api(`${API_BASE}/delete.php`, {
                     method: "POST",
-                    body:   JSON.stringify(payload)
+                    body: JSON.stringify({ station_id: id })
                 });
-
-                console.log("📥 CREATE response:", result);
-
-                if (result.success) {
-                    showAlert("Success", result.message || "Station created successfully.");
-                    closeCreatePopup();
-                    createForm.reset();
-                    loadStations();
-                } else {
-                    showAlert("Error", result.message || "Create failed.", "error");
-                }
+                showAlert(result.success ? "Success" : "Error", result.message || "Operation complete.", result.success ? "success" : "error");
+                if (result.success) loadStations();
             } catch (err) {
-                console.error("Create submit error:", err);
-                showAlert("System Error", "Failed to reach server.", "error");
-            }
-        });
-    }
-
-    /* ── Edit / Update form ── */
-    const editForm = getEl("editForm");
-    if (editForm) {
-        editForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            // ✅ ID comes ONLY from the hidden input — never from a JS variable
-            const id = (getEl("edit_id")?.value ?? "").trim();
-            if (!id) {
-                showAlert("Error", "Station ID is missing. Please re-open the edit modal.", "error");
-                return;
-            }
-
-            // ✅ Every field read fresh — no stale object data, no default overrides
-            const payload = {
-                id,
-                station_name:        (getEl("edit_station_name")?.value        ?? "").trim(),
-                location_name:       (getEl("edit_location_name")?.value       ?? "").trim(),
-                latitude:            (getEl("edit_latitude")?.value            ?? "").trim(),
-                longitude:           (getEl("edit_longitude")?.value           ?? "").trim(),
-                station_type:         getEl("edit_station_type")?.value        ?? "",
-                access_type:          getEl("edit_access_type")?.value         ?? "",
-                availability_status:  getEl("edit_availability_status")?.value ?? "",
-                charging_type:        getEl("edit_charging_type")?.value       ?? "",
-                operating_hours:     (getEl("edit_operating_hours")?.value     ?? "").trim(),
-                description:         (getEl("edit_description")?.value         ?? "").trim(),
-            };
-
-            if (!payload.station_name)  { showAlert("Validation Error", "Station name is required.", "error"); return; }
-            if (!payload.location_name) { showAlert("Validation Error", "Location name is required.", "error"); return; }
-            if (!payload.latitude || !payload.longitude) { showAlert("Missing Coordinates", "Pin a location on the map.", "error"); return; }
-            if (!payload.station_type)  { showAlert("Validation Error", "Select a station type.", "error"); return; }
-            if (!payload.availability_status) { showAlert("Validation Error", "Select an availability status.", "error"); return; }
-
-            console.log("🚀 UPDATE payload:", payload);
-
-            try {
-                const result = await api(`${API_BASE}/update.php`, {
-                    method: "POST",
-                    body:   JSON.stringify(payload)
-                });
-
-                console.log("📥 UPDATE response:", result);
-
-                if (result.success) {
-                    showAlert("Success", result.message || "Station updated successfully.");
-                    closeEditPopup();
-                    loadStations();
-                } else {
-                    showAlert("Error", result.message || "Update failed.", "error");
-                }
-            } catch (err) {
-                console.error("Edit submit error:", err);
-                showAlert("System Error", "Failed to reach server.", "error");
-            }
-        });
-    }
-
-    loadUserLocation();
-    loadStations();
-    batteryDetection();
-    setInterval(loadStations, 10000);
-});
-
-/* ================= PAGINATION ================= */
-function renderPaginationControls() {
-    const paginationContainer = getEl("pagination");
-    if (!paginationContainer) return;
-    paginationContainer.innerHTML = "";
-
-    const totalPages = Math.ceil(filteredReports.length / perPage);
-    if (totalPages <= 1) return;
-
-    const fragment = document.createDocumentFragment();
-
-    const prevBtn = document.createElement("button");
-    prevBtn.textContent = "Prev";
-    prevBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all ${currentPage === 1 ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40' : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'}`;
-    prevBtn.onclick = () => { if (currentPage > 1) { currentPage--; renderStatisticsFeed(); renderPaginationControls(); } };
-    fragment.appendChild(prevBtn);
-
-    for (let i = 1; i <= totalPages; i++) {
-        const pageBtn = document.createElement("button");
-        pageBtn.textContent = i;
-        pageBtn.className = `px-3 py-1.5 text-xs font-black rounded-lg transition-all border ${i === currentPage ? 'bg-[#FFBB02] text-black border-[#FFBB02]' : 'bg-[#31324C]/20 text-[#B5B5B5] border-white/5 hover:text-white'}`;
-        pageBtn.onclick = () => { currentPage = i; renderStatisticsFeed(); renderPaginationControls(); };
-        fragment.appendChild(pageBtn);
-    }
-
-    const nextBtn = document.createElement("button");
-    nextBtn.textContent = "Next";
-    nextBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all ${currentPage === totalPages ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40' : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'}`;
-    nextBtn.onclick = () => { if (currentPage < totalPages) { currentPage++; renderStatisticsFeed(); renderPaginationControls(); } };
-    fragment.appendChild(nextBtn);
-
-    paginationContainer.appendChild(fragment);
-}
-
-/* ================= BATTERY ================= */
-function batteryDetection() {
-    if (!navigator.getBattery) return;
-    navigator.getBattery().then(battery => {
-        function update() {
-            const levelSpan    = getEl("batteryLevel");
-            const chargingSpan = getEl("batteryCharging");
-            const statusBox    = getEl("batteryStatus");
-            if (levelSpan)    levelSpan.innerText    = Math.round(battery.level * 100) + "%";
-            if (chargingSpan) chargingSpan.innerText = battery.charging ? "Yes" : "No";
-            if (battery.level <= 0.20 && !battery.charging) {
-                const toast = getEl("battery-warning");
-                if (toast) toast.classList.remove("invisible", "opacity-0");
-                if (statusBox) { statusBox.innerText = "Low Battery"; statusBox.style.background = "#e74c3c"; }
-            } else if (battery.charging) {
-                if (statusBox) { statusBox.innerText = "Charging"; statusBox.style.background = "#2ecc71"; }
-            } else {
-                if (statusBox) { statusBox.innerText = "Normal"; statusBox.style.background = "#f39c12"; }
+                console.error("deleteStation error:", err);
+                showAlert("System Error", "Failed to connect to server.", "error");
             }
         }
-        update();
-        battery.addEventListener("levelchange", update);
-        battery.addEventListener("chargingchange", update);
-    });
-}
 
-function closeBatteryWarning() {
-    const toast = getEl("battery-warning");
-    if (toast) toast.classList.add("invisible", "opacity-0");
-}
+        /* ================= SUBMIT: CREATE ================= */
+        document.addEventListener("DOMContentLoaded", () => {
 
-/* ================= MOBILE MENU ================= */
-const menuToggle = getEl('menuToggle');
-const sidebar    = getEl('sidebar');
-const overlay    = getEl('overlay');
+            buildModalHTML();
 
-if (menuToggle && sidebar && overlay) {
-    menuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('-translate-x-full');
-        overlay.classList.toggle('hidden');
-    });
-    overlay.addEventListener('click', () => {
-        sidebar.classList.add('-translate-x-full');
-        overlay.classList.add('hidden');
-    });
-}
+            /* ── Create form ── */
+            const createForm = getEl("createForm");
+            if (createForm) {
+                createForm.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+
+                    // ✅ Read every value fresh from the DOM at submit time
+                    const payload = {
+                        station_name: (getEl("create_station_name")?.value ?? "").trim(),
+                        location_name: (getEl("create_location_name")?.value ?? "").trim(),
+                        latitude: (getEl("create_latitude")?.value ?? "").trim(),
+                        longitude: (getEl("create_longitude")?.value ?? "").trim(),
+                        station_type: getEl("create_station_type")?.value ?? "",
+                        access_type: getEl("create_access_type")?.value ?? "",
+                        availability_status: getEl("create_availability_status")?.value ?? "",
+                        charging_type: getEl("create_charging_type")?.value ?? "",
+                        operating_hours: (getEl("create_operating_hours")?.value ?? "").trim(),
+                        description: (getEl("create_description")?.value ?? "").trim(),
+                    };
+
+                    if (!payload.station_name) { showAlert("Validation Error", "Station name is required.", "error"); return; }
+                    if (!payload.location_name) { showAlert("Validation Error", "Location name is required.", "error"); return; }
+                    if (!payload.latitude || !payload.longitude) { showAlert("Missing Coordinates", "Pin a location on the map.", "error"); return; }
+                    if (!payload.station_type) { showAlert("Validation Error", "Select a station type.", "error"); return; }
+                    if (!payload.availability_status) { showAlert("Validation Error", "Select an availability status.", "error"); return; }
+
+                    console.log("🚀 CREATE payload:", payload);
+
+                    try {
+                        const result = await api(`${API_BASE}/create.php`, {
+                            method: "POST",
+                            body: JSON.stringify(payload)
+                        });
+
+                        console.log("📥 CREATE response:", result);
+
+                        if (result.success) {
+                            showAlert("Success", result.message || "Station created successfully.", "success");
+                            closeCreatePopup();
+                            createForm.reset();
+                            loadStations();
+                        } else {
+
+                            let message = result.message || "Create failed.";
+
+                            // 🔥 CUSTOM OVERRIDE MESSAGE
+                            if (message.includes("already have a power station")) {
+                                message = "You already created a station. Please update your existing one.";
+                            }
+
+                            showAlert("Error", message, "error");
+                        }
+                    } catch (err) {
+                        console.error("Create submit error:", err);
+                        showAlert("System Error", "Failed to reach server.", "error");
+                    }
+                });
+            }
+
+            /* ── Edit / Update form ── */
+            const editForm = getEl("editForm");
+            if (editForm) {
+                editForm.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+
+                    // ✅ ID comes ONLY from the hidden input — never from a JS variable
+                    const id = (getEl("edit_id")?.value ?? "").trim();
+                    if (!id) {
+                        showAlert("Error", "Station ID is missing. Please re-open the edit modal.", "error");
+                        return;
+                    }
+
+                    // ✅ Every field read fresh — no stale object data, no default overrides
+                    const payload = {
+                        id,
+                        station_name: (getEl("edit_station_name")?.value ?? "").trim(),
+                        location_name: (getEl("edit_location_name")?.value ?? "").trim(),
+                        latitude: (getEl("edit_latitude")?.value ?? "").trim(),
+                        longitude: (getEl("edit_longitude")?.value ?? "").trim(),
+                        station_type: getEl("edit_station_type")?.value ?? "",
+                        access_type: getEl("edit_access_type")?.value ?? "",
+                        availability_status: getEl("edit_availability_status")?.value ?? "",
+                        charging_type: getEl("edit_charging_type")?.value ?? "",
+                        operating_hours: (getEl("edit_operating_hours")?.value ?? "").trim(),
+                        description: (getEl("edit_description")?.value ?? "").trim(),
+                    };
+
+                    if (!payload.station_name) { showAlert("Validation Error", "Station name is required.", "error"); return; }
+                    if (!payload.location_name) { showAlert("Validation Error", "Location name is required.", "error"); return; }
+                    if (!payload.latitude || !payload.longitude) { showAlert("Missing Coordinates", "Pin a location on the map.", "error"); return; }
+                    if (!payload.station_type) { showAlert("Validation Error", "Select a station type.", "error"); return; }
+                    if (!payload.availability_status) { showAlert("Validation Error", "Select an availability status.", "error"); return; }
+
+                    console.log("🚀 UPDATE payload:", payload);
+
+                    try {
+                        const result = await api(`${API_BASE}/update.php`, {
+                            method: "POST",
+                            body: JSON.stringify(payload)
+                        });
+
+                        console.log("📥 UPDATE response:", result);
+
+                        if (result.success) {
+                            showAlert("Success", result.message || "Station updated successfully.", "success");
+                            closeEditPopup();
+                            loadStations();
+                        } else {
+                            showAlert("Error", result.message || "Update failed.", "error");
+                        }
+                    } catch (err) {
+                        console.error("Edit submit error:", err);
+                        showAlert("System Error", "Failed to reach server.", "error");
+                    }
+                });
+            }
+
+            loadUserLocation();
+            loadStations();
+            batteryDetection();
+            setInterval(loadStations, 10000);
+        });
+
+        /* ================= PAGINATION ================= */
+        function renderPaginationControls() {
+            const paginationContainer = getEl("pagination");
+            if (!paginationContainer) return;
+            paginationContainer.innerHTML = "";
+
+            const totalPages = Math.ceil(filteredReports.length / perPage);
+            if (totalPages <= 1) return;
+
+            const fragment = document.createDocumentFragment();
+
+            const prevBtn = document.createElement("button");
+            prevBtn.textContent = "Prev";
+            prevBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all ${currentPage === 1 ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40' : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'}`;
+            prevBtn.onclick = () => { if (currentPage > 1) { currentPage--; renderStatisticsFeed(); renderPaginationControls(); } };
+            fragment.appendChild(prevBtn);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement("button");
+                pageBtn.textContent = i;
+                pageBtn.className = `px-3 py-1.5 text-xs font-black rounded-lg transition-all border ${i === currentPage ? 'bg-[#FFBB02] text-black border-[#FFBB02]' : 'bg-[#31324C]/20 text-[#B5B5B5] border-white/5 hover:text-white'}`;
+                pageBtn.onclick = () => { currentPage = i; renderStatisticsFeed(); renderPaginationControls(); };
+                fragment.appendChild(pageBtn);
+            }
+
+            const nextBtn = document.createElement("button");
+            nextBtn.textContent = "Next";
+            nextBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg border border-white/10 transition-all ${currentPage === totalPages ? 'opacity-40 cursor-not-allowed bg-transparent text-white/40' : 'bg-[#31324C]/40 text-white hover:bg-[#31324C]'}`;
+            nextBtn.onclick = () => { if (currentPage < totalPages) { currentPage++; renderStatisticsFeed(); renderPaginationControls(); } };
+            fragment.appendChild(nextBtn);
+
+            paginationContainer.appendChild(fragment);
+        }
+
+        /* ================= BATTERY ================= */
+        function batteryDetection() {
+            if (!navigator.getBattery) return;
+            navigator.getBattery().then(battery => {
+                function update() {
+                    const levelSpan = getEl("batteryLevel");
+                    const chargingSpan = getEl("batteryCharging");
+                    const statusBox = getEl("batteryStatus");
+                    if (levelSpan) levelSpan.innerText = Math.round(battery.level * 100) + "%";
+                    if (chargingSpan) chargingSpan.innerText = battery.charging ? "Yes" : "No";
+                    if (battery.level <= 0.20 && !battery.charging) {
+                        const toast = getEl("battery-warning");
+                        if (toast) toast.classList.remove("invisible", "opacity-0");
+                        if (statusBox) { statusBox.innerText = "Low Battery"; statusBox.style.background = "#e74c3c"; }
+                    } else if (battery.charging) {
+                        if (statusBox) { statusBox.innerText = "Charging"; statusBox.style.background = "#2ecc71"; }
+                    } else {
+                        if (statusBox) { statusBox.innerText = "Normal"; statusBox.style.background = "#f39c12"; }
+                    }
+                }
+                update();
+                battery.addEventListener("levelchange", update);
+                battery.addEventListener("chargingchange", update);
+            });
+        }
+
+        function closeBatteryWarning() {
+            const toast = getEl("battery-warning");
+            if (toast) toast.classList.add("invisible", "opacity-0");
+        }
+
+        /* ================= MOBILE MENU ================= */
+        const menuToggle = getEl('menuToggle');
+        const sidebar = getEl('sidebar');
+        const overlay = getEl('overlay');
+
+        if (menuToggle && sidebar && overlay) {
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            });
+            overlay.addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            });
+        }
     </script>
 </body>
 

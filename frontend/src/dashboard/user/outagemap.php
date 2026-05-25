@@ -554,98 +554,117 @@ $current_user_id = $user['id'] ?? null;
 
     <!-- ================= JAVASCRIPT SYSTEM ENGINE ================= -->
     <script>
+        /* ================= ALERT CONFIGURATION ================= */
+        const modalTypes = {
+            success: { color: 'text-[#34FB34]', bg: 'bg-[#34FB34]/10', shadow: 'shadow-[0_0_15px_rgba(52,251,52,0.4)]', icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>' },
+            error: { color: 'text-[#FF2E1F]', bg: 'bg-[#FF2E1F]/10', shadow: 'shadow-[0_0_15px_rgba(255,46,31,0.4)]', icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>' },
+            warning: { color: 'text-[#FFBB02]', bg: 'bg-[#FFBB02]/10', shadow: 'shadow-[0_0_15px_rgba(255,187,2,0.4)]', icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>' },
+            info: { color: 'text-[#00E5FF]', bg: 'bg-[#00E5FF]/10', shadow: 'shadow-[0_0_15px_rgba(0,229,255,0.4)]', icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' }
+        };
+
         /* ================= STREAMING_CHUNK: CUSTOM ALERTS & CONFIRMS ================= */
         function injectCustomModals() {
-            const modalContainer = document.createElement('div');
-            modalContainer.innerHTML = `
-                <div id="custom-alert-modal" class="fixed inset-0 z-[9999] hidden flex items-center justify-center bg-[#1C1D30]/80 backdrop-blur-sm transition-opacity opacity-0 duration-200">
-                    <div class="bg-[#31324C] border border-white/10 rounded-2xl p-6 shadow-2xl max-w-sm w-full mx-4 transform scale-95 transition-transform duration-200 text-center">
-                        <div class="w-12 h-12 rounded-full bg-[#FFBB02]/20 text-[#FFBB02] flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-bold text-white mb-2">Notice</h3>
-                        <p id="custom-alert-message" class="text-[#B5B5B5] text-sm mb-6"></p>
-                        <button onclick="closeCustomAlert()" class="w-full bg-[#FFBB02] text-black font-bold py-2 rounded-lg hover:bg-yellow-500 transition-colors">
-                            Acknowledge
+            if (!document.getElementById('custom-modal-container')) {
+                const container = document.createElement('div');
+                container.id = 'custom-modal-container';
+                container.className = 'fixed inset-0 z-[9999] pointer-events-none flex flex-col items-center justify-center p-4';
+                document.body.appendChild(container);
+            }
+        }
+
+        function showCustomAlert(message, type = 'info', title = 'Notice') {
+            const style = modalTypes[type] || modalTypes.info;
+            const container = document.getElementById('custom-modal-container');
+
+            const overlay = document.createElement('div');
+            overlay.className = 'absolute inset-0 pointer-events-auto flex items-center justify-center p-4 bg-[#1C1D30]/80 backdrop-blur-sm transition-opacity duration-200 opacity-0';
+
+            const modal = document.createElement('div');
+            modal.className = `bg-[#13142A] border border-white/10 rounded-2xl p-6 shadow-2xl max-w-sm w-full mx-4 transform scale-95 transition-transform duration-200 text-center`;
+
+            modal.innerHTML = `
+                <div class="w-12 h-12 rounded-full mb-4 flex items-center justify-center mx-auto ${style.bg} ${style.color} ${style.shadow}">
+                    ${style.icon}
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">${title}</h3>
+                <p class="text-[#B5B5B5] text-sm mb-6">${message}</p>
+                <button class="w-full ${style.bg} ${style.color} border border-white/10 font-bold py-2.5 rounded-lg hover:brightness-125 transition-all">
+                    Acknowledge
+                </button>
+            `;
+
+            overlay.appendChild(modal);
+            container.appendChild(overlay);
+
+            const closeBtn = modal.querySelector('button');
+            closeBtn.onclick = () => {
+                overlay.classList.remove('opacity-100');
+                overlay.classList.add('opacity-0');
+                modal.classList.remove('scale-100');
+                modal.classList.add('scale-95');
+                setTimeout(() => overlay.remove(), 200);
+            };
+
+            // Trigger enter animation
+            requestAnimationFrame(() => {
+                overlay.classList.remove('opacity-0');
+                overlay.classList.add('opacity-100');
+                modal.classList.remove('scale-95');
+                modal.classList.add('scale-100');
+            });
+        }
+
+        function showCustomConfirm(message, title = 'Confirm Action') {
+            return new Promise((resolve) => {
+                const style = modalTypes.error; // Defaults to red/error style for destructive confirm actions
+                const container = document.getElementById('custom-modal-container');
+
+                const overlay = document.createElement('div');
+                overlay.className = 'absolute inset-0 pointer-events-auto flex items-center justify-center p-4 bg-[#1C1D30]/80 backdrop-blur-sm transition-opacity duration-200 opacity-0';
+
+                const modal = document.createElement('div');
+                modal.className = `bg-[#13142A] border border-white/10 rounded-2xl p-6 shadow-2xl max-w-sm w-full mx-4 transform scale-95 transition-transform duration-200 text-center`;
+
+                modal.innerHTML = `
+                    <div class="w-12 h-12 rounded-full mb-4 flex items-center justify-center mx-auto ${style.bg} ${style.color} ${style.shadow}">
+                        ${style.icon}
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">${title}</h3>
+                    <p class="text-[#B5B5B5] text-sm mb-6">${message}</p>
+                    <div class="flex gap-3">
+                        <button id="custom-confirm-no" class="flex-1 bg-transparent border border-white/10 text-white font-bold py-2.5 rounded-lg hover:bg-white/5 transition-colors">
+                            Cancel
+                        </button>
+                        <button id="custom-confirm-yes" class="flex-1 bg-red-500 text-white font-bold py-2.5 rounded-lg hover:bg-red-600 transition-colors shadow-lg shadow-red-500/20">
+                            Proceed
                         </button>
                     </div>
-                </div>
+                `;
 
-                <div id="custom-confirm-modal" class="fixed inset-0 z-[9999] hidden flex items-center justify-center bg-[#1C1D30]/80 backdrop-blur-sm transition-opacity opacity-0 duration-200">
-                    <div class="bg-[#31324C] border border-white/10 rounded-2xl p-6 shadow-2xl max-w-sm w-full mx-4 transform scale-95 transition-transform duration-200 text-center">
-                         <div class="w-12 h-12 rounded-full bg-red-500/20 text-red-500 flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-bold text-white mb-2">Confirm Action</h3>
-                        <p id="custom-confirm-message" class="text-[#B5B5B5] text-sm mb-6"></p>
-                        <div class="flex gap-3">
-                            <button id="custom-confirm-no" class="flex-1 bg-transparent border border-white/10 text-white font-bold py-2 rounded-lg hover:bg-white/5 transition-colors">
-                                Cancel
-                            </button>
-                            <button id="custom-confirm-yes" class="flex-1 bg-red-500 text-white font-bold py-2 rounded-lg hover:bg-red-600 transition-colors">
-                                Proceed
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modalContainer);
-        }
+                overlay.appendChild(modal);
+                container.appendChild(overlay);
 
-        function showCustomAlert(message) {
-            const modal = document.getElementById('custom-alert-modal');
-            const msgEl = document.getElementById('custom-alert-message');
-            const innerBox = modal.children[0];
-            msgEl.innerText = message;
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                innerBox.classList.remove('scale-95');
-            }, 10);
-        }
-
-        function closeCustomAlert() {
-            const modal = document.getElementById('custom-alert-modal');
-            const innerBox = modal.children[0];
-            modal.classList.add('opacity-0');
-            innerBox.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 200);
-        }
-
-        function showCustomConfirm(message) {
-            return new Promise((resolve) => {
-                const modal = document.getElementById('custom-confirm-modal');
-                const msgEl = document.getElementById('custom-confirm-message');
-                const innerBox = modal.children[0];
-                const btnYes = document.getElementById('custom-confirm-yes');
-                const btnNo = document.getElementById('custom-confirm-no');
-
-                msgEl.innerText = message;
+                const btnYes = modal.querySelector('#custom-confirm-yes');
+                const btnNo = modal.querySelector('#custom-confirm-no');
 
                 const cleanup = () => {
-                    modal.classList.add('opacity-0');
-                    if (innerBox) innerBox.classList.add('scale-95');
-                    setTimeout(() => {
-                        modal.classList.add('hidden');
-                        btnYes.onclick = null;
-                        btnNo.onclick = null;
-                    }, 200);
+                    overlay.classList.remove('opacity-100');
+                    overlay.classList.add('opacity-0');
+                    modal.classList.remove('scale-100');
+                    modal.classList.add('scale-95');
+                    setTimeout(() => overlay.remove(), 200);
                 };
 
                 btnYes.onclick = () => { cleanup(); resolve(true); };
                 btnNo.onclick = () => { cleanup(); resolve(false); };
 
-                modal.classList.remove('hidden');
-                setTimeout(() => {
-                    modal.classList.remove('opacity-0');
-                    if (innerBox) innerBox.classList.remove('scale-95');
-                }, 10);
+                // Trigger enter animation
+                requestAnimationFrame(() => {
+                    overlay.classList.remove('opacity-0');
+                    overlay.classList.add('opacity-100');
+                    modal.classList.remove('scale-95');
+                    modal.classList.add('scale-100');
+                });
             });
         }
 
@@ -733,7 +752,7 @@ $current_user_id = $user['id'] ?? null;
         /* ================= STREAMING_CHUNK:Implementing high-accuracy geolocation utilities... ================= */
         function useCurrentLocation() {
             if (!navigator.geolocation) {
-                showCustomAlert("Geolocation is not supported by your browser.");
+                showCustomAlert("Geolocation is not supported by your browser.", "error", "System Error");
                 return;
             }
 
@@ -783,7 +802,7 @@ $current_user_id = $user['id'] ?? null;
                             break;
                     }
 
-                    showCustomAlert(msg);
+                    showCustomAlert(msg, "error", "GPS Error");
                 },
                 {
                     enableHighAccuracy: true,
@@ -854,7 +873,12 @@ $current_user_id = $user['id'] ?? null;
                     body: JSON.stringify(payload)
                 });
                 const result = await res.json();
-                showCustomAlert(result.message || "Updated");
+                
+                showCustomAlert(
+                    result.message || "Record updated successfully.", 
+                    result.success ? "success" : "error", 
+                    result.success ? "Update Success" : "Update Failed"
+                );
 
                 if (result.success) {
                     closeForm();
@@ -862,12 +886,12 @@ $current_user_id = $user['id'] ?? null;
                 }
             } catch (err) {
                 console.error(err);
-                showCustomAlert("Update failed");
+                showCustomAlert("Update failed. Please check your connection.", "error", "System Error");
             }
         }
 
         async function deleteReport(id) {
-            const isConfirmed = await showCustomConfirm("Delete this report?");
+            const isConfirmed = await showCustomConfirm("Are you sure you want to permanently delete this report?");
             if (!isConfirmed) return;
             
             try {
@@ -878,14 +902,19 @@ $current_user_id = $user['id'] ?? null;
                     body: JSON.stringify({ id })
                 });
                 const result = await res.json();
-                showCustomAlert(result.message || "Done");
+                
+                showCustomAlert(
+                    result.message || "Record deleted successfully.", 
+                    result.success ? "success" : "error", 
+                    result.success ? "Deleted" : "Deletion Failed"
+                );
 
                 if (result.success) {
                     initGridSynchronization();
                 }
             } catch (err) {
                 console.error(err);
-                showCustomAlert("Delete failed");
+                showCustomAlert("Delete failed. Please check your connection.", "error", "System Error");
             }
         }
 
@@ -911,12 +940,20 @@ $current_user_id = $user['id'] ?? null;
 
             try {
                 const result = await createReport(payload);
-                showCustomAlert(result.message || "Operation Completed successfully");
-                closePopup();
-                initGridSynchronization();
+                
+                showCustomAlert(
+                    result.message || "Operation Completed successfully", 
+                    result.success ? "success" : "error", 
+                    result.success ? "Success" : "Submission Failed"
+                );
+
+                if (result.success) {
+                    closePopup();
+                    initGridSynchronization();
+                }
             } catch (err) {
                 console.error(err);
-                showCustomAlert("API Submission encountered an error.");
+                showCustomAlert("API Submission encountered an error.", "error", "System Error");
             }
         }
 
@@ -928,10 +965,10 @@ $current_user_id = $user['id'] ?? null;
 
             if (mode === 'mine') {
                 btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
-                btnAll.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
+                btnAll.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#13142A]/40 text-[#B5B5B5] hover:text-white transition-all";
             } else {
                 btnAll.className = "text-xs font-bold rounded-lg px-3 py-1 border border-[#FFBB02] bg-[#FFBB02] text-black transition-all";
-                btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#31324C]/40 text-[#B5B5B5] hover:text-white transition-all";
+                btnMine.className = "text-xs font-bold rounded-lg px-3 py-1 border border-white/10 bg-[#13142A]/40 text-[#B5B5B5] hover:text-white transition-all";
             }
             currentPage = 1;
             document.getElementById("mapSearch").value = "";
@@ -1013,46 +1050,46 @@ $current_user_id = $user['id'] ?? null;
                 // MARKER COLOR BY SEVERITY
                 // =========================================
                 const severity = String(r.severity ?? "")
-    .toLowerCase()
-    .trim();
+                    .toLowerCase()
+                    .trim();
 
-let markerColor = "#FFD400"; // default = moderate (clean yellow)
+                let markerColor = "#FFD400"; // default = moderate (clean yellow)
 
-/* =========================================
-   SEVERITY COLOR MAPPING (STRICT)
-========================================= */
+                /* =========================================
+                   SEVERITY COLOR MAPPING (STRICT)
+                ========================================= */
 
-// Critical
-if (
-    severity === "critical" ||
-    severity.includes("critical") ||
-    severity === "high"
-) {
-    markerColor = "#FF2E1F"; // red
-}
+                // Critical
+                if (
+                    severity === "critical" ||
+                    severity.includes("critical") ||
+                    severity === "high"
+                ) {
+                    markerColor = "#FF2E1F"; // red
+                }
 
-// Moderate
-else if (
-    severity === "moderate" ||
-    severity.includes("moderate") ||
-    severity === "medium"
-) {
-    markerColor = "#FFD400"; // bright yellow (FIXED)
-}
+                // Moderate
+                else if (
+                    severity === "moderate" ||
+                    severity.includes("moderate") ||
+                    severity === "medium"
+                ) {
+                    markerColor = "#FFD400"; // bright yellow (FIXED)
+                }
 
-// Minor
-else if (
-    severity === "minor" ||
-    severity.includes("minor") ||
-    severity === "low"
-) {
-    markerColor = "#34FB34"; // green
-}
+                // Minor
+                else if (
+                    severity === "minor" ||
+                    severity.includes("minor") ||
+                    severity === "low"
+                ) {
+                    markerColor = "#34FB34"; // green
+                }
 
-// Fallback (important for debugging bad data)
-else {
-    markerColor = "#9CA3AF"; // gray (unknown severity)
-}
+                // Fallback (important for debugging bad data)
+                else {
+                    markerColor = "#9CA3AF"; // gray (unknown severity)
+                }
 
                 // =========================================
                 // FORMAT CATEGORY
@@ -1171,7 +1208,7 @@ else {
                 const displayHazard = (r.hazard_type || 'none').replace(/_/g, ' ');
                 const displayStatus = (r.status || 'active').replace(/_/g, ' ');
 
-                const isAuthor = (CURRENT_USER_ID && r.user_id && String(r.user_id) === String(CURRENT_USER_ID)) || (currentFilterMode === 'mine');
+                const isAuthor = (typeof CURRENT_USER_ID !== 'undefined' && r.user_id && String(r.user_id) === String(CURRENT_USER_ID)) || (currentFilterMode === 'mine');
 
                 const card = document.createElement("div");
                 card.className = "card-hover flex flex-col p-4 border border-white/5 rounded-2xl bg-[#1C1D30]/30 transition-all hover:border-white/10";
@@ -1192,15 +1229,15 @@ else {
                         </span>
                     </div>
                     <div class="grid grid-cols-3 gap-2 mt-3.5">
-                        <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-2 text-center">
+                        <div class="border border-white/5 rounded-xl bg-[#13142A]/40 flex flex-col p-2 text-center">
                             <span class="text-[9px] text-[#B5B5B5] font-bold tracking-wide uppercase opacity-50">AFFECTED</span>
                             <span class="text-xs text-white font-extrabold mt-0.5">${parseInt(r.affected_houses) || 1} Hse</span>
                         </div>
-                        <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-2 text-center">
+                        <div class="border border-white/5 rounded-xl bg-[#13142A]/40 flex flex-col p-2 text-center">
                             <span class="text-[9px] text-[#B5B5B5] font-bold tracking-wide uppercase opacity-50">HAZARD</span>
                             <span class="text-xs text-[#FFBB02] font-extrabold mt-0.5 truncate capitalize">${escapeHTML(displayHazard)}</span>
                         </div>
-                        <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-2 text-center">
+                        <div class="border border-white/5 rounded-xl bg-[#13142A]/40 flex flex-col p-2 text-center">
                             <span class="text-[9px] text-[#B5B5B5] font-bold tracking-wide uppercase opacity-50">STATUS</span>
                             <span class="text-xs text-white font-extrabold mt-0.5 truncate capitalize">${escapeHTML(displayStatus)}</span>
                         </div>
