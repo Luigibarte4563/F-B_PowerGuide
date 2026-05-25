@@ -502,7 +502,7 @@ $picture = $user['picture'] ?? $defaultPicture;
 
                             <!-- Radius -->
                             <div class="flex flex-col gap-1.5">
-                                <label class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Radius (km)
+                                <label class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Radius (m)
                                     *</label>
                                 <input type="number" step="0.1" id="formRadius" required placeholder="e.g. 5"
                                     class="bg-[#0D0E2A] border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#FFBB02]/50 text-white w-full placeholder:text-white/20">
