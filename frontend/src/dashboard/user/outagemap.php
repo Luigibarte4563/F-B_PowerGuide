@@ -149,7 +149,7 @@ $current_user_id = $user['id'] ?? null;
                     MENU</span>
 
                 <a href="dashboard.php"
-                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
+                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
@@ -873,10 +873,10 @@ $current_user_id = $user['id'] ?? null;
                     body: JSON.stringify(payload)
                 });
                 const result = await res.json();
-                
+
                 showCustomAlert(
-                    result.message || "Record updated successfully.", 
-                    result.success ? "success" : "error", 
+                    result.message || "Record updated successfully.",
+                    result.success ? "success" : "error",
                     result.success ? "Update Success" : "Update Failed"
                 );
 
@@ -893,7 +893,7 @@ $current_user_id = $user['id'] ?? null;
         async function deleteReport(id) {
             const isConfirmed = await showCustomConfirm("Are you sure you want to permanently delete this report?");
             if (!isConfirmed) return;
-            
+
             try {
                 const res = await fetch(`http://localhost/crowdsourcedAPI/api/outage_report/delete.php`, {
                     method: "POST",
@@ -902,10 +902,10 @@ $current_user_id = $user['id'] ?? null;
                     body: JSON.stringify({ id })
                 });
                 const result = await res.json();
-                
+
                 showCustomAlert(
-                    result.message || "Record deleted successfully.", 
-                    result.success ? "success" : "error", 
+                    result.message || "Record deleted successfully.",
+                    result.success ? "success" : "error",
                     result.success ? "Deleted" : "Deletion Failed"
                 );
 
@@ -940,10 +940,10 @@ $current_user_id = $user['id'] ?? null;
 
             try {
                 const result = await createReport(payload);
-                
+
                 showCustomAlert(
-                    result.message || "Operation Completed successfully", 
-                    result.success ? "success" : "error", 
+                    result.message || "Operation Completed successfully",
+                    result.success ? "success" : "error",
                     result.success ? "Success" : "Submission Failed"
                 );
 
@@ -978,7 +978,7 @@ $current_user_id = $user['id'] ?? null;
         /* ================= STREAMING_CHUNK:Synchronizing the data points with the Leaflet map... ================= */
         async function initGridSynchronization() {
             try {
-                // 1. Fetch both endpoints concurrently (credentials: 'include' ensures PHP reads your session)
+                // 1. Fetch both endpoints concurrently
                 const [publicRes, mineRes] = await Promise.all([
                     fetch(`${API_BASE}/get.php`, { credentials: "include" }),
                     fetch(`${API_BASE}/get_my_report.php`, { credentials: "include" })
@@ -990,20 +990,29 @@ $current_user_id = $user['id'] ?? null;
                 const publicReports = publicResult.data || [];
                 const myReports = mineResult.data || [];
 
-                // 2. Merge reports to ensure user data ALWAYS appears in the "all" view
-                // Using a Map prevents duplicate markers if a report exists in both endpoints
+                // 2. Merge reports using a Map to prevent duplicate markers
                 const combinedMap = new Map();
                 publicReports.forEach(r => combinedMap.set(r.id, r));
-                myReports.forEach(r => combinedMap.set(r.id, r)); // Overwrites with user's version if duplicate
-                const allReports = Array.from(combinedMap.values());
+                myReports.forEach(r => combinedMap.set(r.id, r));
 
-                // 3. Assign data based on the active tab
-                allCachedReports = (currentFilterMode === 'mine') ? myReports : allReports;
+                // 3. Get the full merged array from the Map
+                let allReports = Array.from(combinedMap.values());
 
-                // 4. FIX: Render map using the currently filtered data, not just publicReports
+                // 4. In "all" mode, strip out resolved/rejected — keep them visible in "mine" mode
+                if (currentFilterMode === "all") {
+                    allReports = allReports.filter(r => {
+                        const status = String(r.status || "").toLowerCase().trim();
+                        return status !== "resolved" && status !== "rejected";
+                    });
+                }
+
+                // 5. Assign to cache based on active tab
+                allCachedReports = (currentFilterMode === "mine") ? myReports : allReports;
+
+                // 6. Render map using the now-filtered dataset
                 renderMapMarkers(allCachedReports);
 
-                // 5. Handle feed filtering and rendering
+                // 7. Handle feed filtering and pagination
                 const currentKeyword = document.getElementById("mapSearch")?.value || "";
                 if (currentKeyword) {
                     filterBarangay(currentKeyword);
@@ -1233,11 +1242,11 @@ $current_user_id = $user['id'] ?? null;
                             <span class="text-[9px] text-[#B5B5B5] font-bold tracking-wide uppercase opacity-50">AFFECTED</span>
                             <span class="text-xs text-white font-extrabold mt-0.5">${parseInt(r.affected_houses) || 1} Hse</span>
                         </div>
-                        <div class="border border-white/5 rounded-xl bg-[#13142A]/40 flex flex-col p-2 text-center">
+                        <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-2 text-center">
                             <span class="text-[9px] text-[#B5B5B5] font-bold tracking-wide uppercase opacity-50">HAZARD</span>
                             <span class="text-xs text-[#FFBB02] font-extrabold mt-0.5 truncate capitalize">${escapeHTML(displayHazard)}</span>
                         </div>
-                        <div class="border border-white/5 rounded-xl bg-[#13142A]/40 flex flex-col p-2 text-center">
+                        <div class="border border-white/5 rounded-xl bg-[#31324C]/40 flex flex-col p-2 text-center">
                             <span class="text-[9px] text-[#B5B5B5] font-bold tracking-wide uppercase opacity-50">STATUS</span>
                             <span class="text-xs text-white font-extrabold mt-0.5 truncate capitalize">${escapeHTML(displayStatus)}</span>
                         </div>
@@ -1413,7 +1422,7 @@ $current_user_id = $user['id'] ?? null;
                 overlay.classList.add('hidden');
             });
         }
-</script>
+    </script>
 </body>
 
 </html>
