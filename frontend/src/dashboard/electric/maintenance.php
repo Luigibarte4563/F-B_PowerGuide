@@ -160,10 +160,8 @@ $picture = $user['picture'] ?? $defaultPicture;
         <!-- Logo -->
         <div class="flex items-center gap-3 ml-4 mb-8">
             <div
-                class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#FFBB02] to-[#E39A00] rounded-xl flex items-center justify-center shadow-lg shadow-[#FFBB02]/10">
-                <svg class="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                </svg>
+                class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#1E293B] to-[#0F172A] rounded-xl flex items-center justify-center shadow-lg shadow-black/20 border border-slate-700/50">
+                <img src="../../../img/logo.png" class="w-6 h-6 object-contain" alt="Logo">
             </div>
             <div class="flex flex-col justify-center items-start">
                 <span class="text-white font-bold text-lg md:text-xl tracking-tight leading-tight">
