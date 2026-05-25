@@ -6,6 +6,7 @@
     <title>POWERGUIDE</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -13,10 +14,12 @@
                     borderRadius: {
                         '4xl': '2rem',
                     },
+
                     spacing: {
                         '17': '4.25rem',
                         '25': '6.25rem',
                     },
+
                     colors: {
                         brand: {
                             dark: '#03041A',
@@ -24,19 +27,37 @@
                             footer: '#0B0C22',
                             yellow: '#FFBB02'
                         }
+                    },
+
+                    fontFamily: {
+                        montserrat: ['Montserrat', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
 
+    <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght=100;300;400;500;600;700;900&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
-        body {
+        * {
             font-family: 'Montserrat', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #03041A;
+            color: white;
         }
     </style>
 </head>
@@ -45,6 +66,8 @@
 
     <!-- Header Navigation -->
     <header id="mainHeader" class="flex flex-row sticky top-0 z-50 h-16 md:h-20 items-center justify-between px-6 md:px-12 bg-black/80 backdrop-blur-md border-b border-white/5">
+        
+        <!-- Logo -->
         <div class="flex items-center">
             <a href="#" class="flex items-center gap-3">
                 <img class="w-10 object-contain" src="../img/logo.png" alt="Logo">
@@ -59,29 +82,40 @@
             </a>
         </div>
 
-        <ul class="hidden md:flex flex-row items-center font-medium gap-8 text-white/60 text-xs md:text-sm">
-            <li class="hover:text-white transition-colors">
-                <a href="#about" class="py-2 block">About</a>
-            </li>
-            <li class="hover:text-white transition-colors">
-                <a href="#features" class="py-2 block">Features</a>
-            </li>
-        </ul>
+        <!-- Right Side -->
+        <div class="flex items-center gap-8">
 
-        <div class="flex items-center gap-4 text-xs md:text-sm font-semibold">
-            <a href="./auth/login.php">
-                Login
-            </a>
-            <a href="./auth/signup.php">
-                <button class="cursor-pointer px-5 py-2 bg-brand-yellow text-black rounded-full hover:bg-[#e0a400] transition-colors">
-                    Sign Up
+            <!-- Navbar Links -->
+            <ul class="hidden md:flex flex-row items-center font-medium gap-8 text-white/60 text-xs md:text-sm">
+                <li class="hover:text-white transition-colors">
+                    <a href="#about" class="py-2 block">About</a>
+                </li>
+
+                <li class="hover:text-white transition-colors">
+                    <a href="#features" class="py-2 block">Features</a>
+                </li>
+            </ul>
+
+            <!-- Auth Buttons -->
+            <div class="flex items-center gap-4 text-xs md:text-sm font-semibold">
+                
+                <a href="./auth/login.php">
+                    Login
+                </a>
+
+                <a href="./auth/signup.php">
+                    <button class="cursor-pointer px-5 py-2 bg-brand-yellow text-black rounded-full hover:bg-[#e0a400] transition-colors">
+                        Sign Up
+                    </button>
+                </a>
+
+                <button id="menuBtn" class="md:hidden text-white p-2 focus:outline-none hover:text-brand-yellow transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
                 </button>
-            </a>
-            <button id="menuBtn" class="md:hidden text-white p-2 focus:outline-none hover:text-brand-yellow transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
+
+            </div>
         </div>
     </header>
 
@@ -94,8 +128,10 @@
 
     <!-- Hero Section -->
     <section id="hero-section" class="bg-brand-dark flex flex-col justify-center min-h-[90vh] px-6 relative overflow-hidden">
-        <!-- Minimal radial gradient for depth -->
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,187,2,0.05)_0%,transparent_60%)] pointer-events-none"></div>
+        <img src="../img/landingbg.png" alt="" class="absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none select-none" />
+
+    <!-- Minimal radial gradient for depth -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,187,2,0.05)_0%,transparent_60%)] pointer-events-none"></div>
 
         <div class="max-w-4xl mx-auto text-center relative z-10 py-20">
             
@@ -134,36 +170,67 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="min-h-screen bg-black flex flex-col lg:flex-row items-center py-20 lg:py-0 px-6 md:px-12 scroll-mt-20 gap-16 lg:gap-8 border-t border-white/5">
-        
+    <section id="about" class="min-h-screen bg-[#03041A] flex flex-col lg:flex-row items-center py-20 lg:py-0 px-6 md:px-12 scroll-mt-20 gap-16 lg:gap-8 border-t border-white/5">
+            
         <!-- Typography-driven Stats Cards -->
         <div class="w-full lg:w-1/2 flex justify-center">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
                 
+                <!-- No Internet -->
                 <div class="flex flex-col items-start justify-center p-8 w-full bg-brand-card rounded-3xl border border-white/5 hover:border-white/10 transition-colors">
-                    <h3 class="font-bold text-xl md:text-2xl text-white mb-3">No Internet</h3>
+                    
+                    <img src="../img/nointernet.png" alt="No Internet" class="w-20 h-20 object-contain mb-5">
+
+                    <h3 class="font-bold text-xl md:text-2xl text-white mb-3">
+                        No Internet
+                    </h3>
+
                     <p class="font-medium text-white/50 text-sm leading-relaxed">
                         Loss of connectivity during brownouts
                     </p>
                 </div>
 
+                <!-- Unprepared -->
                 <div class="flex flex-col items-start justify-center p-8 w-full bg-brand-card rounded-3xl border border-white/5 hover:border-white/10 transition-colors">
-                    <span class="text-4xl md:text-5xl font-black text-brand-yellow mb-2">85%</span>
-                    <h3 class="font-bold text-base text-white mb-2">Unprepared Rate</h3>
+                    
+                    <img src="../img/unprepared.jpg" alt="Unprepared" class="w-14 h-14 object-cover rounded-xl mb-5">
+
+                    <span class="text-4xl md:text-5xl font-black text-brand-yellow mb-2">
+                        85%
+                    </span>
+
+                    <h3 class="font-bold text-base text-white mb-2">
+                        Unprepared Rate
+                    </h3>
+
                     <p class="font-medium text-white/50 text-sm leading-relaxed">
                         Unpreparedness rate in local communities
                     </p>
                 </div>
 
+                <!-- Dead Battery -->
                 <div class="flex flex-col items-start justify-center p-8 w-full bg-brand-card rounded-3xl border border-white/5 hover:border-white/10 transition-colors">
-                    <h3 class="font-bold text-xl md:text-2xl text-white mb-3">Dead Battery</h3>
+                    
+                    <img src="../img/deadbattery.png" alt="Dead Battery" class="w-20 h-20 object-contain mb-5">
+
+                    <h3 class="font-bold text-xl md:text-2xl text-white mb-3">
+                        Dead Battery
+                    </h3>
+
                     <p class="font-medium text-white/50 text-sm leading-relaxed">
                         Unexpected drain on vital devices
                     </p>
                 </div>
 
+                <!-- Lack of Data -->
                 <div class="flex flex-col items-start justify-center p-8 w-full bg-brand-card rounded-3xl border border-white/5 hover:border-white/10 transition-colors">
-                    <h3 class="font-bold text-xl md:text-2xl text-white mb-3">Lack of Data</h3>
+                    
+                    <img src="../img/data.png" alt="Lack of Data" class="w-14 h-14 object-contain mb-5">
+
+                    <h3 class="font-bold text-xl md:text-2xl text-white mb-3">
+                        Lack of Data
+                    </h3>
+
                     <p class="font-medium text-white/50 text-sm leading-relaxed">
                         Unawareness of city updates and schedules
                     </p>
@@ -340,15 +407,22 @@
                 </p>
 
                 <div class="flex flex-row gap-4 mt-2">
-                    <a href="https://www.facebook.com/" class="w-10 h-10 border border-white/10 hover:border-brand-yellow hover:text-brand-yellow transition-colors rounded-full flex justify-center items-center text-white/60">
-                        <span class="font-bold text-sm">F</span>
+    
+                    <a href="https://www.facebook.com/" 
+                    class="w-10 h-10 border border-white/10 hover:border-brand-yellow hover:text-brand-yellow transition-colors rounded-full flex justify-center items-center text-white/60">
+                        <i class="fa-brands fa-facebook-f text-sm"></i>
                     </a>
-                    <a href="https://www.twitter.com/" class="w-10 h-10 border border-white/10 hover:border-brand-yellow hover:text-brand-yellow transition-colors rounded-full flex justify-center items-center text-white/60">
-                        <span class="font-bold text-sm">T</span>
+
+                    <a href="https://www.twitter.com/" 
+                    class="w-10 h-10 border border-white/10 hover:border-brand-yellow hover:text-brand-yellow transition-colors rounded-full flex justify-center items-center text-white/60">
+                        <i class="fa-brands fa-x-twitter text-sm"></i>
                     </a>
-                    <a href="https://www.github.com/" class="w-10 h-10 border border-white/10 hover:border-brand-yellow hover:text-brand-yellow transition-colors rounded-full flex justify-center items-center text-white/60">
-                        <span class="font-bold text-sm">G</span>
+
+                    <a href="https://www.github.com/" 
+                    class="w-10 h-10 border border-white/10 hover:border-brand-yellow hover:text-brand-yellow transition-colors rounded-full flex justify-center items-center text-white/60">
+                        <i class="fa-brands fa-github text-sm"></i>
                     </a>
+
                 </div>
             </div>
 
@@ -385,7 +459,7 @@
                 <h3 class="font-bold text-base text-white mb-6 tracking-wide">The Builders</h3>
                 <ul class="font-medium text-white/50 text-sm flex flex-col gap-3">
                     <li class="cursor-default">Luigi Barte</li>
-                    <li class="cursor-default">Walter Ballesteros</li>
+                    <li class="cursor-default">Walter Ballesteros Jr.</li>
                     <li class="cursor-default">Don Rudyrick Barberan</li>
                     <li class="cursor-default">Christian Blanco</li>
                     <li class="cursor-default">Noerly Yvonne Mae Idos</li>
