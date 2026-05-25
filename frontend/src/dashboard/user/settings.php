@@ -13,24 +13,45 @@ $isGoogleUser =
 $defaultPicture = "https://i.imgur.com/8Km9tLL.png";
 
 /* =========================
-   FIX IMAGE PATH
+   FORCE LATEST SESSION VALUE
 ========================= */
-
-// force latest session value
 if (isset($_SESSION['user']['picture'])) {
     $user['picture'] = $_SESSION['user']['picture'];
 }
 
+/* =========================
+   PROFILE PICTURE HANDLER
+========================= */
+
+$picture = $defaultPicture;
+
 if (!empty($user['picture'])) {
 
-    // remove accidental duplicate slashes
-    $cleanPath = ltrim($user['picture'], '/');
+    /*
+    |-----------------------------------------
+    | CHECK IF GOOGLE / EXTERNAL URL
+    |-----------------------------------------
+    */
+    if (
+        str_starts_with($user['picture'], 'http://') ||
+        str_starts_with($user['picture'], 'https://')
+    ) {
 
-    // full browser URL
-    $picture = "http://localhost/" . $cleanPath;
+        // Google image or external URL
+        $picture = $user['picture'];
 
-} else {
-    $picture = $defaultPicture;
+    } else {
+
+        /*
+        |-----------------------------------------
+        | LOCAL UPLOADED IMAGE
+        |-----------------------------------------
+        */
+
+        $cleanPath = ltrim($user['picture'], '/');
+
+        $picture = "http://localhost/" . $cleanPath;
+    }
 }
 ?>
 
