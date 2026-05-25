@@ -127,10 +127,8 @@ $current_user_id = $user['id'] ?? null;
             <!-- Logo -->
             <div class="flex items-center gap-3 ml-4 mb-8">
                 <div
-                    class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#FFBB02] to-[#E39A00] rounded-xl flex items-center justify-center shadow-lg shadow-[#FFBB02]/10">
-                    <svg class="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                    </svg>
+                    class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#1E293B] to-[#0F172A] rounded-xl flex items-center justify-center shadow-lg shadow-black/20 border border-slate-700/50">
+                    <img src="../../../img/logo.png" class="w-6 h-6 object-contain" alt="Logo">
                 </div>
                 <div class="flex flex-col justify-center items-start">
                     <span class="text-white font-bold text-lg md:text-xl tracking-tight leading-tight">
@@ -149,7 +147,7 @@ $current_user_id = $user['id'] ?? null;
                     MENU</span>
 
                 <a href="dashboard.php"
-                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
+                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
@@ -158,7 +156,7 @@ $current_user_id = $user['id'] ?? null;
                 </a>
 
                 <a href="outagemap.php"
-                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl bg-[#FEBB02] text-black hover:bg-[#FEBB02] hover:text-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
+                    class="group flex flex-row items-center gap-3.5 px-4 h-11 rounded-xl bg-[#FEBB02] text-black  hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out font-semibold text-sm">
                     <svg class="w-5 h-5 text-[#B5B5B5] group-hover:text-black text-black transition-colors" fill="none"
                         stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
