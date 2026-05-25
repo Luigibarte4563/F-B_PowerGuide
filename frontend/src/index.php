@@ -119,12 +119,12 @@
             </p>
             
             <div class="flex justify-center gap-4 sm:gap-6 flex-col sm:flex-row items-center">
-                <a href="login.html" onclick="fadeOut(event)" class="w-full sm:w-auto">
+                <a href="auth/login.php" onclick="fadeOut(event)" class="w-full sm:w-auto">
                     <button class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-brand-yellow text-black text-sm md:text-base font-bold hover:bg-[#e0a400] transition-colors tracking-wide">
                         Get Started for Free
                     </button>
                 </a>
-                <a href="dashboard.html" onclick="fadeOut(event)" class="w-full sm:w-auto">
+                <a href="auth/login.php" onclick="fadeOut(event)" class="w-full sm:w-auto">
                     <button class="w-full sm:w-auto px-8 py-3.5 rounded-full border border-white/20 text-white text-sm md:text-base font-bold hover:bg-white/10 transition-colors tracking-wide">
                         Report Outages
                     </button>
